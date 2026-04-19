@@ -1,8 +1,19 @@
 // @ts-check
+import mdx from "@astrojs/mdx";
 import { defineConfig, fontProviders } from "astro/config";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
 
 // https://astro.build/config
 export default defineConfig({
+	integrations: [
+		mdx({
+			rehypePlugins: [
+				rehypeSlug,
+				[rehypeAutolinkHeadings, { behavior: "wrap", test: ["h2", "h3", "h4", "h5", "h6"] }],
+			],
+		}),
+	],
 	devToolbar: {
 		enabled: false,
 	},
