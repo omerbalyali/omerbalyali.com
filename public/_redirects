@@ -1,0 +1,2 @@
+# Redirect /thoughts/ URLs to /writing/
+/thoughts/* /writing/:splat 308

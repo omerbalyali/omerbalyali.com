@@ -1,0 +1,29 @@
+---
+import Head from "../components/app/Head.astro";
+---
+
+<!doctype html>
+<html lang="en" data-theme="default">
+	<head>
+		<Head />
+	</head>
+	<body>
+		<div class="layout app-container">
+			<div class="page">
+				<slot />
+			</div>
+		</div>
+	</body>
+</html>
+
+<style>
+	.layout {
+		min-height: 100lvh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.page {
+		flex: 1;
+	}
+</style>

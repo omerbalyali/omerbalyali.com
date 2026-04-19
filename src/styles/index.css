@@ -1,0 +1,6 @@
+@layer base, theme, components, utilities;
+
+@import url("./base.css") layer(base);
+@import url("./theme/tokens.css") layer(theme);
+@import url("./theme/default.css") layer(theme);
+@import url("./utilities.css") layer(utilities);
