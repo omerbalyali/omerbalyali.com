@@ -1,0 +1,50 @@
+---
+const isHome = Astro.url.pathname === "/";
+---
+
+<header class="app-container-padded">
+	<span>
+		<a href="/" class="branding">Ömer Balyalı</a>
+	</span>
+	{
+		isHome && (
+			<div>
+				I'm a Design Engineer at{" "}
+				<a href="https://humaninterface.studio" class="studio-link">
+					Human Interface Studio
+				</a>{" "}
+				with a focus on Accessibility, Design Systems, Branding, and Software Development.
+			</div>
+		)
+	}
+</header>
+
+<style>
+	header {
+		display: flex;
+		flex-direction: column;
+		gap: var(--t-space-4);
+		padding-block: var(--t-space-12);
+		background-color:;
+	}
+
+	.branding {
+		max-width: max-content;
+		font-weight: var(--t-font-weight-semibold);
+		position: relative;
+		padding-block: var(--t-space-3);
+		padding-inline: var(--t-space-3);
+		margin-inline: calc(var(--t-space-3) * -1);
+		display: flex;
+		text-decoration: none;
+
+		&:hover {
+			text-decoration-color: transparent;
+		}
+	}
+
+	.studio-link {
+		font-weight: var(--t-font-weight-semibold);
+		color: var(--t-color-accent);
+	}
+</style>
