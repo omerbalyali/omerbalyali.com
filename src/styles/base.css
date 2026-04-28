@@ -10,6 +10,7 @@ html {
 	font-family: var(--t-font-family, ui-sans-serif, system-ui, sans-serif);
 	font-size: var(--t-font-size, 1rem);
 	line-height: var(--t-line-height, 1.5);
+	letter-spacing: var(--t-font-letter-spacing, 0);
 
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -42,6 +43,29 @@ body {
 	color: currentColor;
 	text-decoration: none;
 	touch-action: manipulation;
+}
+
+:where(a) {
+	&:where(&) {
+		--s-color: currentColor;
+		--s-text-decoration-color: transparent;
+	}
+
+	color: var(--s-color);
+	text-decoration: underline;
+	text-decoration-color: var(--s-text-decoration-color);
+	text-decoration-thickness: var(--t-font-underline-thickness);
+	text-underline-offset: var(--t-font-underline-offset-comfortable);
+	transition:
+		color var(--t-transition-preset),
+		background-color var(--t-transition-preset),
+		border-color var(--t-transition-preset),
+		text-decoration-color var(--t-transition-preset);
+
+	&:hover {
+		--s-color: var(--t-color-accent);
+		--s-text-decoration-color: currentColor;
+	}
 }
 
 :where(p) {

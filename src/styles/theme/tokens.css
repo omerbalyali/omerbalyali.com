@@ -20,8 +20,8 @@
 
 	--t-font-weight-regular: 400;
 	--t-font-weight-medium: 500;
-	--t-font-weight-semibold: 550;
-	--t-font-weight-bold: 600;
+	--t-font-weight-semibold: 575;
+	--t-font-weight-bold: 650;
 	--t-font-weight-black: 900;
 
 	--t-font-weight-heading: var(--t-font-weight-semibold);
@@ -32,6 +32,8 @@
 	--t-font-line-height-base: 1.5;
 	--t-font-line-height-relaxed: 1.65;
 
+	--t-font-letter-spacing: var(--t-font-letter-spacing-tighter, 0);
+
 	--t-font-letter-spacing-tighter: -0.01875em;
 	--t-font-letter-spacing-tight: -0.01em;
 	--t-font-letter-spacing-base: 0;
@@ -39,7 +41,9 @@
 
 	--t-font-underline-style: underline;
 	--t-font-underline-thickness: 0.0625em;
+	--t-font-underline-thickness-thick: 0.125em;
 	--t-font-underline-offset: 0.125em;
+	--t-font-underline-offset-comfortable: 0.25em;
 	--t-font-underline-color: color-mix(in display-p3, currentColor, transparent);
 }
 

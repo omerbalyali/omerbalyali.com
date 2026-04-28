@@ -11,17 +11,9 @@
 [data-theme="default"] {
 	color-scheme: light dark;
 
-	@media (prefers-color-scheme: light) {
-		--t-color-scheme-direction: 1;
-	}
+	--t-color-accent: light-dark(oklch(50% 0.4 165deg), oklch(85% 0.5 170deg));
 
-	@media (prefers-color-scheme: dark) {
-		--t-color-scheme-direction: -1;
-	}
-
-	--t-color-accent: light-dark(oklch(100% 0.8 85deg), oklch(100% 0.5 85deg));
-
-	--t-color-foreground-base: light-dark(oklch(25% 0.01 50deg), oklch(95% 0.01 125deg));
+	--t-color-foreground-base: light-dark(oklch(25% 0.01 50deg), oklch(88% 0 0deg));
 	--t-color-foreground-weak: oklch(
 		from var(--t-color-foreground-base) calc(l + 0.8 * var(--t-color-scheme-direction)) c h
 	);
@@ -29,13 +21,18 @@
 		from var(--t-color-foreground-base) calc(l - 0.1 * var(--t-color-scheme-direction)) c h
 	);
 
-	--t-color-selection-background: ;
-	--t-color-selection-foreground: ;
+	@media (prefers-color-scheme: light) {
+		--t-color-scheme-direction: 1;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		--t-color-scheme-direction: -1;
+	}
 }
 
 [data-theme="default"] {
-	--t-color-background-root: light-dark(oklch(98% 0 0deg), oklch(10% 0 0deg));
+	--t-color-background-root: light-dark(oklch(98% 0 0deg), oklch(15% 0 0deg));
 	--t-color-foreground-root: var(--t-color-foreground-base);
 
-	--t-color-background-page: ;
+	--t-color-background-page: light-dark(oklch(98% 0 0deg), oklch(15% 0 0deg));
 }
