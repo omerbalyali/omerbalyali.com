@@ -119,3 +119,19 @@
 
 	--t-transition-preset: var(--t-duration-base) var(--t-ease-default);
 }
+
+/* Elevation */
+[data-theme] {
+	--t-z-below: -1;
+	--t-z-base: 0;
+	--t-z-raised: 10;
+	--t-z-dropdown: 20;
+	--t-z-sticky: 30;
+	--t-z-fixed: 40;
+	--t-z-overlay: 50;
+	--t-z-modal: 60;
+	--t-z-popover: 70;
+	--t-z-toast: 80;
+	--t-z-tooltip: 90;
+	--t-z-max: 9999;
+}
