@@ -1,5 +1,7 @@
 ---
+import Footer from "../components/app/Footer.astro";
 import Head from "../components/app/Head.astro";
+import Header from "../components/app/Header.astro";
 ---
 
 <!doctype html>
@@ -8,10 +10,12 @@ import Head from "../components/app/Head.astro";
 		<Head />
 	</head>
 	<body>
-		<div class="layout app-container">
-			<div class="page">
+		<div class="layout">
+			<Header />
+			<div class="page app-container-padded">
 				<slot />
 			</div>
+			<Footer />
 		</div>
 	</body>
 </html>
@@ -25,5 +29,7 @@ import Head from "../components/app/Head.astro";
 
 	.page {
 		flex: 1;
+		padding-block: var(--t-space-6);
+		background-color: var(--t-color-background-page);
 	}
 </style>
