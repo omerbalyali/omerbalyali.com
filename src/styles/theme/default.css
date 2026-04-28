@@ -35,4 +35,6 @@
 	--t-color-foreground-root: var(--t-color-foreground-base);
 
 	--t-color-background-page: light-dark(oklch(98% 0 0deg), oklch(15% 0 0deg));
+
+	--t-color-border-primary: light-dark(oklch(92% 0.01 50deg), oklch(30% 0.01 50deg));
 }
