@@ -2,20 +2,74 @@
 const { pathname } = Astro.url;
 
 const links = [
-	{ href: "/", label: "Home" },
-	{ href: "/works/", label: "Works" },
-	{ href: "/writing/", label: "Writing" },
-	{ href: "/about/", label: "About" },
-];
+	{ href: "/", label: "Home", priority: 3, isHome: true },
+	{ href: "/works/", label: "Works", priority: 2 },
+	{ href: "/writing/", label: "Writing", priority: 2 },
+	{ href: "/about/", label: "About", priority: 1 },
+	{
+		href: "https://linkedin.com/in/omerbalyali",
+		label: "LinkedIn",
+		priority: 0,
+		external: true,
+	},
+	{
+		href: "https://github.com/omerbalyali",
+		label: "GitHub",
+		priority: 0,
+		external: true,
+	},
+	{ href: "/privacy-policy/", label: "Privacy Policy", priority: 0 },
+	{ href: "/legal-notice/", label: "Legal Notice", priority: 0 },
+] as const;
+
+const isActive = (href: string) => {
+	if (!href.startsWith("/")) return false;
+	return href === "/" ? pathname === "/" : pathname.startsWith(href);
+};
+
+const mainLinks = links.filter((link) => link.priority > 0);
+const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 ---
 
-<div class="navbar-wrapper">
-	<nav id="navigation" class="navbar">
-		<ul>
+<div class="navbar-wrapper" transition:persist="navbar" transition:animate="none">
+	<nav id="navigation" class="navbar" aria-label="Primary">
+		<ul class="navbar-list">
 			{
-				links.map((link) => (
-					<li>
-						<a href={link.href} aria-current={pathname === link.href ? "page" : undefined}>
+				mainLinks.map((link) => (
+					<li
+						class="navbar-item"
+						data-priority={link.priority}
+						data-home={"isHome" in link && link.isHome ? "" : undefined}>
+						<a
+							href={link.href}
+							aria-current={isActive(link.href) ? "page" : undefined}
+							aria-label={"isHome" in link && link.isHome ? "Home" : undefined}>
+							{"isHome" in link && link.isHome ? <span class="navbar-logo" aria-hidden="true" /> : link.label}
+						</a>
+					</li>
+				))
+			}
+			<li class="navbar-more">
+				<button
+					type="button"
+					aria-haspopup="true"
+					aria-expanded="false"
+					aria-controls="navbar-menu"
+					aria-label="More links">
+					<span class="navbar-icon" aria-hidden="true"></span>
+				</button>
+			</li>
+		</ul>
+		<ul class="navbar-menu" id="navbar-menu">
+			{
+				menuLinks.map((link) => (
+					<li class="navbar-menu-item" data-priority={link.priority}>
+						<a
+							href={link.href}
+							aria-current={isActive(link.href) ? "page" : undefined}
+							{...("external" in link && link.external
+								? { target: "_blank", rel: "noopener noreferrer" }
+								: {})}>
 							{link.label}
 						</a>
 					</li>
@@ -28,41 +82,390 @@ const links = [
 <style>
 	.navbar-wrapper {
 		position: fixed;
-		bottom: 0;
 		inset-inline: 0;
-		width: 100%;
+		inset-block-end: var(--t-space-6);
+		z-index: var(--t-elevation-fixed);
+		display: flex;
+		justify-content: center;
+		padding-inline: var(--t-space-6);
+		pointer-events: none;
+
+		&:has(.navbar[data-collapsed]) {
+			justify-content: flex-end;
+		}
+	}
+
+	.navbar-list {
+		position: relative;
+		display: flex;
+		align-items: center;
+		isolation: isolate;
+		overflow: hidden;
+		border-radius: var(--t-radius-full);
+
+		& > li {
+			flex-shrink: 0;
+		}
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset-block: 0;
+			inset-inline-start: var(--indicator-left, 0);
+			width: var(--indicator-width, 0);
+			border-radius: var(--t-radius-full);
+			border: var(--t-border-thin) solid color-mix(in oklab, currentColor 7%, transparent);
+			background-color: color-mix(in oklab, currentColor 5%, transparent);
+			z-index: -1;
+			opacity: 0;
+		}
+	}
+
+	.navbar-item > a,
+	.navbar-more > button {
+		display: block;
+		padding-block: var(--t-space-3);
+		padding-inline: var(--t-space-4);
+		border-radius: var(--t-radius-full);
+		font-size: var(--t-font-size-xsmall);
+		font-weight: var(--t-font-weight-semibold);
+		color: color-mix(in oklab, currentColor 75%, transparent);
+		text-decoration: none;
+		background: transparent;
+		border: 0;
+		cursor: pointer;
+		transition: color var(--t-duration-fast) var(--t-ease-out);
+	}
+
+	.navbar-menu-item > a {
+		display: block;
+		padding-inline: var(--t-space-4);
+		padding-block: var(--t-space-2);
+		border-radius: var(--t-radius-large);
+		font-size: var(--t-font-size-xsmall);
+		font-weight: var(--t-font-weight-semibold);
+		color: color-mix(in oklab, currentColor 75%, transparent);
+		text-decoration: none;
+		transition:
+			color var(--t-duration-fast) var(--t-ease-out),
+			background-color var(--t-duration-fast) var(--t-ease-out);
+	}
+
+	.navbar-item[data-home] > a {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-inline: 0.875rem;
+	}
+
+	.navbar-more > button {
+		display: grid;
+		place-items: center;
+		inline-size: var(--t-space-11);
+		block-size: var(--t-space-11);
+		padding: 0;
+	}
+
+	.navbar-logo {
+		display: block;
+		inline-size: 1rem;
+		block-size: 1rem;
+		background: currentcolor;
+		mask: var(--logo) center / contain no-repeat;
+	}
+
+	.navbar-icon {
+		display: block;
+		inline-size: 0.75rem;
+		block-size: 0.1875rem;
+		background: currentcolor;
+		mask: var(--icon-more) center / contain no-repeat;
+	}
+
+	.navbar-menu {
+		position: absolute;
+		inset-inline-end: 0;
+		inset-block-end: 100%;
+		margin-block-end: var(--t-space-4);
+		min-inline-size: 12rem;
+		padding: var(--t-space-2);
+		border-radius: var(--t-radius-xlarge);
+		border: var(--t-border-thin) solid var(--t-color-border-primary);
+		background-color: color-mix(in oklab, var(--t-color-background-page) 85%, transparent);
+		backdrop-filter: blur(8px);
+		display: none;
+		flex-direction: column;
+		gap: var(--t-space-1);
+	}
+
+	.navbar-item > a:hover,
+	.navbar-more > button:hover {
+		color: currentcolor;
+	}
+
+	.navbar-menu-item > a:hover {
+		color: currentcolor;
+		background-color: color-mix(in oklab, currentColor 5%, transparent);
+	}
+
+	.navbar-item > a[aria-current="page"] {
+		color: var(--t-color-accent);
+	}
+
+	.navbar-menu-item > a[aria-current="page"] {
+		color: var(--t-color-accent);
+		background-color: color-mix(in oklab, currentColor 10%, transparent);
+	}
+
+	.navbar-menu-item[data-priority="1"],
+	.navbar-menu-item[data-priority="2"] {
+		display: none;
 	}
 
 	.navbar {
+		pointer-events: auto;
+		position: relative;
 		max-width: max-content;
-		margin-block-end: var(--t-space-6);
-		margin-inline: auto;
-		z-index: var(--t-z-dropdown);
 		border: var(--t-border-thin) solid var(--t-color-border-primary);
 		border-radius: var(--t-radius-full);
-		background-color: #fff;
+		background-color: color-mix(in oklab, var(--t-color-background-page) 85%, transparent);
+		backdrop-filter: blur(8px);
 		padding: var(--t-space-1-5);
+		opacity: 0;
 
-		& ul {
-			display: flex;
-			justify-content: center;
+		&[data-ready] {
+			opacity: 1;
+			transition: opacity var(--t-duration-base) var(--t-ease-out);
 
-			& li {
-				display: flex;
+			& .navbar-list::before {
+				opacity: 1;
+				transition:
+					inset-inline-start var(--t-duration-base) var(--t-ease-out),
+					width var(--t-duration-base) var(--t-ease-out),
+					opacity var(--t-duration-fast) var(--t-ease-out);
 			}
 		}
 
-		& a {
-			display: block;
-			padding: var(--t-space-3) var(--t-space-4);
-			min-height: var(--t-space-8);
-			border-radius: var(--t-radius-full);
-			text-decoration: none;
-			font-weight: var(--t-font-weight-medium);
+		&[data-resizing] .navbar-list::before {
+			transition: none;
+		}
 
-			&[aria-current="page"] {
-				color: var(--t-color-accent);
-			}
+		&[data-indicator-hidden] .navbar-list::before {
+			opacity: 0;
+		}
+
+		&[data-menu-active] .navbar-more > button {
+			color: var(--t-color-accent);
+		}
+
+		&:has(.navbar-more > button[aria-expanded="true"]) .navbar-menu {
+			display: flex;
+		}
+	}
+
+	@media (width <= 519px) {
+		.navbar-list .navbar-item[data-priority="1"] {
+			display: none;
+		}
+
+		.navbar-menu-item[data-priority="1"] {
+			display: revert;
+		}
+	}
+
+	@media (width <= 379px) {
+		.navbar-wrapper {
+			justify-content: flex-end;
+		}
+
+		.navbar-list .navbar-item[data-priority="2"] {
+			display: none;
+		}
+
+		.navbar-menu-item[data-priority="2"] {
+			display: revert;
+		}
+	}
+
+	@media (width <= 639px) and (height <= 1199px) {
+		.navbar[data-collapsed] .navbar-list .navbar-item:not([data-priority="3"]) {
+			display: none;
+		}
+
+		.navbar[data-collapsed] .navbar-menu-item[data-priority] {
+			display: revert;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.navbar,
+		.navbar-list::before,
+		.navbar-item > a,
+		.navbar-more > button,
+		.navbar-menu-item > a {
+			transition: none;
 		}
 	}
 </style>
+
+<script>
+	let bound = false;
+
+	function setupNavBar() {
+		if (bound) return;
+		const nav = document.querySelector<HTMLElement>(".navbar");
+		if (!nav) return;
+		bound = true;
+
+		const list = nav.querySelector<HTMLElement>(".navbar-list")!;
+		const moreItem = nav.querySelector<HTMLElement>(".navbar-more")!;
+		const moreButton = moreItem.querySelector<HTMLButtonElement>("button")!;
+		const menu = nav.querySelector<HTMLElement>(".navbar-menu")!;
+
+		let lastWidth = 0;
+		let resizeTimer: number | undefined;
+		let lastScrollY = window.scrollY;
+		let firstUpdate = true;
+		let currentAnimation: Animation | null = null;
+
+		const isLinkActive = (href: string) => {
+			if (!href.startsWith("/")) return false;
+			const path = window.location.pathname;
+			return href === "/" ? path === "/" : path.startsWith(href);
+		};
+
+		const updateAriaCurrent = () => {
+			nav.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((anchor) => {
+				if (isLinkActive(anchor.getAttribute("href") || "")) {
+					anchor.setAttribute("aria-current", "page");
+				} else {
+					anchor.removeAttribute("aria-current");
+				}
+			});
+		};
+
+		const updateIndicator = () => {
+			const visibleActive = list.querySelector<HTMLAnchorElement>('.navbar-item > a[aria-current="page"]');
+			const menuActive = menu.querySelector<HTMLAnchorElement>('a[aria-current="page"]');
+
+			let target: HTMLElement | null = null;
+			const activeItem = (visibleActive?.parentElement ?? null) as HTMLElement | null;
+			if (activeItem && activeItem.offsetParent !== null) {
+				target = activeItem;
+			} else if (menuActive) {
+				target = moreItem;
+			}
+
+			if (target) {
+				nav.style.setProperty("--indicator-left", `${target.offsetLeft}px`);
+				nav.style.setProperty("--indicator-width", `${target.offsetWidth}px`);
+				delete nav.dataset.indicatorHidden;
+				if (target === moreItem) {
+					nav.dataset.menuActive = "";
+				} else {
+					delete nav.dataset.menuActive;
+				}
+			} else {
+				nav.dataset.indicatorHidden = "";
+				delete nav.dataset.menuActive;
+			}
+		};
+
+		const flip = () => {
+			const newWidth = nav.getBoundingClientRect().width;
+			if (lastWidth && Math.abs(lastWidth - newWidth) > 0.5) {
+				currentAnimation?.cancel();
+				currentAnimation = nav.animate([{ width: `${lastWidth}px` }, { width: `${newWidth}px` }], {
+					duration: 200,
+					easing: "ease-out",
+				});
+				currentAnimation.finished
+					.then(() => {
+						currentAnimation = null;
+						lastWidth = nav.getBoundingClientRect().width;
+						updateIndicator();
+					})
+					.catch(() => {
+						/* canceled */
+					});
+			}
+			lastWidth = newWidth;
+		};
+
+		const beginResizing = () => {
+			nav.dataset.resizing = "";
+			window.clearTimeout(resizeTimer);
+			resizeTimer = window.setTimeout(() => {
+				delete nav.dataset.resizing;
+			}, 150);
+		};
+
+		const ro = new ResizeObserver(() => {
+			if (currentAnimation) return;
+			flip();
+			updateIndicator();
+		});
+		ro.observe(nav);
+
+		window.addEventListener("resize", beginResizing, { passive: true });
+
+		const updateCollapse = () => {
+			const isMobile = window.innerWidth < 640 && window.innerHeight < 1200;
+			const y = window.scrollY;
+			const isCollapsed = nav.dataset.collapsed !== undefined;
+
+			if (!isMobile || y <= 0) {
+				if (isCollapsed) {
+					delete nav.dataset.collapsed;
+					beginResizing();
+				}
+				lastScrollY = y;
+				return;
+			}
+			if (y > lastScrollY && !isCollapsed) {
+				nav.dataset.collapsed = "";
+				beginResizing();
+			} else if (y < lastScrollY && isCollapsed) {
+				delete nav.dataset.collapsed;
+				beginResizing();
+			}
+			lastScrollY = y;
+		};
+		window.addEventListener("scroll", updateCollapse, { passive: true });
+
+		const closeMenu = () => moreButton.setAttribute("aria-expanded", "false");
+
+		moreButton.addEventListener("click", () => {
+			const expanded = moreButton.getAttribute("aria-expanded") === "true";
+			moreButton.setAttribute("aria-expanded", String(!expanded));
+		});
+
+		document.addEventListener("click", (event) => {
+			if (!nav.contains(event.target as Node)) closeMenu();
+		});
+
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape") closeMenu();
+		});
+
+		menu.addEventListener("click", (event) => {
+			if ((event.target as HTMLElement).closest("a")) closeMenu();
+		});
+
+		document.addEventListener("astro:page-load", () => {
+			closeMenu();
+			updateAriaCurrent();
+			updateIndicator();
+			if (firstUpdate) {
+				requestAnimationFrame(() => {
+					requestAnimationFrame(() => {
+						nav.dataset.ready = "";
+					});
+				});
+				firstUpdate = false;
+			}
+		});
+	}
+
+	setupNavBar();
+</script>
