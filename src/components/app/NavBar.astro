@@ -1,0 +1,68 @@
+---
+const { pathname } = Astro.url;
+
+const links = [
+	{ href: "/", label: "Home" },
+	{ href: "/works/", label: "Works" },
+	{ href: "/writing/", label: "Writing" },
+	{ href: "/about/", label: "About" },
+];
+---
+
+<div class="navbar-wrapper">
+	<nav id="navigation" class="navbar">
+		<ul>
+			{
+				links.map((link) => (
+					<li>
+						<a href={link.href} aria-current={pathname === link.href ? "page" : undefined}>
+							{link.label}
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</nav>
+</div>
+
+<style>
+	.navbar-wrapper {
+		position: fixed;
+		bottom: 0;
+		inset-inline: 0;
+		width: 100%;
+	}
+
+	.navbar {
+		max-width: max-content;
+		margin-block-end: var(--t-space-6);
+		margin-inline: auto;
+		z-index: var(--t-z-dropdown);
+		border: var(--t-border-thin) solid var(--t-color-border-primary);
+		border-radius: var(--t-radius-full);
+		background-color: #fff;
+		padding: var(--t-space-1-5);
+
+		& ul {
+			display: flex;
+			justify-content: center;
+
+			& li {
+				display: flex;
+			}
+		}
+
+		& a {
+			display: block;
+			padding: var(--t-space-3) var(--t-space-4);
+			min-height: var(--t-space-8);
+			border-radius: var(--t-radius-full);
+			text-decoration: none;
+			font-weight: var(--t-font-weight-medium);
+
+			&[aria-current="page"] {
+				color: var(--t-color-accent);
+			}
+		}
+	}
+</style>
