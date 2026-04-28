@@ -179,7 +179,9 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 		inline-size: 0.75rem;
 		block-size: 0.1875rem;
 		background: currentcolor;
-		mask: var(--icon-more) center / contain no-repeat;
+		mask: var(--navbar-icon-more) center / contain no-repeat;
+
+		--navbar-icon-more: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 3"><circle cx="1.5" cy="1.5" r="1.5"/><circle cx="6" cy="1.5" r="1.5"/><circle cx="10.5" cy="1.5" r="1.5"/></svg>');
 	}
 
 	.navbar-menu {
