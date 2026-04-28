@@ -1,0 +1,51 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout>
+	<h1>Works</h1>
+	<ul>
+		<li><a href="/works/statefulcss/">Stateful CSS</a></li>
+		<li><a href="/works/idea-compass/">IDEA Compass</a></li>
+	</ul>
+</Layout>
+
+<style>
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: var(--t-space-2);
+		margin-block: var(--t-space-4);
+
+		li {
+			max-width: calc(50% - var(--t-space));
+		}
+
+		a {
+			display: flex;
+			align-items: center;
+			min-height: 4lh;
+			padding: var(--t-space-5);
+			text-decoration: none;
+			font-weight: var(--t-font-weight-medium);
+			background-color: color-mix(in oklch, currentColor 1%, transparent);
+			border: var(--t-border-thin) solid
+				light-dark(
+					color-mix(in oklch, currentColor 5%, transparent),
+					color-mix(in oklch, currentColor 2%, transparent)
+				);
+			border-radius: var(--t-radius-medium);
+
+			&:hover {
+				background-color: light-dark(
+					color-mix(in oklch, currentColor 4%, transparent),
+					color-mix(in oklch, currentColor 2%, transparent)
+				);
+				border-color: light-dark(
+					color-mix(in oklch, currentColor 10%, transparent),
+					color-mix(in oklch, currentColor 3%, transparent)
+				);
+			}
+		}
+	}
+</style>
