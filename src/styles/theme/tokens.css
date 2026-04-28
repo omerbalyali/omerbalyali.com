@@ -122,16 +122,16 @@
 
 /* Elevation */
 [data-theme] {
-	--t-z-below: -1;
-	--t-z-base: 0;
-	--t-z-raised: 10;
-	--t-z-dropdown: 20;
-	--t-z-sticky: 30;
-	--t-z-fixed: 40;
-	--t-z-overlay: 50;
-	--t-z-modal: 60;
-	--t-z-popover: 70;
-	--t-z-toast: 80;
-	--t-z-tooltip: 90;
-	--t-z-max: 9999;
+	--t-elevation-below: -1;
+	--t-elevation-base: 0;
+	--t-elevation-raised: 10;
+	--t-elevation-dropdown: 20;
+	--t-elevation-sticky: 30;
+	--t-elevation-fixed: 40;
+	--t-elevation-overlay: 50;
+	--t-elevation-modal: 60;
+	--t-elevation-popover: 70;
+	--t-elevation-toast: 80;
+	--t-elevation-tooltip: 90;
+	--t-elevation-max: 9999;
 }
