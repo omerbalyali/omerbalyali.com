@@ -1,7 +1,14 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { SITE } from "../site";
+
+const metadata = {
+	title: SITE.sections.about.title,
+	description: SITE.sections.about.description,
+	canonicalURL: "/about/",
+};
 ---
 
-<Layout>
+<Layout metadata={metadata}>
 	<h1>About</h1>
 </Layout>

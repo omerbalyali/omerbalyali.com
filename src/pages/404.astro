@@ -1,8 +1,15 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+const metadata = {
+	title: "Page Not Found",
+	description: "The requested page could not be found.",
+	canonicalURL: "/404/",
+	noindex: true,
+};
 ---
 
-<Layout>
+<Layout metadata={metadata}>
 	<h1>Page Not Found</h1>
 	<p>The page you are looking for does not exist.</p>
 	<a href="/">Go back to Home</a>

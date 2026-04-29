@@ -4,12 +4,19 @@ import Head from "../components/app/Head.astro";
 import Header from "../components/app/Header.astro";
 import NavBar from "../components/app/NavBar.astro";
 import SkipLinks from "../components/app/SkipLinks.astro";
+import type { PageMetadata } from "../lib/seo";
+
+interface Props {
+	metadata?: PageMetadata;
+}
+
+const { metadata } = Astro.props as Props;
 ---
 
 <!doctype html>
 <html lang="en" data-theme="default">
 	<head>
-		<Head />
+		<Head {...metadata} />
 	</head>
 	<body>
 		<SkipLinks />

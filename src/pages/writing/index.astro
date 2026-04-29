@@ -1,7 +1,18 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { createCollectionPageStructuredData } from "../../lib/seo";
+import { SITE } from "../../site";
+const metadata = {
+	title: SITE.sections.writing.title,
+	description: SITE.sections.writing.description,
+	canonicalURL: "/writing/",
+	structuredData: createCollectionPageStructuredData({
+		title: SITE.sections.writing.title,
+		description: SITE.sections.writing.description,
+		path: "/writing/",
+	}),
+};
 ---
 
-<Layout>
-	<h1>Writing</h1>
+<Layout metadata={metadata}>
 </Layout>

@@ -1,5 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { createWebsiteStructuredData } from "../lib/seo";
+import { SITE } from "../site";
+
+const metadata = {
+	description: SITE.description,
+	canonicalURL: "/",
+	structuredData: createWebsiteStructuredData(),
+};
 ---
 
-<Layout />
+<Layout metadata={metadata} />

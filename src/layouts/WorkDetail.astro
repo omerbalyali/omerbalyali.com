@@ -1,10 +1,19 @@
 ---
+import type { PageMetadata } from "../lib/seo";
+import { SITE } from "../site";
 import Layout from "./Layout.astro";
 
 const { frontmatter } = Astro.props;
+const metadata: PageMetadata = {
+	title: frontmatter.title,
+	description: frontmatter.description ?? SITE.sections.works.description,
+	canonicalURL: Astro.url.pathname,
+	ogImage: frontmatter.ogImage,
+	type: "article",
+};
 ---
 
-<Layout>
+<Layout metadata={metadata}>
 	<article>
 		<header>
 			<h1>{frontmatter.title}</h1>

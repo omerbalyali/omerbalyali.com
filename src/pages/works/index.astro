@@ -1,8 +1,15 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { SITE } from "../../site";
+
+const metadata = {
+	title: SITE.sections.works.title,
+	description: SITE.sections.works.description,
+	canonicalURL: "/works/",
+};
 ---
 
-<Layout>
+<Layout metadata={metadata}>
 	<h1>Works</h1>
 	<ul>
 		<li><a href="/works/statefulcss/">Stateful CSS</a></li>
