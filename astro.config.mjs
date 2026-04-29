@@ -5,21 +5,21 @@ import sitemap from "@astrojs/sitemap";
 import { defineConfig, fontProviders } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
+import { markdownConfig } from "./markdown.config.mjs";
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [
-		mdx({
-			rehypePlugins: [
-				rehypeSlug,
-				[rehypeAutolinkHeadings, { behavior: "wrap", test: ["h2", "h3", "h4", "h5", "h6"] }],
-			],
-		}),
-	],
 	adapter: cloudflare({
 		imageService: { build: "compile", runtime: "cloudflare-binding" },
 		prerenderEnvironment: "node",
 	}),
+	markdown: {
+		...markdownConfig,
+		rehypePlugins: [
+			rehypeSlug,
+			[rehypeAutolinkHeadings, { behavior: "wrap", test: ["h2", "h3", "h4", "h5", "h6"] }],
+		],
+	},
 	integrations: [mdx(), sitemap()],
 	devToolbar: {
 		enabled: false,
