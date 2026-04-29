@@ -1,6 +1,7 @@
 // @ts-check
 import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
+import sitemap from "@astrojs/sitemap";
 import { defineConfig, fontProviders } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
@@ -19,6 +20,7 @@ export default defineConfig({
 		imageService: { build: "compile", runtime: "cloudflare-binding" },
 		prerenderEnvironment: "node",
 	}),
+	integrations: [mdx(), sitemap()],
 	devToolbar: {
 		enabled: false,
 	},
