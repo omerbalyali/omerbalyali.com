@@ -1,7 +1,31 @@
 ---
+import { getCollection } from "astro:content";
+import Card from "../../components/writing/Card.astro";
 import Layout from "../../layouts/Layout.astro";
 import { createCollectionPageStructuredData } from "../../lib/seo";
 import { SITE } from "../../site";
+
+const posts = (
+	await getCollection("writing", ({ data }) => {
+		return import.meta.env.PROD ? data.draft !== true : true;
+	})
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const postsByYear = new Map<number, typeof posts>();
+
+for (const post of posts) {
+	const year = post.data.pubDate.getFullYear();
+	const yearPosts = postsByYear.get(year);
+
+	if (yearPosts) {
+		yearPosts.push(post);
+	} else {
+		postsByYear.set(year, [post]);
+	}
+}
+
+const yearlyArchive = Array.from(postsByYear.entries()).sort(([left], [right]) => right - left);
+
 const metadata = {
 	title: SITE.sections.writing.title,
 	description: SITE.sections.writing.description,
@@ -15,4 +39,27 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
+	<section>
+		<header>
+			<h1>Writing</h1>
+		</header>
+		{
+			yearlyArchive.length > 0 ? (
+				yearlyArchive.map(([year, yearPosts]) => (
+					<section aria-labelledby={`writing-year-${year}`}>
+						<div>
+							<h2 id={`writing-year-${year}`}>{year}</h2>
+						</div>
+						<div>
+							{yearPosts.map((postEntry) => (
+								<Card post={postEntry} />
+							))}
+						</div>
+					</section>
+				))
+			) : (
+				<p>No published writing yet.</p>
+			)
+		}
+	</section>
 </Layout>

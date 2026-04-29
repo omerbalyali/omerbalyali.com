@@ -1,0 +1,93 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { PageMetadata } from "../lib/seo";
+import { createBlogPostingStructuredData, formatDate, getWritingPath } from "../lib/seo";
+import Layout from "./Layout.astro";
+
+type HeadingLink = {
+	depth: number;
+	slug: string;
+	text: string;
+};
+
+interface Props {
+	post: CollectionEntry<"writing">;
+	headings: HeadingLink[];
+}
+
+const { post, headings } = Astro.props as Props;
+
+const canonicalURL = post.data.canonicalURL ?? getWritingPath(post.id);
+const ogImage = post.data.ogImage;
+const articleHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+const metadata: PageMetadata = {
+	title: post.data.title,
+	description: post.data.description,
+	canonicalURL,
+	ogImage,
+	type: "article",
+	publishedTime: post.data.pubDate,
+	modifiedTime: post.data.updatedDate,
+	tags: post.data.tags,
+	structuredData: createBlogPostingStructuredData({
+		title: post.data.title,
+		description: post.data.description,
+		path: canonicalURL,
+		imagePath: ogImage,
+		publishedTime: post.data.pubDate,
+		modifiedTime: post.data.updatedDate,
+		tags: post.data.tags,
+	}),
+};
+---
+
+<Layout metadata={metadata}>
+	<article>
+		<header>
+			{post.data.series && <p>Series: {post.data.series}</p>}
+			<h1>{post.data.title}</h1>
+			<p>{post.data.description}</p>
+			<div>
+				<p>
+					<time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+				</p>
+				{
+					post.data.updatedDate && (
+						<p>
+							Updated{" "}
+							<time datetime={post.data.updatedDate.toISOString()}>{formatDate(post.data.updatedDate)}</time>
+						</p>
+					)
+				}
+			</div>
+			{
+				post.data.tags.length > 0 && (
+					<ul aria-label="Tags">
+						{post.data.tags.map((tag: string) => (
+							<li>{tag}</li>
+						))}
+					</ul>
+				)
+			}
+		</header>
+
+		{
+			articleHeadings.length > 1 && (
+				<nav aria-labelledby="table-of-contents-title">
+					<h2 id="table-of-contents-title">On this page</h2>
+					<ol>
+						{articleHeadings.map((heading: HeadingLink) => (
+							<li data-heading-depth={`depth-${heading.depth}`}>
+								<a href={`#${heading.slug}`}>{heading.text}</a>
+							</li>
+						))}
+					</ol>
+				</nav>
+			)
+		}
+
+		<section>
+			<slot />
+		</section>
+	</article>
+</Layout>

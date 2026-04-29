@@ -1,0 +1,19 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatDate, getWritingPath } from "../../lib/seo";
+
+interface Props {
+	post: CollectionEntry<"writing">;
+}
+
+const { post } = Astro.props;
+---
+
+<article>
+	<h3>
+		<a href={getWritingPath(post.id)}>{post.data.title}</a>
+	</h3>
+	<p>
+		<time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+	</p>
+</article>
