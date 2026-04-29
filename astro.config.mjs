@@ -1,4 +1,5 @@
 // @ts-check
+import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import { defineConfig, fontProviders } from "astro/config";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -14,6 +15,10 @@ export default defineConfig({
 			],
 		}),
 	],
+	adapter: cloudflare({
+		imageService: { build: "compile", runtime: "cloudflare-binding" },
+		prerenderEnvironment: "node",
+	}),
 	devToolbar: {
 		enabled: false,
 	},
