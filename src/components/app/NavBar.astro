@@ -31,8 +31,13 @@ const mainLinks = links.filter((link) => link.priority > 0);
 const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 ---
 
-<div class="navbar-wrapper" transition:persist="navbar" transition:animate="none">
-	<nav id="navigation" class="navbar" aria-label="Primary">
+<div>
+	<nav
+		id="navigation"
+		class="navbar"
+		aria-label="Primary"
+		transition:persist="navbar"
+		transition:animate="none">
 		<ul class="navbar-list">
 			{
 				mainLinks.map((link) => (
@@ -77,175 +82,59 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			}
 		</ul>
 	</nav>
+	<div class="overlay"></div>
 </div>
 
 <style>
-	.navbar-wrapper {
+	.overlay {
+		content: "";
 		position: fixed;
-		inset-inline: 0;
-		inset-block-end: var(--t-space-6);
-		z-index: var(--t-elevation-fixed);
-		display: flex;
-		justify-content: center;
-		padding-inline: var(--t-space-6);
+		width: 100%;
+		height: 5rem;
+		background: linear-gradient(to top, var(--t-color-background-page), transparent);
+		z-index: 5;
 		pointer-events: none;
-
-		&:has(.navbar[data-collapsed]) {
-			justify-content: flex-end;
-		}
-	}
-
-	.navbar-list {
-		position: relative;
-		display: flex;
-		align-items: center;
-		isolation: isolate;
-		overflow: hidden;
-		border-radius: var(--t-radius-full);
-
-		& > li {
-			flex-shrink: 0;
-		}
-
-		&::before {
-			content: "";
-			position: absolute;
-			inset-block: 0;
-			inset-inline-start: var(--indicator-left, 0);
-			width: var(--indicator-width, 0);
-			border-radius: var(--t-radius-full);
-			border: var(--t-border-thin) solid color-mix(in oklab, currentColor 7%, transparent);
-			background-color: color-mix(in oklab, currentColor 5%, transparent);
-			z-index: -1;
-			opacity: 0;
-		}
-	}
-
-	.navbar-item > a,
-	.navbar-more > button {
-		display: block;
-		padding-block: var(--t-space-3);
-		padding-inline: var(--t-space-4);
-		border-radius: var(--t-radius-full);
-		font-size: var(--t-font-size-small);
-		font-weight: var(--t-font-weight-semibold);
-		color: color-mix(in oklab, currentColor 75%, transparent);
-		text-decoration: none;
-		background: transparent;
-		border: 0;
-		cursor: pointer;
-		transition: color var(--t-duration-fast) var(--t-ease-out);
-	}
-
-	.navbar-menu-item > a {
-		display: block;
-		padding-inline: var(--t-space-4);
-		padding-block: var(--t-space-2);
-		border-radius: var(--t-radius-large);
-		font-size: var(--t-font-size-small);
-		font-weight: var(--t-font-weight-semibold);
-		color: color-mix(in oklab, currentColor 75%, transparent);
-		text-decoration: none;
-		transition:
-			color var(--t-duration-fast) var(--t-ease-out),
-			background-color var(--t-duration-fast) var(--t-ease-out);
-	}
-
-	.navbar-item[data-home] > a {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding-inline: 0.875rem;
-	}
-
-	.navbar-more > button {
-		display: grid;
-		place-items: center;
-		inline-size: var(--t-space-11);
-		block-size: var(--t-space-11);
-		padding: 0;
-	}
-
-	.navbar-logo {
-		display: block;
-		inline-size: 1rem;
-		block-size: 1rem;
-		background: currentcolor;
-		mask: var(--t-brand-logomark) center / contain no-repeat;
-	}
-
-	.navbar-icon {
-		display: block;
-		inline-size: 0.75rem;
-		block-size: 0.1875rem;
-		background: currentcolor;
-		mask: var(--navbar-icon-more) center / contain no-repeat;
-
-		--navbar-icon-more: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 3"><circle cx="1.5" cy="1.5" r="1.5"/><circle cx="6" cy="1.5" r="1.5"/><circle cx="10.5" cy="1.5" r="1.5"/></svg>');
-	}
-
-	.navbar-menu {
-		position: absolute;
-		inset-inline-end: 0;
-		inset-block-end: 100%;
-		margin-block-end: var(--t-space-4);
-		min-inline-size: 12rem;
-		padding: var(--t-space-2);
-		border-radius: var(--t-radius-xlarge);
-		border: var(--t-border-thin) solid var(--t-color-border-primary);
-		background-color: color-mix(in oklab, var(--t-color-background-page) 85%, transparent);
-		backdrop-filter: blur(8px);
-		display: none;
-		flex-direction: column;
-		gap: var(--t-space-1);
-	}
-
-	.navbar-item > a:hover,
-	.navbar-more > button:hover {
-		color: currentcolor;
-	}
-
-	.navbar-menu-item > a:hover {
-		color: currentcolor;
-		background-color: color-mix(in oklab, currentColor 5%, transparent);
-	}
-
-	.navbar-item > a[aria-current="page"] {
-		color: var(--t-color-accent);
-	}
-
-	.navbar-menu-item > a[aria-current="page"] {
-		color: var(--t-color-accent);
-		background-color: color-mix(in oklab, currentColor 10%, transparent);
-	}
-
-	.navbar-menu-item[data-priority="1"],
-	.navbar-menu-item[data-priority="2"] {
-		display: none;
+		inset-block-end: 0;
+		inset-inline: auto;
 	}
 
 	.navbar {
-		pointer-events: auto;
-		position: relative;
+		:where(&) {
+			--s-inset-inline: 0;
+			--s-margin-inline-end: auto;
+			--s-opacity: 0;
+			--s-transition: none;
+		}
+
+		position: fixed;
 		max-width: max-content;
-		border: var(--t-border-thin) solid var(--t-color-border-primary);
-		border-radius: var(--t-radius-full);
-		background-color: color-mix(in oklab, var(--t-color-background-page) 85%, transparent);
-		backdrop-filter: blur(8px);
+		inset-block-end: 1lh;
+		inset-inline: var(--s-inset-inline);
+		margin-inline: auto var(--s-margin-inline-end);
 		padding: var(--t-space-1-5);
-		opacity: 0;
+		z-index: var(--t-elevation-fixed);
+		pointer-events: auto;
+		border-radius: var(--t-radius-full);
+		border: var(--t-border-thin) solid hsl(0deg 0% 0% / 7%);
+		background-color: light-dark(hsl(0deg 0% 98% / 90%), hsl(0deg 0% 8% / 90%));
+		backdrop-filter: blur(3px);
+		box-shadow:
+			inset 0 0 0 1px light-dark(white, hsl(0deg 0% 100% / 7%)),
+			0 2px 2px 0 hsl(0deg 0% 0% / 2%),
+			0 10px 15px 0 hsl(0deg 0% 0% / 2%);
+		opacity: var(--s-opacity);
 
 		&[data-ready] {
-			opacity: 1;
-			transition: opacity var(--t-duration-base) var(--t-ease-out);
+			--s-opacity: 1;
+			--s-transition: opacity var(--t-duration-base) var(--t-ease-out);
+		}
 
-			& .navbar-list::before {
-				opacity: 1;
-				transition:
-					inset-inline-start var(--t-duration-base) var(--t-ease-out),
-					width var(--t-duration-base) var(--t-ease-out),
-					opacity var(--t-duration-fast) var(--t-ease-out);
-			}
+		&[data-ready] .navbar-list::before {
+			opacity: 1;
+			transition:
+				inset-inline-start var(--t-duration-base) var(--t-ease-out),
+				width var(--t-duration-base) var(--t-ease-out),
+				opacity var(--t-duration-fast) var(--t-ease-out);
 		}
 
 		&[data-resizing] .navbar-list::before {
@@ -256,56 +145,212 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			opacity: 0;
 		}
 
-		&[data-menu-active] .navbar-more > button {
-			color: var(--t-color-accent);
+		@media (width <= 379px) {
+			--s-inset-inline: auto 0;
+			--s-margin-inline-end: var(--t-space-4);
 		}
 
-		&:has(.navbar-more > button[aria-expanded="true"]) .navbar-menu {
+		@media (prefers-reduced-motion: reduce) {
+			--s-transition: none;
+		}
+	}
+
+	.navbar-list {
+		position: relative;
+		display: flex;
+		align-items: stretch;
+		isolation: isolate;
+		overflow: hidden;
+		border-radius: var(--t-radius-full);
+
+		& > li {
+			/* flex-shrink: 0; */
+			display: flex;
+
+			& > a,
+			& > button {
+				:where(&) {
+					--s-color: color-mix(in oklab, currentColor 75%, transparent);
+					--s-outline: ;
+					--s-outline-offset: ;
+					--s-transition: color var(--t-duration-fast) var(--t-ease-out);
+				}
+
+				display: flex;
+				align-items: center;
+				padding-block: var(--t-space-3);
+				padding-inline: var(--t-space-4);
+				border-radius: var(--t-radius-full);
+				border: 0;
+				text-decoration: none;
+				font-size: var(--t-font-size-small);
+				font-weight: var(--t-font-weight-medium);
+				color: var(--s-color);
+				background: transparent;
+				transition: var(--s-transition);
+				cursor: pointer;
+
+				&:hover {
+					--s-color: currentColor;
+				}
+
+				&:focus-visible {
+					--s-outline: var(--t-border-default) solid currentColor;
+					--s-outline-offset: var(--t-border-thin);
+				}
+
+				&[aria-current="page"] {
+					--s-color: var(--t-color-accent);
+				}
+
+				@media (prefers-reduced-motion: reduce) {
+					--s-transition: none;
+				}
+			}
+
+			&[data-home] > a {
+				/* padding-inline: 0.875rem; */
+			}
+
+			& > button {
+				display: grid;
+				place-items: center;
+				aspect-ratio: 1 / 1;
+				block-size: var(--t-space-12);
+				background-color: color-mix(in oklab, currentColor 5%, transparent);
+
+				[data-menu-active] & {
+					color: var(--t-color-accent);
+				}
+			}
+
+			&[data-priority="1"] {
+				@media (width <= 519px) {
+					display: none;
+				}
+			}
+
+			&[data-priority="2"] {
+				@media (width <= 379px) {
+					display: none;
+				}
+			}
+
+			.navbar[data-collapsed] &:not([data-priority="3"]) {
+				@media (width <= 639px) and (height <= 1199px) {
+					display: none;
+				}
+			}
+		}
+
+		/* Active Route Indicator */
+		&::before {
+			content: "";
+			position: absolute;
+			inset-block: 0;
+			inset-inline-start: var(--indicator-left, 0);
+			width: var(--indicator-width, 0);
+			border-radius: var(--t-radius-full);
+			border: var(--t-border-thin) solid color-mix(in oklab, var(--t-color-accent) 7%, transparent);
+			background-color: color-mix(in oklab, var(--t-color-accent) 5%, transparent);
+			z-index: -1;
+			opacity: 0;
+
+			@media (prefers-reduced-motion: reduce) {
+				transition: none;
+			}
+		}
+
+		/* Home Link Logo */
+		.navbar-logo {
+			display: flex;
+			inline-size: 1rem;
+			aspect-ratio: 1 / 1;
+			background: currentcolor;
+			mask: var(--t-brand-logomark) center / contain no-repeat;
+		}
+
+		/* More Button Icon */
+		.navbar-icon {
+			display: block;
+			aspect-ratio: 4 / 1;
+			inline-size: 0.5lh;
+			background: currentcolor;
+			mask: var(--navbar-icon-more) center / contain no-repeat;
+
+			--navbar-icon-more: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 3"><circle cx="1.5" cy="1.5" r="1.5"/><circle cx="6" cy="1.5" r="1.5"/><circle cx="10.5" cy="1.5" r="1.5"/></svg>');
+		}
+	}
+
+	.navbar-menu {
+		position: absolute;
+		inset-inline-end: 0;
+		inset-block-end: 100%;
+		margin-block-end: var(--t-space-3);
+		min-inline-size: var(--t-space-48);
+		padding: var(--t-space-2);
+		border-radius: var(--t-radius-xlarge);
+		border: var(--t-border-thin) solid var(--t-color-border-primary);
+		background-color: color-mix(in oklab, var(--t-color-background-page) 85%, transparent);
+		backdrop-filter: blur(8px);
+		display: none;
+		flex-direction: column;
+		gap: var(--t-space-1-5);
+
+		.navbar:has(.navbar-more > button[aria-expanded="true"]) & {
 			display: flex;
 		}
-	}
 
-	@media (width <= 519px) {
-		.navbar-list .navbar-item[data-priority="1"] {
-			display: none;
-		}
+		& > li {
+			&:is([data-priority="1"], [data-priority="2"]) {
+				display: none;
+			}
 
-		.navbar-menu-item[data-priority="1"] {
-			display: revert;
-		}
-	}
+			&[data-priority="1"] {
+				@media (width <= 519px) {
+					display: revert;
+				}
+			}
 
-	@media (width <= 379px) {
-		.navbar-wrapper {
-			justify-content: flex-end;
-		}
+			&[data-priority="2"] {
+				@media (width <= 379px) {
+					display: revert;
+				}
+			}
 
-		.navbar-list .navbar-item[data-priority="2"] {
-			display: none;
-		}
+			.navbar[data-collapsed] &[data-priority] {
+				@media (width <= 639px) and (height <= 1199px) {
+					display: revert;
+				}
+			}
 
-		.navbar-menu-item[data-priority="2"] {
-			display: revert;
-		}
-	}
+			& > a {
+				display: block;
+				padding-inline: var(--t-space-4);
+				padding-block: var(--t-space-2);
+				border-radius: var(--t-radius-large);
+				font-size: var(--t-font-size-small);
+				font-weight: var(--t-font-weight-medium);
+				color: color-mix(in oklab, currentColor 75%, transparent);
+				text-decoration: none;
+				transition:
+					color var(--t-duration-fast) var(--t-ease-out),
+					background-color var(--t-duration-fast) var(--t-ease-out);
 
-	@media (width <= 639px) and (height <= 1199px) {
-		.navbar[data-collapsed] .navbar-list .navbar-item:not([data-priority="3"]) {
-			display: none;
-		}
+				&:hover {
+					color: currentcolor;
+					background-color: color-mix(in oklab, currentColor 5%, transparent);
+				}
 
-		.navbar[data-collapsed] .navbar-menu-item[data-priority] {
-			display: revert;
-		}
-	}
+				&[aria-current="page"] {
+					color: var(--t-color-accent);
+					background-color: color-mix(in oklab, currentColor 10%, transparent);
+				}
 
-	@media (prefers-reduced-motion: reduce) {
-		.navbar,
-		.navbar-list::before,
-		.navbar-item > a,
-		.navbar-more > button,
-		.navbar-menu-item > a {
-			transition: none;
+				@media (prefers-reduced-motion: reduce) {
+					transition: none;
+				}
+			}
 		}
 	}
 </style>
