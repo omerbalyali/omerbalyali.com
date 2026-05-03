@@ -64,6 +64,9 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					<span class="navbar-icon" aria-hidden="true"></span>
 				</button>
 			</li>
+			<li role="presentation" aria-hidden="true">
+				<div class="navbar-indicator"></div>
+			</li>
 		</ul>
 		<ul class="navbar-menu" id="navbar-menu">
 			{
@@ -86,269 +89,307 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 </div>
 
 <style>
-	.overlay {
-		content: "";
-		position: fixed;
-		width: 100%;
-		height: 5rem;
-		background: linear-gradient(to top, var(--t-color-background-page), transparent);
-		z-index: 5;
-		pointer-events: none;
-		inset-block-end: 0;
-		inset-inline: auto;
-	}
-
-	.navbar {
-		:where(&) {
-			--s-inset-inline: 0;
-			--s-margin-inline-end: auto;
-			--s-opacity: 0;
-			--s-transition: none;
+	/* stylelint-disable custom-property-pattern */
+	@layer components {
+		.overlay {
+			position: fixed;
+			width: 100%;
+			height: 5rem;
+			background: linear-gradient(to top, var(--t-color-background-page), transparent);
+			z-index: 5;
+			pointer-events: none;
+			inset-block-end: 0;
+			inset-inline: auto;
 		}
 
-		position: fixed;
-		max-width: max-content;
-		inset-block-end: 1lh;
-		inset-inline: var(--s-inset-inline);
-		margin-inline: auto var(--s-margin-inline-end);
-		padding: var(--t-space-1-5);
-		z-index: var(--t-elevation-fixed);
-		pointer-events: auto;
-		border-radius: var(--t-radius-full);
-		border: var(--t-border-thin) solid hsl(0deg 0% 0% / 7%);
-		background-color: light-dark(hsl(0deg 0% 98% / 90%), hsl(0deg 0% 8% / 90%));
-		backdrop-filter: blur(3px);
-		box-shadow:
-			inset 0 0 0 1px light-dark(white, hsl(0deg 0% 100% / 7%)),
-			0 2px 2px 0 hsl(0deg 0% 0% / 2%),
-			0 10px 15px 0 hsl(0deg 0% 0% / 2%);
-		opacity: var(--s-opacity);
-
-		&[data-ready] {
-			--s-opacity: 1;
-			--s-transition: opacity var(--t-duration-base) var(--t-ease-out);
-		}
-
-		&[data-ready] .navbar-list::before {
-			opacity: 1;
-			transition:
-				inset-inline-start var(--t-duration-base) var(--t-ease-out),
-				width var(--t-duration-base) var(--t-ease-out),
-				opacity var(--t-duration-fast) var(--t-ease-out);
-		}
-
-		&[data-resizing] .navbar-list::before {
-			transition: none;
-		}
-
-		&[data-indicator-hidden] .navbar-list::before {
-			opacity: 0;
-		}
-
-		@media (width <= 379px) {
-			--s-inset-inline: auto 0;
-			--s-margin-inline-end: var(--t-space-4);
-		}
-
-		@media (prefers-reduced-motion: reduce) {
-			--s-transition: none;
-		}
-	}
-
-	.navbar-list {
-		position: relative;
-		display: flex;
-		align-items: stretch;
-		isolation: isolate;
-		overflow: hidden;
-		border-radius: var(--t-radius-full);
-
-		& > li {
-			/* flex-shrink: 0; */
-			display: flex;
-
-			& > a,
-			& > button {
-				:where(&) {
-					--s-color: color-mix(in oklab, currentColor 75%, transparent);
-					--s-outline: ;
-					--s-outline-offset: ;
-					--s-transition: color var(--t-duration-fast) var(--t-ease-out);
-				}
-
-				display: flex;
-				align-items: center;
-				padding-block: var(--t-space-3);
-				padding-inline: var(--t-space-4);
-				border-radius: var(--t-radius-full);
-				border: 0;
-				text-decoration: none;
-				font-size: var(--t-font-size-small);
-				font-weight: var(--t-font-weight-medium);
-				color: var(--s-color);
-				background: transparent;
-				transition: var(--s-transition);
-				cursor: pointer;
-
-				&:hover {
-					--s-color: currentColor;
-				}
-
-				&:focus-visible {
-					--s-outline: var(--t-border-default) solid currentColor;
-					--s-outline-offset: var(--t-border-thin);
-				}
-
-				&[aria-current="page"] {
-					--s-color: var(--t-color-accent);
-				}
-
-				@media (prefers-reduced-motion: reduce) {
-					--s-transition: none;
-				}
+		.navbar {
+			:where(&) {
+				--s-inset-inline: 0;
+				--s-margin-inline-end: auto;
+				--s-opacity: 0;
+				--s-transition: none;
 			}
 
-			&[data-home] > a {
-				/* padding-inline: 0.875rem; */
+			position: fixed;
+			max-width: max-content;
+			inset-block-end: 1lh;
+			inset-inline: var(--s-inset-inline);
+			margin-inline: auto var(--s-margin-inline-end);
+			padding: var(--t-space-1-5);
+			z-index: var(--t-elevation-fixed);
+			pointer-events: auto;
+			border-radius: var(--t-radius-full);
+			border: var(--t-border-thin) solid hsl(0deg 0% 0% / 7%);
+			background-color: light-dark(hsl(0deg 0% 100% / 85%), hsl(0deg 0% 18% / 90%));
+			backdrop-filter: blur(3px);
+			box-shadow:
+				inset 0 0 0 1px light-dark(white, hsl(0deg 0% 100% / 7%)),
+				0 2px 2px 0 hsl(0deg 0% 0% / 2%),
+				0 10px 15px 0 hsl(0deg 0% 0% / 2%);
+			opacity: var(--s-opacity);
+			transition: var(--s-transition);
+			user-select: none;
+			/* stylelint-disable-next-line property-no-vendor-prefix */
+			-webkit-user-select: none;
+
+			&[data-ready] {
+				--s-opacity: 1;
+				--s-transition: opacity var(--t-duration-base) var(--t-ease-out);
 			}
 
-			& > button {
-				display: grid;
-				place-items: center;
-				aspect-ratio: 1 / 1;
-				block-size: var(--t-space-12);
-				background-color: color-mix(in oklab, currentColor 5%, transparent);
-
-				[data-menu-active] & {
-					color: var(--t-color-accent);
-				}
+			@media (width <= 379px) {
+				--s-inset-inline: auto 0;
+				--s-margin-inline-end: var(--t-space-4);
 			}
 
-			&[data-priority="1"] {
-				@media (width <= 519px) {
-					display: none;
-				}
-			}
-
-			&[data-priority="2"] {
-				@media (width <= 379px) {
-					display: none;
-				}
-			}
-
-			.navbar[data-collapsed] &:not([data-priority="3"]) {
-				@media (width <= 639px) and (height <= 1199px) {
-					display: none;
-				}
+			@media (prefers-reduced-motion: reduce) {
+				--s-transition: none;
 			}
 		}
 
 		/* Active Route Indicator */
-		&::before {
-			content: "";
+		/* stylelint-disable-next-line no-descending-specificity */
+		.navbar-indicator {
+			:where(&) {
+				--s-inset-inline-start: var(--c-navbar-indicator-left, 0);
+				--s-width: var(--c-navbar-indicator-width, 0);
+				--s-opacity: var(--c-navbar-indicator-opacity, 0);
+				--s-transition: var(--c-navbar-indicator-transition, none);
+			}
+
 			position: absolute;
 			inset-block: 0;
-			inset-inline-start: var(--indicator-left, 0);
-			width: var(--indicator-width, 0);
+			inset-inline-start: var(--s-inset-inline-start);
+			width: var(--s-width);
 			border-radius: var(--t-radius-full);
 			border: var(--t-border-thin) solid color-mix(in oklab, var(--t-color-accent) 7%, transparent);
 			background-color: color-mix(in oklab, var(--t-color-accent) 5%, transparent);
 			z-index: -1;
-			opacity: 0;
+			opacity: var(--s-opacity);
+			transition: var(--s-transition);
+
+			.navbar[data-ready] & {
+				--s-opacity: 1;
+				--s-transition:
+					inset-inline-start var(--t-duration-base) var(--t-ease-out),
+					width var(--t-duration-base) var(--t-ease-out), opacity var(--t-duration-fast) var(--t-ease-out);
+			}
+
+			.navbar[data-resizing] & {
+				--s-transition: none;
+			}
+
+			.navbar[data-indicator-hidden] & {
+				--s-opacity: 0;
+			}
 
 			@media (prefers-reduced-motion: reduce) {
-				transition: none;
+				--s-transition: none;
 			}
 		}
 
-		/* Home Link Logo */
-		.navbar-logo {
+		/* Navbar List (and Visible Items) */
+		.navbar-list {
+			position: relative;
 			display: flex;
-			inline-size: 1rem;
-			aspect-ratio: 1 / 1;
-			background: currentcolor;
-			mask: var(--t-brand-logomark) center / contain no-repeat;
-		}
+			align-items: stretch;
+			isolation: isolate;
+			border-radius: var(--t-radius-full);
 
-		/* More Button Icon */
-		.navbar-icon {
-			display: block;
-			aspect-ratio: 4 / 1;
-			inline-size: 0.5lh;
-			background: currentcolor;
-			mask: var(--navbar-icon-more) center / contain no-repeat;
+			& > li {
+				:where(&) {
+					--s-display: flex;
+				}
 
-			--navbar-icon-more: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 3"><circle cx="1.5" cy="1.5" r="1.5"/><circle cx="6" cy="1.5" r="1.5"/><circle cx="10.5" cy="1.5" r="1.5"/></svg>');
-		}
-	}
+				/* flex-shrink: 0; */
+				display: var(--s-display);
 
-	.navbar-menu {
-		position: absolute;
-		inset-inline-end: 0;
-		inset-block-end: 100%;
-		margin-block-end: var(--t-space-3);
-		min-inline-size: var(--t-space-48);
-		padding: var(--t-space-2);
-		border-radius: var(--t-radius-xlarge);
-		border: var(--t-border-thin) solid var(--t-color-border-primary);
-		background-color: color-mix(in oklab, var(--t-color-background-page) 85%, transparent);
-		backdrop-filter: blur(8px);
-		display: none;
-		flex-direction: column;
-		gap: var(--t-space-1-5);
+				&[data-priority="1"] {
+					@media (width <= 519px) {
+						--s-display: none;
+					}
+				}
 
-		.navbar:has(.navbar-more > button[aria-expanded="true"]) & {
-			display: flex;
-		}
+				&[data-priority="2"] {
+					@media (width <= 379px) {
+						--s-display: none;
+					}
+				}
 
-		& > li {
-			&:is([data-priority="1"], [data-priority="2"]) {
-				display: none;
-			}
+				.navbar[data-collapsed] &:not([data-priority="3"]) {
+					@media (width <= 639px) and (height <= 1199px) {
+						--s-display: none;
+					}
+				}
 
-			&[data-priority="1"] {
-				@media (width <= 519px) {
-					display: revert;
+				& > a,
+				& > button {
+					:where(&) {
+						--s-background-color: transparent;
+						--s-color: color-mix(in oklab, currentColor 75%, transparent);
+						--s-display: flex;
+						--s-outline-color: transparent;
+						--s-transition: color var(--t-duration-fast) var(--t-ease-out);
+					}
+
+					display: var(--s-display);
+					align-items: center;
+					padding-block: var(--t-space-3);
+					padding-inline: var(--t-space-4);
+					border-radius: var(--t-radius-full);
+					border: 0;
+					text-decoration: none;
+					font-size: var(--t-font-size-small);
+					font-weight: var(--t-font-weight-medium);
+					color: var(--s-color);
+					background-color: var(--s-background-color);
+					outline: var(--t-border-default) solid var(--s-outline-color);
+					outline-offset: var(--t-border-thin);
+					transition: var(--s-transition);
+					cursor: pointer;
+
+					&:hover {
+						--s-color: currentColor;
+					}
+
+					&:focus-visible {
+						--s-outline-color: currentColor;
+					}
+
+					&[aria-current="page"] {
+						--s-color: var(--t-color-accent);
+					}
+
+					&:is(button) {
+						--s-display: grid;
+						--s-background-color: color-mix(in oklab, currentColor 5%, transparent);
+
+						place-items: center;
+						aspect-ratio: 1 / 1;
+						block-size: var(--t-space-12);
+
+						.navbar[data-menu-active] & {
+							--s-color: var(--t-color-accent);
+						}
+					}
+
+					@media (prefers-reduced-motion: reduce) {
+						--s-transition: none;
+					}
+				}
+
+				&[data-home] > a {
+					/* padding-inline: 0.875rem; */
 				}
 			}
 
-			&[data-priority="2"] {
-				@media (width <= 379px) {
-					display: revert;
-				}
+			/* Home Link Logo */
+			.navbar-logo {
+				display: flex;
+				inline-size: 1rem;
+				aspect-ratio: 1 / 1;
+				background: currentColor;
+				mask: var(--t-brand-logomark) center / contain no-repeat;
 			}
 
-			.navbar[data-collapsed] &[data-priority] {
-				@media (width <= 639px) and (height <= 1199px) {
-					display: revert;
-				}
-			}
-
-			& > a {
+			/* More Button Icon */
+			.navbar-icon {
 				display: block;
-				padding-inline: var(--t-space-4);
-				padding-block: var(--t-space-2);
-				border-radius: var(--t-radius-large);
-				font-size: var(--t-font-size-small);
-				font-weight: var(--t-font-weight-medium);
-				color: color-mix(in oklab, currentColor 75%, transparent);
-				text-decoration: none;
-				transition:
-					color var(--t-duration-fast) var(--t-ease-out),
-					background-color var(--t-duration-fast) var(--t-ease-out);
+				aspect-ratio: 4 / 1;
+				inline-size: 0.5lh;
+				background: currentColor;
+				mask: var(--_navbar-icon-more) center / contain no-repeat;
 
-				&:hover {
-					color: currentcolor;
-					background-color: color-mix(in oklab, currentColor 5%, transparent);
+				--_navbar-icon-more: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 3"><circle cx="1.5" cy="1.5" r="1.5"/><circle cx="6" cy="1.5" r="1.5"/><circle cx="10.5" cy="1.5" r="1.5"/></svg>');
+			}
+		}
+
+		/* Dropdown Menu (More Items) */
+		.navbar-menu {
+			:where(&) {
+				--s-display: none;
+			}
+
+			position: absolute;
+			inset-inline-end: 0;
+			inset-block-end: 100%;
+			margin-block-end: var(--t-space-3);
+			min-inline-size: var(--t-space-48);
+			padding: var(--t-space-2);
+			border-radius: var(--t-radius-xlarge);
+			border: var(--t-border-thin) solid var(--t-color-border-primary);
+			background-color: color-mix(in oklab, var(--t-color-background-page) 85%, transparent);
+			backdrop-filter: blur(8px);
+			display: var(--s-display);
+			flex-direction: column;
+			gap: var(--t-space-1-5);
+
+			.navbar:has(.navbar-more > button[aria-expanded="true"]) & {
+				--s-display: flex;
+			}
+
+			& > li {
+				:where(&) {
+					--s-display: block;
 				}
 
-				&[aria-current="page"] {
-					color: var(--t-color-accent);
-					background-color: color-mix(in oklab, currentColor 10%, transparent);
+				display: var(--s-display);
+
+				&:is([data-priority="1"], [data-priority="2"]) {
+					--s-display: none;
 				}
 
-				@media (prefers-reduced-motion: reduce) {
-					transition: none;
+				&[data-priority="1"] {
+					@media (width <= 519px) {
+						--s-display: revert;
+					}
+				}
+
+				&[data-priority="2"] {
+					@media (width <= 379px) {
+						--s-display: revert;
+					}
+				}
+
+				.navbar[data-collapsed] &[data-priority] {
+					@media (width <= 639px) and (height <= 1199px) {
+						--s-display: revert;
+					}
+				}
+
+				& > a {
+					:where(&) {
+						--s-color: color-mix(in oklab, currentColor 75%, transparent);
+						--s-background-color: transparent;
+						--s-transition:
+							color var(--t-duration-fast) var(--t-ease-out),
+							background-color var(--t-duration-fast) var(--t-ease-out);
+					}
+
+					display: block;
+					padding-inline: var(--t-space-4);
+					padding-block: var(--t-space-2);
+					border-radius: var(--t-radius-large);
+					font-size: var(--t-font-size-small);
+					font-weight: var(--t-font-weight-medium);
+					color: var(--s-color);
+					background-color: var(--s-background-color);
+					text-decoration: none;
+					transition: var(--s-transition);
+
+					&:hover {
+						--s-color: currentColor;
+						--s-background-color: color-mix(in oklab, currentColor 5%, transparent);
+					}
+
+					&[aria-current="page"] {
+						--s-color: var(--t-color-accent);
+						--s-background-color: color-mix(in oklab, currentColor 10%, transparent);
+					}
+
+					@media (prefers-reduced-motion: reduce) {
+						--s-transition: none;
+					}
 				}
 			}
 		}
@@ -364,6 +405,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 		if (!nav) return;
 		bound = true;
 
+		const indicator = nav.querySelector<HTMLElement>(".navbar-indicator")!;
 		const list = nav.querySelector<HTMLElement>(".navbar-list")!;
 		const moreItem = nav.querySelector<HTMLElement>(".navbar-more")!;
 		const moreButton = moreItem.querySelector<HTMLButtonElement>("button")!;
@@ -404,8 +446,8 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			}
 
 			if (target) {
-				nav.style.setProperty("--indicator-left", `${target.offsetLeft}px`);
-				nav.style.setProperty("--indicator-width", `${target.offsetWidth}px`);
+				indicator.style.setProperty("--c-navbar-indicator-left", `${target.offsetLeft}px`);
+				indicator.style.setProperty("--c-navbar-indicator-width", `${target.offsetWidth}px`);
 				delete nav.dataset.indicatorHidden;
 				if (target === moreItem) {
 					nav.dataset.menuActive = "";
