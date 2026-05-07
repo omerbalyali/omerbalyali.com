@@ -26,8 +26,8 @@ const { metadata } = Astro.props as Props;
 				<slot />
 			</main>
 			<NavBar />
-			<Footer />
 		</div>
+		<Footer />
 	</body>
 </html>
 
@@ -39,7 +39,7 @@ const { metadata } = Astro.props as Props;
 	}
 
 	.page {
-		flex: 1;
+		flex-grow: 1;
 		padding-block: var(--t-space-6);
 		background-color: var(--t-color-background-page);
 	}
