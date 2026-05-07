@@ -465,7 +465,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 
 		const flip = () => {
 			const newWidth = nav.getBoundingClientRect().width;
-			if (lastWidth && Math.abs(lastWidth - newWidth) > 0.5) {
+			if (lastWidth && lastWidth - newWidth > 0.5) {
 				currentAnimation?.cancel();
 				currentAnimation = nav.animate([{ width: `${lastWidth}px` }, { width: `${newWidth}px` }], {
 					duration: 200,
@@ -492,10 +492,15 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			}, 150);
 		};
 
+		let pendingFrame: number | undefined;
 		const ro = new ResizeObserver(() => {
-			if (currentAnimation) return;
-			flip();
-			updateIndicator();
+			if (currentAnimation || pendingFrame !== undefined) return;
+			pendingFrame = requestAnimationFrame(() => {
+				pendingFrame = undefined;
+				if (currentAnimation) return;
+				flip();
+				updateIndicator();
+			});
 		});
 		ro.observe(nav);
 
