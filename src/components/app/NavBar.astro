@@ -204,7 +204,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					--s-display: flex;
 				}
 
-				/* flex-shrink: 0; */
 				display: var(--s-display);
 
 				&[data-priority="1"] {
@@ -236,6 +235,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					}
 
 					display: var(--s-display);
+					position: relative;
 					align-items: center;
 					padding-block: var(--t-space-3);
 					padding-inline: var(--t-space-4);
@@ -276,13 +276,16 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 						}
 					}
 
+					/* Increase clickable area */
+					&::after {
+						content: "";
+						position: absolute;
+						inset: 0;
+					}
+
 					@media (prefers-reduced-motion: reduce) {
 						--s-transition: none;
 					}
-				}
-
-				&[data-home] > a {
-					/* padding-inline: 0.875rem; */
 				}
 			}
 
