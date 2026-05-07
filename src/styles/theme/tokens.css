@@ -85,6 +85,9 @@
 	--t-space-21: 5.25rem; /* 84px */
 	--t-space-24: 6rem; /* 96px */
 	--t-space-32: 8rem; /* 128px */
+	--t-space-36: 9rem; /* 144px */
+	--t-space-40: 10rem; /* 160px */
+	--t-space-48: 12rem; /* 192px */
 }
 
 /* Borders */
