@@ -32,12 +32,8 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 ---
 
 <div>
-	<nav
-		id="navigation"
-		class="navbar"
-		aria-label="Primary"
-		transition:persist="navbar"
-		transition:animate="none">
+	<nav id="navigation" class="navbar" aria-label="Primary" transition:persist="navbar">
+		<div class="navbar-surface" aria-hidden="true"></div>
 		<ul class="navbar-list">
 			{
 				mainLinks.map((link) => (
@@ -118,14 +114,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			padding: var(--t-space-1-5);
 			z-index: var(--t-elevation-fixed);
 			pointer-events: auto;
-			border-radius: var(--t-radius-full);
-			border: var(--t-border-thin) solid hsl(0deg 0% 0% / 7%);
-			background-color: light-dark(hsl(0deg 0% 100% / 85%), hsl(0deg 0% 18% / 90%));
-			backdrop-filter: blur(3px);
-			box-shadow:
-				inset 0 0 0 1px light-dark(white, hsl(0deg 0% 100% / 7%)),
-				0 2px 2px 0 hsl(0deg 0% 0% / 2%),
-				0 10px 15px 0 hsl(0deg 0% 0% / 2%);
 			opacity: var(--s-opacity);
 			transition: var(--s-transition);
 			user-select: none;
@@ -145,6 +133,21 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			@media (prefers-reduced-motion: reduce) {
 				--s-transition: none;
 			}
+		}
+
+		.navbar-surface {
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			border-radius: var(--t-radius-full);
+			border: var(--t-border-thin) solid hsl(0deg 0% 0% / 7%);
+			background-color: light-dark(hsl(0deg 0% 100% / 85%), hsl(0deg 0% 18% / 90%));
+			backdrop-filter: blur(3px);
+			box-shadow:
+				inset 0 0 0 1px light-dark(white, hsl(0deg 0% 100% / 7%)),
+				0 2px 2px 0 hsl(0deg 0% 0% / 2%),
+				0 10px 15px 0 hsl(0deg 0% 0% / 2%);
+			pointer-events: none;
 		}
 
 		/* Active Route Indicator */
