@@ -11,7 +11,7 @@
 [data-theme="default"] {
 	color-scheme: light dark;
 
-	--t-color-accent: light-dark(oklch(50% 0.4 165deg), oklch(85% 0.5 170deg));
+	--t-color-accent: light-dark(oklch(50% 0.4 280deg), oklch(85% 0.5 170deg));
 
 	--t-color-foreground-base: light-dark(oklch(25% 0.01 50deg), oklch(88% 0 0deg));
 	--t-color-foreground-weak: oklch(
