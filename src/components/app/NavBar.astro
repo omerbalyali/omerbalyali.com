@@ -218,12 +218,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					}
 				}
 
-				.navbar[data-collapsed] &:not([data-priority="3"]) {
-					@media (width <= 639px) and (height <= 1199px) {
-						--s-display: none;
-					}
-				}
-
 				& > a,
 				& > button {
 					:where(&) {
@@ -357,12 +351,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					}
 				}
 
-				.navbar[data-collapsed] &[data-priority] {
-					@media (width <= 639px) and (height <= 1199px) {
-						--s-display: revert;
-					}
-				}
-
 				& > a {
 					:where(&) {
 						--s-color: color-mix(in oklab, currentColor 75%, transparent);
@@ -419,7 +407,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 
 		let lastWidth = 0;
 		let resizeTimer: number | undefined;
-		let lastScrollY = window.scrollY;
 		let firstUpdate = true;
 		let currentAnimation: Animation | null = null;
 
@@ -508,30 +495,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 		ro.observe(nav);
 
 		window.addEventListener("resize", beginResizing, { passive: true });
-
-		const updateCollapse = () => {
-			const isMobile = window.innerWidth < 640 && window.innerHeight < 1200;
-			const y = window.scrollY;
-			const isCollapsed = nav.dataset.collapsed !== undefined;
-
-			if (!isMobile || y <= 0) {
-				if (isCollapsed) {
-					delete nav.dataset.collapsed;
-					beginResizing();
-				}
-				lastScrollY = y;
-				return;
-			}
-			if (y > lastScrollY && !isCollapsed) {
-				nav.dataset.collapsed = "";
-				beginResizing();
-			} else if (y < lastScrollY && isCollapsed) {
-				delete nav.dataset.collapsed;
-				beginResizing();
-			}
-			lastScrollY = y;
-		};
-		window.addEventListener("scroll", updateCollapse, { passive: true });
 
 		const closeMenu = () => moreButton.setAttribute("aria-expanded", "false");
 
