@@ -1,6 +1,6 @@
 export const SITE = {
 	name: "Ömer Balyalı",
-	url: "https://omerbalyali.com",
+	url: "https://preview.omerbalyali.com",
 	description: "Personal website of Ömer Balyalı.",
 	locale: "en_US",
 	themeColor: "#111111",
