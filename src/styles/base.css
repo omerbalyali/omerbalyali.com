@@ -40,12 +40,6 @@ body {
 }
 
 :where(a) {
-	color: currentColor;
-	text-decoration: none;
-	touch-action: manipulation;
-}
-
-:where(a) {
 	&:where(&) {
 		--s-color: currentColor;
 		--s-text-decoration-color: transparent;
@@ -56,6 +50,7 @@ body {
 	text-decoration-color: var(--s-text-decoration-color);
 	text-decoration-thickness: var(--t-font-underline-thickness);
 	text-underline-offset: var(--t-font-underline-offset-comfortable);
+	touch-action: manipulation;
 	transition:
 		color var(--t-transition-preset),
 		background-color var(--t-transition-preset),
