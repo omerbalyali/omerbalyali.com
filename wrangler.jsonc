@@ -1,23 +1,24 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "omerbalyali-com",
-	"compatibility_date": "2026-04-20",
+	"name": "preview-omerbalyali-com",
+	"compatibility_date": "2026-05-03",
 	"assets": {
 		"directory": "./dist",
 		"not_found_handling": "404-page",
 	},
 	"routes": [
 		{
-			"pattern": "omerbalyali.com",
-			"custom_domain": true,
-		},
-		{
-			"pattern": "www.omerbalyali.com",
+			"pattern": "preview.omerbalyali.com",
 			"custom_domain": true,
 		},
 	],
 	"observability": {
 		"enabled": true,
+	},
+	"env": {
+		"preview": {
+			"name": "preview-omerbalyali-com",
+		},
 	},
 	// "upload_source_maps": true
 }
