@@ -10,6 +10,7 @@
 		"dev": "wrangler types && astro dev",
 		"format": "prettier --write .",
 		"lint:style": "stylelint '**/*.{css,astro}' --max-warnings 0",
+		"prepare": "lefthook install || true",
 		"preview": "wrangler types && astro preview"
 	},
 	"dependencies": {
@@ -22,8 +23,11 @@
 	"devDependencies": {
 		"@astrojs/check": "^0.9.9",
 		"@astrojs/sitemap": "^3.7.2",
+		"@commitlint/cli": "^20.5.3",
+		"@commitlint/config-conventional": "^20.5.3",
 		"@resvg/resvg-wasm": "^2.6.2",
 		"@shikijs/transformers": "^4.0.2",
+		"lefthook": "^2.1.6",
 		"postcss-html": "1.8.1",
 		"prettier": "3.8.3",
 		"prettier-plugin-astro": "0.14.1",
