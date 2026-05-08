@@ -22,10 +22,12 @@
 	"devDependencies": {
 		"@astrojs/check": "^0.9.9",
 		"@astrojs/sitemap": "^3.7.2",
+		"@resvg/resvg-wasm": "^2.6.2",
 		"@shikijs/transformers": "^4.0.2",
 		"postcss-html": "1.8.1",
 		"prettier": "3.8.3",
 		"prettier-plugin-astro": "0.14.1",
+		"satori": "^0.26.0",
 		"stylelint": "17.8.0",
 		"stylelint-config-html": "1.1.0",
 		"stylelint-config-standard": "40.0.0",
