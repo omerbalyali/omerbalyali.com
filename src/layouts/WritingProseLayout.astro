@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getOgImageMetadata } from "../lib/og-pages";
 import type { PageMetadata } from "../lib/seo";
 import { createBlogPostingStructuredData, formatDate, getWritingPath } from "../lib/seo";
 import Layout from "./Layout.astro";
@@ -18,13 +19,15 @@ interface Props {
 const { post, headings } = Astro.props as Props;
 
 const canonicalURL = post.data.canonicalURL ?? getWritingPath(post.id);
-const ogImage = post.data.ogImage;
+const ogMetadata = post.data.ogImage
+	? { ogImage: post.data.ogImage }
+	: getOgImageMetadata(canonicalURL);
 const articleHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 const metadata: PageMetadata = {
 	title: post.data.title,
 	description: post.data.description,
 	canonicalURL,
-	ogImage,
+	...ogMetadata,
 	type: "article",
 	publishedTime: post.data.pubDate,
 	modifiedTime: post.data.updatedDate,
@@ -33,7 +36,7 @@ const metadata: PageMetadata = {
 		title: post.data.title,
 		description: post.data.description,
 		path: canonicalURL,
-		imagePath: ogImage,
+		imagePath: ogMetadata.ogImage,
 		publishedTime: post.data.pubDate,
 		modifiedTime: post.data.updatedDate,
 		tags: post.data.tags,

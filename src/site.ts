@@ -22,6 +22,8 @@ export const SITE = {
 		},
 	},
 	og: {
-		defaultImage: undefined,
+		defaultImage: "/og/wide/default.png",
+		defaultImageWidth: 1200,
+		defaultImageHeight: 630,
 	},
 } as const;

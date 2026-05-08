@@ -1,0 +1,198 @@
+---
+import { OG_SIZES, renderOgSvg, type OgSize } from "../../lib/og";
+import { discoverOgRoutes } from "../../lib/og-pages";
+
+const isDev = import.meta.env.DEV;
+const sizes = Object.keys(OG_SIZES) as OgSize[];
+const routes = isDev ? await discoverOgRoutes() : [];
+
+const previews = isDev
+	? await Promise.all(
+			routes.map(async (route) => ({
+				route,
+				renders: await Promise.all(
+					sizes.map(async (size) => ({
+						size,
+						dimensions: OG_SIZES[size],
+						svg: await renderOgSvg({
+							size,
+							variant: route.variant,
+							title: route.title,
+						}),
+					})),
+				),
+			})),
+		)
+	: [];
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="robots" content="noindex, nofollow" />
+		<title>OG Preview</title>
+		<style>
+			body {
+				font-family:
+					ui-sans-serif,
+					system-ui,
+					-apple-system,
+					BlinkMacSystemFont,
+					sans-serif;
+				background: #f3f4f6;
+				color: #111;
+				margin: 0;
+				padding: 24px;
+			}
+
+			.wrapper {
+				max-width: 1400px;
+				margin: 0 auto;
+				display: flex;
+				flex-direction: column;
+				gap: 24px;
+			}
+
+			.page-header {
+				display: flex;
+				align-items: baseline;
+				gap: 12px;
+			}
+
+			.page-header h1 {
+				margin: 0;
+				font-size: 18px;
+				font-weight: 600;
+			}
+
+			.page-header small {
+				color: #6b7280;
+				font-size: 13px;
+			}
+
+			.card {
+				background: #fff;
+				border: 1px solid #e5e7eb;
+				border-radius: 12px;
+				padding: 16px;
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+			}
+
+			.card-header {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 8px 16px;
+				align-items: baseline;
+			}
+
+			.card-header code {
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 13px;
+				color: #111;
+				background: #f3f4f6;
+				padding: 2px 6px;
+				border-radius: 4px;
+			}
+
+			.card-header span {
+				font-size: 12px;
+				color: #6b7280;
+			}
+
+			.card-header strong {
+				color: #111;
+				font-weight: 500;
+			}
+
+			.previews {
+				display: grid;
+				grid-template-columns: 2fr 1fr;
+				gap: 16px;
+				align-items: start;
+			}
+
+			.preview-item {
+				background: #fafafa;
+				border: 1px solid #e5e7eb;
+				border-radius: 6px;
+				overflow: hidden;
+			}
+
+			.preview-item header {
+				padding: 6px 10px;
+				border-bottom: 1px solid #e5e7eb;
+				background: #fff;
+				font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+				font-size: 11px;
+				color: #6b7280;
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.preview-item .frame {
+				padding: 8px;
+			}
+
+			.preview-item svg {
+				display: block;
+				width: 100%;
+				height: auto;
+				border-radius: 2px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="page-header">
+				<h1>OG Preview</h1>
+				{
+					isDev ? (
+						<small>
+							{previews.length} routes × {sizes.length} sizes — save lib/og.ts to hot-reload
+						</small>
+					) : (
+						<small>Preview is only rendered in development. Run `pnpm dev` and visit this URL.</small>
+					)
+				}
+			</div>
+			{
+				previews.map(({ route, renders }) => (
+					<div class="card">
+						<div class="card-header">
+							<code>
+								/og/{`{size}`}/{route.slug}.png
+							</code>
+							<span>
+								variant: <strong>{route.variant}</strong>
+							</span>
+							{route.title && (
+								<span>
+									title: <strong>{route.title}</strong>
+								</span>
+							)}
+						</div>
+						<div class="previews">
+							{renders.map(({ size, dimensions, svg }) => (
+								<div class="preview-item">
+									<header>
+										<span>{size}</span>
+										<span>
+											{dimensions.width} × {dimensions.height}
+										</span>
+									</header>
+									<div class="frame">
+										<Fragment set:html={svg} />
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</body>
+</html>

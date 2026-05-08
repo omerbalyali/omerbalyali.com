@@ -1,11 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import { getOgImageMetadata } from "../../lib/og-pages";
 import { SITE } from "../../site";
 
 const metadata = {
 	title: SITE.sections.works.title,
 	description: SITE.sections.works.description,
 	canonicalURL: "/works/",
+	...getOgImageMetadata(Astro.url.pathname),
 };
 ---
 

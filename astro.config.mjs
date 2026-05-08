@@ -24,6 +24,14 @@ export default defineConfig({
 	devToolbar: {
 		enabled: false,
 	},
+	vite: {
+		ssr: {
+			external: ["@resvg/resvg-wasm", "satori"],
+		},
+		optimizeDeps: {
+			exclude: ["@resvg/resvg-wasm", "satori"],
+		},
+	},
 	site: "https://omerbalyali.com",
 	trailingSlash: "always",
 	fonts: [

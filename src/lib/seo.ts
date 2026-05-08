@@ -10,6 +10,8 @@ export interface PageMetadata {
 	canonicalURL?: string | URL;
 	ogImage?: string | URL;
 	ogImageAlt?: string;
+	ogImageWidth?: number;
+	ogImageHeight?: number;
 	type?: "website" | "article";
 	publishedTime?: Date | string;
 	modifiedTime?: Date | string;

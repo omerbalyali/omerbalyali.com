@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import Card from "../../components/writing/Card.astro";
 import Layout from "../../layouts/Layout.astro";
+import { getOgImageMetadata } from "../../lib/og-pages";
 import { createCollectionPageStructuredData } from "../../lib/seo";
 import { SITE } from "../../site";
 
@@ -30,6 +31,7 @@ const metadata = {
 	title: SITE.sections.writing.title,
 	description: SITE.sections.writing.description,
 	canonicalURL: "/writing/",
+	...getOgImageMetadata(Astro.url.pathname),
 	structuredData: createCollectionPageStructuredData({
 		title: SITE.sections.writing.title,
 		description: SITE.sections.writing.description,
