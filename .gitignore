@@ -32,3 +32,8 @@ pnpm-debug.log*
 
 # Misc
 .docs
+
+# test artifacts
+test-results/
+playwright-report/
+coverage/
