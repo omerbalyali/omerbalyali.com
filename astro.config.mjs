@@ -20,7 +20,7 @@ export default defineConfig({
 			[rehypeAutolinkHeadings, { behavior: "wrap", test: ["h2", "h3", "h4", "h5", "h6"] }],
 		],
 	},
-	integrations: [mdx(), sitemap()],
+	integrations: [mdx(), sitemap({ filter: (page) => !page.includes("/og/") })],
 	devToolbar: {
 		enabled: false,
 	},
