@@ -41,9 +41,10 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-	<section>
+	<section class="writing-page">
 		<header>
 			<h1>Writing</h1>
+			<a href="/writing/" class="view-all">View All</a>
 		</header>
 		{
 			yearlyArchive.length > 0 ? (
@@ -65,3 +66,64 @@ const metadata = {
 		}
 	</section>
 </Layout>
+
+<style>
+	/* stylelint-disable custom-property-pattern */
+
+	.writing-page {
+		display: flex;
+		flex-direction: column;
+		gap: var(--t-space-6);
+
+		& > header {
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+
+			& > h1 {
+				font-size: var(--t-font-size-small);
+				font-weight: var(--t-font-weight-medium);
+				color: color-mix(in oklch, currentColor 80%, transparent);
+				letter-spacing: var(--t-letter-spacing-wide);
+			}
+
+			& > .view-all {
+				&:where(&) {
+					--s-text-color: color-mix(in oklch, currentColor 80%, transparent);
+					--s-background-color: transparent;
+					--s-border-color: transparent;
+					--s-outline-color: transparent;
+					--_padding-block: var(--t-space-2);
+					--_padding-inline: var(--t-space-3);
+				}
+
+				max-width: max-content;
+				margin-block-start: var(--t-space-3);
+				font-size: var(--t-font-size-small);
+				font-weight: var(--t-font-weight-semibold);
+				border-radius: var(--t-radius-medium);
+				padding: var(--_padding-block) var(--_padding-inline);
+				margin: calc(var(--_padding-block) * -1) calc(var(--_padding-inline) * -1);
+				color: var(--s-text-color);
+				background-color: var(--s-background-color);
+				border: var(--t-border-thin) solid var(--s-border-color);
+				text-decoration: none;
+				outline-color: var(--s-outline-color);
+				outline-offset: 2px;
+
+				&:hover,
+				&:focus-visible {
+					--s-text-color: var(--t-color-accent);
+					--s-background-color: color-mix(in oklch, currentColor 3%, transparent);
+					--s-border-color: color-mix(in oklch, currentColor 4%, transparent);
+				}
+
+				&:focus-visible {
+					--s-outline-color: var(--t-color-accent);
+					--s-border-color: transparent;
+				}
+			}
+		}
+	}
+</style>
