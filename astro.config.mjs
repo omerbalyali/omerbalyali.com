@@ -32,7 +32,7 @@ export default defineConfig({
 			exclude: ["@resvg/resvg-wasm", "satori"],
 		},
 	},
-	site: "https://omerbalyali.com",
+	site: "https://preview.omerbalyali.com",
 	trailingSlash: "always",
 	fonts: [
 		{
