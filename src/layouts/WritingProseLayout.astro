@@ -1,26 +1,19 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import { type CollectionEntry } from "astro:content";
 import { getOgImageMetadata } from "../lib/og-pages";
 import type { PageMetadata } from "../lib/seo";
 import { createBlogPostingStructuredData, formatDate, getWritingPath } from "../lib/seo";
 import Layout from "./Layout.astro";
 
-type HeadingLink = {
-	depth: number;
-	slug: string;
-	text: string;
-};
-
 interface Props {
 	post: CollectionEntry<"writing">;
-	headings: HeadingLink[];
+	minutesRead: number;
 }
 
-const { post, headings } = Astro.props as Props;
+const { post, minutesRead } = Astro.props as Props;
 
 const canonicalURL = post.data.canonicalURL ?? getWritingPath(post.id);
 const ogMetadata = post.data.ogImage ? { ogImage: post.data.ogImage } : getOgImageMetadata(canonicalURL);
-const articleHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 const metadata: PageMetadata = {
 	title: post.data.title,
 	description: post.data.description,
@@ -53,6 +46,7 @@ const metadata: PageMetadata = {
 					title={post.data.updatedDate ? `Updated ${formatDate(post.data.updatedDate)}` : undefined}
 					>{formatDate(post.data.pubDate)}</time
 				>
+				<span class="reading-time">{minutesRead}</span>
 			</div>
 		</header>
 
