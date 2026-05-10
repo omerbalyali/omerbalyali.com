@@ -33,14 +33,18 @@ const { metadata } = Astro.props as Props;
 
 <style>
 	.layout {
-		min-height: 100lvh;
+		min-height: 100vh;
 		display: flex;
 		flex-direction: column;
+		background-color: var(--t-color-background-page);
 	}
 
 	.page {
 		flex-grow: 1;
-		padding-block: var(--t-space-6);
+		position: relative;
+		z-index: 1;
+		padding-block: var(--t-space-18);
 		background-color: var(--t-color-background-page);
+		border-block: var(--t-border-thin) solid var(--t-color-border-primary);
 	}
 </style>
