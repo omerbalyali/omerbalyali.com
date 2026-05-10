@@ -133,7 +133,7 @@ function wordmark({ orientation, logoSize, nameSize, gap, iconOffsetX = 0 }: Wor
 	};
 }
 
-function urlBlock(size: OgSize, fontSize: number): Node {
+function urlBlock(fontSize: number): Node {
 	return {
 		type: "div",
 		props: {
@@ -267,7 +267,7 @@ function buildPageLayout({ title, size }: { title: string; size: OgSize }): Node
 			iconOffsetX: isSquare ? -6 : -6,
 		}),
 		middle: titleStack,
-		bottom: urlBlock(size, isSquare ? 27 : 30),
+		bottom: urlBlock(isSquare ? 27 : 30),
 	});
 }
 
@@ -286,6 +286,6 @@ function buildDefaultLayout(size: OgSize): Node {
 			nameSize: isSquare ? 60 : 72,
 			gap: isSquare ? 40 : 40,
 		}),
-		bottom: urlBlock(size, isSquare ? 27 : 32),
+		bottom: urlBlock(isSquare ? 27 : 32),
 	});
 }

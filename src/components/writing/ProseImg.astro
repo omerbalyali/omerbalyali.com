@@ -1,0 +1,52 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+
+interface Props {
+	src: ImageMetadata;
+	darkSrc?: ImageMetadata;
+	alt?: string;
+}
+
+const { src, darkSrc, alt = "" } = Astro.props;
+---
+
+<figure>
+	{
+		darkSrc ? (
+			<>
+				<Image class="light-image" src={src} alt={alt} />
+				<Image class="dark-image" src={darkSrc} alt={alt} />
+			</>
+		) : (
+			<Image src={src} alt={alt} />
+		)
+	}
+	{
+		Astro.slots.has("default") && (
+			<figcaption>
+				<slot />
+			</figcaption>
+		)
+	}
+</figure>
+
+<style>
+	img {
+		border-radius: var(--t-radius-medium);
+	}
+
+	.dark-image {
+		display: none;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		.light-image {
+			display: none;
+		}
+
+		.dark-image {
+			display: block;
+		}
+	}
+</style>

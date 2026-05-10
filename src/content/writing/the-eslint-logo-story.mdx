@@ -10,11 +10,225 @@ tags:
   - logo-design
 ---
 
-Every day, millions of developers see a logo I designed. It took me just a few hours in 2016, yet it appears in their IDEs, conference presentations, and official documentation. If you've ever felt like you're not "technical enough" to contribute to open source, this story might change your mind.
+import nicholasTweetDark from "../../assets/images/writing/the-eslint-logo-story/2016-01-27-nicholas-c-zakas-tweet-dark.webp";
+import nicholasTweetLight from "../../assets/images/writing/the-eslint-logo-story/2016-01-27-nicholas-c-zakas-tweet-light.webp";
+import omerTweetDark from "../../assets/images/writing/the-eslint-logo-story/2016-01-27-omerbalyali-tweet-dark.webp";
+import omerTweetLight from "../../assets/images/writing/the-eslint-logo-story/2016-01-27-omerbalyali-tweet-light.webp";
+import firstDrafts from "../../assets/images/writing/the-eslint-logo-story/2016-01-28-eslint-first-drafts.webp";
+import eslintDownloadChart from "../../assets/images/writing/the-eslint-logo-story/eslint-download-chart-npmtrends.webp";
+import googleIO from "../../assets/images/writing/the-eslint-logo-story/google-io-2025-developer-keynote.webp";
+import logoConstruction from "../../assets/images/writing/the-eslint-logo-story/logo-construction-steps.webp";
+import pre2016Logo from "../../assets/images/writing/the-eslint-logo-story/pre-2016-eslint-logo.webp";
+import vscodeDark from "../../assets/images/writing/the-eslint-logo-story/vscode-dark.webp";
+import vscodeLight from "../../assets/images/writing/the-eslint-logo-story/vscode-light.webp";
+import ProseImg from "../../components/writing/ProseImg.astro";
 
-I mostly struggled with JavaScript because I never invested the time to learn it properly. I wanted to change that, and I started reading the book "Professional JavaScript for Web Developers" by Nicholas C. Zakas in the summer of 2013.
+Every day, millions of developers see a logo I designed. It took me just a few hours in 2016, yet it appears in
+their IDEs, conference presentations, and official documentation. If you've ever felt like you're not "technical
+enough" to contribute to open source, this story might change your mind.
 
-The book gave me the confidence to understand JavaScript, rather than fighting it. Still, I was hesitant to call myself a "software developer", especially seeing the work of open source maintainers and how much impact they have. I started following them on Twitter to stay informed and up-to-date with the ever-changing front-end ecosystem.
+I mostly struggled with JavaScript because I never invested the time to learn it properly. I wanted to change
+that, and I started reading the book "Professional JavaScript for Web Developers" by Nicholas C. Zakas in the
+summer of 2013.
+
+The book gave me the confidence to understand JavaScript, rather than fighting it. Still, I was hesitant to call
+myself a "software developer", especially seeing the work of open source maintainers and how much impact they
+have. I started following them on Twitter to stay informed and up-to-date with the ever-changing front-end
+ecosystem.
+
+## Designing the ESLint Logo
+
+On January 27th, 2016, while scrolling through my Twitter timeline, I saw a tweet from Nicholas C. Zakas, posted
+five minutes before, asking for non-code contributions to the ESLint project, ranging from design work to
+community support.
+
+<ProseImg
+	src={nicholasTweetLight}
+	darkSrc={nicholasTweetDark}
+	alt="Nicholas C. Zakas tweet asking for help with ESLint logo and website redesign">
+	**@slicknet**: "Short story: looking for a logo update, website redesign, and community management help. All
+	help appreciated. :)"\
+	[https://x.com/slicknet/status/692454724168069120](https://x.com/slicknet/status/692454724168069120)
+</ProseImg>
+
+Remembering how much his book helped me on my journey, I wanted to help and give back to the open source
+community, and I replied:
+
+<ProseImg
+	src={omerTweetLight}
+	darkSrc={omerTweetDark}
+	alt="Ömer Balyalı tweet offering help with ESLint logo redesign">
+	**@omerbalyali**: "@slicknet Hey Nicholas, I'd be happy to help"\
+	[https://x.com/omerbalyali/status/692456284239589378](https://x.com/omerbalyali/status/692456284239589378)
+</ProseImg>
+
+I didn't get any response on Twitter, but I saw he posted a link to the [GitHub issue #5083](https://github.com/eslint/eslint/issues/5083).
+
+After 10 minutes of seeing the tweet, I [replied on GitHub](https://github.com/eslint/eslint/issues/5083#issuecomment-175861094)
+that I can help with the logo and website redesign.
+
+<ProseImg src={pre2016Logo} alt="Pre-2016 ESLint Logo">
+	Pre-2016 ESLint Logo
+</ProseImg>
+
+> **@nzakas**: [...] An updated logo - we like the current one, but would like to evolve it. We also like the
+> color scheme (purple!).
+> We'd just like an update to the logo and typography that would be good for stickers, tshirts, and more.
+>
+> [Source](https://github.com/eslint/eslint/issues/5083#issue-129225285)
+
+The brief was simple: redesign the ESLint logo without a drastic change, so that brand equity can be retained. It
+wasn't a "redesign from scratch," but rather an evolution to make it versatile for any application, especially as
+a small icon.
+
+Less than 24 hours later, I asked for feedback for the first drafts of [the redesigned ESLint logo](https://github.com/eslint/eslint/issues/5085#issuecomment-176390552) and [the new website](https://github.com/eslint/archive-website/issues/185#issuecomment-176408910).
+
+<ProseImg
+	src={firstDrafts}
+	alt="Showing seven alternative proposals for new ESLint logo, with three color variants each">
+	Alternative proposals
+</ProseImg>
+
+The first option I proposed ultimately became the final logo, with some minor tweaks. The entire process occurred
+in [GitHub issue #5085](https://github.com/eslint/eslint/issues/5085). I later signed
+ownership transfer documents to the jQuery Foundation (now OpenJS Foundation), which [registered it as an official trademark](https://tsdr.uspto.gov/#caseNumber=87002474&caseSearchType=US_APPLICATION&caseType=DEFAULT&searchType=statusSearch). The only behind-the-scenes part was the legal paperwork; everything else is
+accessible online.
+
+<ProseImg src={logoConstruction} alt="Showing construction steps of the logo grid and hexagon shape">
+
+<details>
+<summary>Construction Steps</summary>
+
+Construction of the logo grid was so simple:
+
+1. Draw a perfect hexagon, and draw a rectangle around it.
+2. Copy the hexagon and rectangle, rotate them 90 degrees, and place the smaller rectangle inside the outer hexagon, with the smaller rectangle touching the outer hexagon.
+3. Copy the inner hexagon and rectangle, and place them inside to create the "inner hexagon".
+4. Subtract the rotated hexagon from step 2 from the outer hexagon.
+5. Round the corners of both hexagons (from steps 1 and 3) to make them more refined.
+
+ESLint itself is about systematic perfection–it identifies minor inconsistencies and fixes them to improve our code. This logo grid, with its mathematical accuracy, was an ideal fit. Ironically, the grid was perfect on paper, but somehow the final logo isn't; the inner hexagons are slightly larger or smaller than they should be. It was a mistake but fate it seems. Like ESLint itself, which doesn't create perfect code but guides us toward it, this logo isn't mathematically perfect, but it is perfectly functional.
+
+</details>
+</ProseImg>
+
+Designing in the open, receiving feedback from the community, and discussing the entire process exclusively on
+GitHub issues was an enjoyable experience for me. I was glad to write that tweet; it was my first real
+contribution to an open source project.
+
+## Impact and Reach
+
+Today, ESLint is one of the most popular and crucial open source tools, with ~100 downloads every second. It's
+integrated into most
+JavaScript development workflows.
+
+<ProseImg
+	src={vscodeLight}
+	darkSrc={vscodeDark}
+	alt="VSCode Editor screenshot showing an example project with ESLint logo used as icon for eslint.config.js">
+	VSCode Editor with Material Icon Theme (Color Theme: GitHub Light Theme)
+</ProseImg>
+
+From product launches to conferences, it has been shown everywhere.
+
+<ProseImg src={googleIO} alt="Addy Osmani and Una Kravets presents Baseline features at Google I/O 2025">
+[Addy Osmani](https://x.com/addyosmani) and [Una Kravets](https://bsky.app/profile/una.im) presents Baseline features at Google I/O 2025
+
+Watch on YouTube: [https://youtu.be/GjvgtwSOCao?t=2360](https://youtu.be/GjvgtwSOCao?t=2360)
+
+</ProseImg>
+
+Seeing that hexagon in presentations and daily in millions of developers' IDEs — including mine — is surreal. I'm
+proud of the work I did, but this popularity isn't about the logo or who designed it.
+
+A logo is just a vessel; it only matters if the thing it represents matters. Nobody wakes up excited about linting
+JavaScript. They use ESLint because it solves real problems: catching bugs before they reach users, making
+JavaScript more reliable, and helping teams maintain consistent code.
+
+My contribution was small, my investment was merely a few hours, but the impact of that small contribution is
+unbelievable.
+
+## Infrastructure at Scale
+
+It may seem unusual to some that a small contribution can have a significant impact, and I'm not just referring to
+the logo design, but rather how open source contributions work in general.
+
+<ProseImg src={eslintDownloadChart} alt="ESLint weekly-downloads chart from npmtrends.com, showing exponential growth from 2016 to 2025">
+Graph from npmtrends.com showing the weekly downloads were around 390.000 at the end of January 2016, now it's close to 60 million in May 2025.
+
+Source: [npmtrends.com/eslint](https://npmtrends.com/eslint)
+
+</ProseImg>
+
+ESLint is not an outlier in this trend; all successful open source projects exhibit similar scaling patterns. But
+exponential growth means exponential dependency. And dependency implies fragility.
+
+## Securing Open Source
+
+Today marks the end of the 5th [#MaintainerMonth](https://maintainermonth.github.com),
+with this year's theme being ["Securing Open Source"](https://opensource.org/blog/may-is-maintainer-month-celebrating-those-who-secure-open-source). Given the infrastructure fragility we just explored, this focus
+couldn't be more timely.
+
+We rely on open source software in every facet of life, from healthcare to city infrastructure, from entertainment
+to AI advancements. Yet maintenance is left to volunteers who invest their time, well-being, and money freely.
+While many companies support open source initiatives, most of the work is still done by volunteers worldwide.
+
+Projects like ESLint play a crucial yet overlooked role in securing our infrastructure by enhancing code quality
+and identifying issues early. But the responsibility cannot be left to volunteers alone.
+
+Corporations of all sizes benefit from open source, yet their contributions are underwhelming compared to the
+value they receive. Initiatives like Sentry's [Open Source Pledge](https://opensourcepledge.com) demonstrate practical steps: donating "$2,000 per year per developer" is something any
+corporation can start immediately.
+
+Securing open source means more than patching vulnerabilities—it means ensuring these projects remain vibrant and
+welcoming to new contributors. This is where individual contributions become crucial, because sustainability comes
+from the community, not just corporate budgets.
+
+## Beyond Code
+
+Individual contributions are crucial for the future of open source, but who counts as a contributor?
+
+Consider how startups form: someone identifies a problem, experiments with solutions, and builds something that
+compounds over time. Open source projects follow a similar pattern but operate differently than commercial
+ventures—the most valuable resource is human capital, and A-players ("A" stands for high agency).
+
+Yet, despite the need for diverse skills, our biases tend to favor the idea that these projects require only
+programmers. Just like startups, open source projects require community building, design, documentation, user
+support, and strategic leadership. Currently, these responsibilities are either missing or assigned to maintainers
+alongside their technical work. This isn't sustainable and explains why many crucial projects struggle to scale.
+
+## Shaping Open Source
+
+There's never been a better time to contribute to open source. As AI makes code generation increasingly automated,
+the human skills that projects have been lacking become critically important.
+
+In an increasingly uncertain work landscape, open source offers something different: a model where your
+contributions speak louder than your job title, where teams organize around impact rather than office politics,
+and where you can align with projects that genuinely matter to you. Open source has already proven that
+high-agency, distributed collaboration can produce remarkable results when people focus on merit rather than
+hierarchy.
+
+Small contributions today can compound exponentially, just like my few hours designing a hexagon that millions now
+see daily. As traditional work structures continue to evolve, the open source approach to organizing productive
+work may become increasingly relevant. Now is the time to invest in this compounding value. Instead of waiting to
+see what happens, we can shape our future by shaping open source—and it starts with a simple willingness to
+contribute, no matter how small.
+
+## Impact Over Metrics
+
+Even after writing this entire article about non-code contributions, I hesitate to call myself a "contributor" - a
+few hours designing a logo while others spend nights maintaining projects? If you're thinking, "I could never
+contribute enough to matter," you're feeling exactly what I still feel.
+
+We often obsess over the wrong metrics when, in reality, real impact comes from simplifying, not adding
+complexity. My few hours designing that hexagon now appear in millions of developers' IDEs daily—that taught me
+more about meaningful contribution than any GitHub streak could.
+
+You don't need to be a full-time maintainer to contribute meaningfully. Find an open source project that needs
+your skills and ask how you can help. Take one task from their overwhelming to-do list. Small contributions matter
+more than contribution graphs.
+
+Here is a guide to get you started: [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/).
 
 ## Community and Commitment
 

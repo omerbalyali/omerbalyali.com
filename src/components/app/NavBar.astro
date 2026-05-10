@@ -140,13 +140,13 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			inset: 0;
 			z-index: -1;
 			border-radius: var(--t-radius-full);
-			border: var(--t-border-thin) solid hsl(0deg 0% 0% / 7%);
-			background-color: light-dark(hsl(0deg 0% 100% / 85%), hsl(0deg 0% 18% / 90%));
+			border: var(--t-border-thin) solid light-dark(hsl(0 0% 0% / 0.07), hsl(0 0% 25%));
+			background-color: light-dark(hsl(0 0% 100% / 0.85), hsl(0 0% 18% / 0.9));
 			backdrop-filter: blur(3px);
 			box-shadow:
-				inset 0 0 0 1px light-dark(white, hsl(0deg 0% 100% / 7%)),
-				0 2px 2px 0 hsl(0deg 0% 0% / 2%),
-				0 10px 15px 0 hsl(0deg 0% 0% / 2%);
+				inset 0 0 0 1px light-dark(white, hsl(0 0% 15% / 0.5)),
+				0 2px 2px 0 hsl(0 0% 0% / 0.02),
+				0 10px 15px 0 hsl(0 0% 0% / 0.02);
 			pointer-events: none;
 		}
 
@@ -214,12 +214,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 
 				&[data-priority="2"] {
 					@media (width <= 379px) {
-						--s-display: none;
-					}
-				}
-
-				.navbar[data-collapsed] &:not([data-priority="3"]) {
-					@media (width <= 639px) and (height <= 1199px) {
 						--s-display: none;
 					}
 				}
@@ -357,14 +351,9 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					}
 				}
 
-				.navbar[data-collapsed] &[data-priority] {
-					@media (width <= 639px) and (height <= 1199px) {
-						--s-display: revert;
-					}
-				}
-
 				& > a {
 					:where(&) {
+						--s-display: block;
 						--s-color: color-mix(in oklab, currentColor 75%, transparent);
 						--s-background-color: transparent;
 						--s-transition:
@@ -372,7 +361,8 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 							background-color var(--t-duration-fast) var(--t-ease-out);
 					}
 
-					display: block;
+					display: var(--s-display);
+					width: 100%;
 					padding-inline: var(--t-space-4);
 					padding-block: var(--t-space-2);
 					border-radius: var(--t-radius-large);
@@ -419,7 +409,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 
 		let lastWidth = 0;
 		let resizeTimer: number | undefined;
-		let lastScrollY = window.scrollY;
 		let firstUpdate = true;
 		let currentAnimation: Animation | null = null;
 
@@ -508,30 +497,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 		ro.observe(nav);
 
 		window.addEventListener("resize", beginResizing, { passive: true });
-
-		const updateCollapse = () => {
-			const isMobile = window.innerWidth < 640 && window.innerHeight < 1200;
-			const y = window.scrollY;
-			const isCollapsed = nav.dataset.collapsed !== undefined;
-
-			if (!isMobile || y <= 0) {
-				if (isCollapsed) {
-					delete nav.dataset.collapsed;
-					beginResizing();
-				}
-				lastScrollY = y;
-				return;
-			}
-			if (y > lastScrollY && !isCollapsed) {
-				nav.dataset.collapsed = "";
-				beginResizing();
-			} else if (y < lastScrollY && isCollapsed) {
-				delete nav.dataset.collapsed;
-				beginResizing();
-			}
-			lastScrollY = y;
-		};
-		window.addEventListener("scroll", updateCollapse, { passive: true });
 
 		const closeMenu = () => moreButton.setAttribute("aria-expanded", "false");
 

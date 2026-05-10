@@ -19,9 +19,7 @@ interface Props {
 const { post, headings } = Astro.props as Props;
 
 const canonicalURL = post.data.canonicalURL ?? getWritingPath(post.id);
-const ogMetadata = post.data.ogImage
-	? { ogImage: post.data.ogImage }
-	: getOgImageMetadata(canonicalURL);
+const ogMetadata = post.data.ogImage ? { ogImage: post.data.ogImage } : getOgImageMetadata(canonicalURL);
 const articleHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
 const metadata: PageMetadata = {
 	title: post.data.title,
@@ -49,48 +47,62 @@ const metadata: PageMetadata = {
 		<header>
 			{post.data.series && <p>Series: {post.data.series}</p>}
 			<h1>{post.data.title}</h1>
-			<p>{post.data.description}</p>
-			<div>
-				<p>
-					<time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-				</p>
-				{
-					post.data.updatedDate && (
-						<p>
-							Updated{" "}
-							<time datetime={post.data.updatedDate.toISOString()}>{formatDate(post.data.updatedDate)}</time>
-						</p>
-					)
-				}
+			<div class="meta-info">
+				<time
+					datetime={post.data.pubDate.toISOString()}
+					title={post.data.updatedDate ? `Updated ${formatDate(post.data.updatedDate)}` : undefined}
+					>{formatDate(post.data.pubDate)}</time
+				>
 			</div>
-			{
-				post.data.tags.length > 0 && (
-					<ul aria-label="Tags">
-						{post.data.tags.map((tag: string) => (
-							<li>{tag}</li>
-						))}
-					</ul>
-				)
-			}
 		</header>
 
-		{
-			articleHeadings.length > 1 && (
-				<nav aria-labelledby="table-of-contents-title">
-					<h2 id="table-of-contents-title">On this page</h2>
-					<ol>
-						{articleHeadings.map((heading: HeadingLink) => (
-							<li data-heading-depth={`depth-${heading.depth}`}>
-								<a href={`#${heading.slug}`}>{heading.text}</a>
-							</li>
-						))}
-					</ol>
-				</nav>
-			)
-		}
-
-		<section>
+		<section class="prose">
 			<slot />
+
+			<footer>
+				Find me on:
+				<a href="https://www.linkedin.com/in/omerbalyali/" rel="external">LinkedIn</a>,
+				<a href="https://bsky.app/profile/omerbalyali.com" rel="external">Bluesky</a>, or
+				<a href="https://twitter.com/omerbalyali" rel="external">X</a>
+			</footer>
 		</section>
 	</article>
+
+	<style>
+		header {
+			margin-block-end: 2lh;
+
+			& > h1 {
+				font-size: var(--t-font-size-large);
+				letter-spacing: var(--t-letter-spacing-tight);
+				margin-block-end: 1lh;
+			}
+		}
+
+		.meta-info {
+			display: flex;
+			gap: 0.375lh;
+			margin-block-end: 1.5lh;
+			font-size: var(--t-font-size-small);
+			font-weight: var(--t-font-weight-medium);
+			color: color-mix(in oklch, currentColor 70%, transparent);
+
+			.reading-time::before {
+				content: "•";
+				margin-inline-end: 0.375lh;
+				font-size: var(--t-font-size-xsmall);
+				color: color-mix(in oklch, currentColor 70%, transparent);
+			}
+		}
+
+		footer {
+			border-block-start: var(--t-border-thin) solid color-mix(in oklch, currentColor 10%, transparent);
+			padding-block: 1.5lh;
+			margin-block: 2.5lh 0;
+
+			& > a {
+				font-weight: var(--t-font-weight-semibold);
+			}
+		}
+	</style>
 </Layout>
