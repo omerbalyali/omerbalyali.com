@@ -3,7 +3,7 @@ export const SITE = {
 	url: "https://preview.omerbalyali.com",
 	description: "Personal website of Ömer Balyalı.",
 	locale: "en_US",
-	themeColor: "#111111",
+	themeColor: "#fff",
 	author: {
 		name: "Ömer Balyalı",
 	},
