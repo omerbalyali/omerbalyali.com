@@ -8,7 +8,7 @@
 
 html {
 	font-family: var(--t-font-family, ui-sans-serif, system-ui, sans-serif);
-	font-size: var(--t-font-size, 1rem);
+	font-size: var(--t-font-size-base, 1rem);
 	line-height: var(--t-line-height, 1.5);
 	letter-spacing: var(--t-font-letter-spacing, 0);
 
@@ -18,7 +18,7 @@ html {
 	-webkit-text-size-adjust: 100%;
 	text-size-adjust: 100%;
 
-	scroll-padding-block-start: var(--t-scroll-offset, 1rlh);
+	scroll-padding-block-start: var(--t-scroll-offset, 1.5rlh);
 
 	/* Mobile: removes iOS tap highlight that obscures custom interactive states */
 	-webkit-tap-highlight-color: transparent;
@@ -156,6 +156,11 @@ body {
 
 ::placeholder {
 	opacity: 1;
+}
+
+::selection {
+	/* color: var(--t-color-background-root); */
+	background-color: color-mix(in oklch, var(--t-color-accent) 35%, transparent);
 }
 
 :is(img, picture, video)::selection {

@@ -11,9 +11,9 @@
 [data-theme="default"] {
 	color-scheme: light dark;
 
-	--t-color-accent: light-dark(oklch(50% 0.4 280deg), oklch(85% 0.5 170deg));
+	--t-color-accent: light-dark(oklch(0.5 0.4 280), oklch(0.85 0.5 170));
 
-	--t-color-foreground-base: light-dark(oklch(25% 0.01 50deg), oklch(88% 0 0deg));
+	--t-color-foreground-base: light-dark(oklch(0.25 0.01 50), oklch(0.88 0 0));
 	--t-color-foreground-weak: oklch(
 		from var(--t-color-foreground-base) calc(l + 0.8 * var(--t-color-scheme-direction)) c h
 	);
@@ -31,10 +31,10 @@
 }
 
 [data-theme="default"] {
-	--t-color-background-root: light-dark(oklch(98% 0 0deg), oklch(15% 0 0deg));
+	--t-color-background-root: light-dark(oklch(0.99 0 0), oklch(0.185 0 0));
 	--t-color-foreground-root: var(--t-color-foreground-base);
 
-	--t-color-background-page: light-dark(oklch(98% 0 0deg), oklch(15% 0 0deg));
+	--t-color-background-page: light-dark(oklch(0.98 0 0), oklch(0.195 0 0));
 
-	--t-color-border-primary: light-dark(oklch(92% 0.01 50deg), oklch(30% 0.01 50deg));
+	--t-color-border-primary: light-dark(oklch(0.95 0 0), oklch(0.23 0 0));
 }

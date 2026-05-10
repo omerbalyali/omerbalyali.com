@@ -54,7 +54,7 @@
 
 /* Layout */
 [data-theme] {
-	--t-app-page-max-width: 60rem;
+	--t-app-page-max-width: 50rem;
 	--t-app-page-gutter: var(--t-space-6);
 
 	--t-app-container-gutter-inline: max(
@@ -84,6 +84,7 @@
 	--t-space-20: 5rem; /* 80px */
 	--t-space-21: 5.25rem; /* 84px */
 	--t-space-24: 6rem; /* 96px */
+	--t-space-27: 6.75rem; /* 108px */
 	--t-space-32: 8rem; /* 128px */
 	--t-space-36: 9rem; /* 144px */
 	--t-space-40: 10rem; /* 160px */
