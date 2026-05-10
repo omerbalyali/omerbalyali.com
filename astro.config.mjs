@@ -3,6 +3,7 @@ import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig, fontProviders } from "astro/config";
+import { Features } from "lightningcss";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import { markdownConfig } from "./markdown.config.mjs";
@@ -30,6 +31,12 @@ export default defineConfig({
 		},
 		optimizeDeps: {
 			exclude: ["@resvg/resvg-wasm", "satori"],
+		},
+		css: {
+			transformer: "lightningcss",
+			lightningcss: {
+				include: Features.LightDark,
+			},
 		},
 	},
 	site: "https://preview.omerbalyali.com",
