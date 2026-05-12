@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+import Card from "../../components/writing/Card.astro";
+
+const posts = (
+	await getCollection("writing", ({ data }) => {
+		return import.meta.env.PROD ? data.draft !== true : true;
+	})
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<section class="writing-list">
+	<header>
+		<h2>Writing</h2>
+	</header>
+	{
+		posts.length > 0 &&
+			posts.map((post) => {
+				return (
+					<ul class="writing-cards" role="list">
+						<li>
+							<Card post={post} />
+						</li>
+					</ul>
+				);
+			})
+	}
+</section>
+
+<style>
+	/* stylelint-disable custom-property-pattern */
+
+	.writing-list {
+		display: flex;
+		flex-direction: column;
+		gap: var(--t-space-2);
+	}
+
+	header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	h2 {
+		font-weight: var(--t-font-weight-semibold);
+		color: color-mix(in oklch, currentColor 80%, transparent);
+		letter-spacing: var(--t-letter-spacing-wide);
+	}
+
+	.writing-cards {
+		display: flex;
+		flex-direction: column;
+	}
+</style>
