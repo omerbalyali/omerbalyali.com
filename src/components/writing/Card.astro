@@ -9,11 +9,50 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<article>
-	<h3>
-		<a href={getWritingPath(post.id)}>{post.data.title}</a>
-	</h3>
-	<p>
-		<time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
-	</p>
-</article>
+<a href={getWritingPath(post.id)} class="writing-card">
+	<span class="title">{post.data.title}</span>
+	<time datetime={post.data.pubDate.toISOString()} class="published-date"
+		>{formatDate(post.data.pubDate)}</time
+	>
+</a>
+
+<style>
+	.writing-card {
+		:where(&) {
+			--s-background-color: transparent;
+			--s-border-color: transparent;
+			--s-color: currentColor;
+			--s-padding-block: var(--t-space-4);
+			--s-padding-inline: var(--t-space-4);
+		}
+
+		display: flex;
+		flex-direction: column;
+		gap: var(--t-space-2);
+		background-color: var(--s-background-color);
+		border-radius: var(--t-radius-medium);
+		border: var(--t-border-thin) solid var(--s-border-color);
+		padding: var(--s-padding-block) var(--s-padding-inline);
+		margin-inline: calc((var(--s-padding-inline) + var(--t-border-thin)) * -1);
+		font-weight: var(--t-font-weight-medium);
+		transition:
+			color var(--t-transition-preset),
+			background-color var(--t-transition-preset),
+			border-color var(--t-transition-preset);
+
+		&:hover {
+			--s-color: var(--t-color-accent);
+			--s-background-color: color-mix(in oklch, currentColor 3%, transparent);
+			--s-border-color: color-mix(in oklch, currentColor 5%, transparent);
+		}
+
+		.title {
+			text-wrap: pretty;
+		}
+
+		.published-date {
+			font-size: var(--t-font-size-small);
+			color: color-mix(in oklch, currentColor 80%, transparent);
+		}
+	}
+</style>

@@ -39,7 +39,7 @@ export default defineConfig({
 			},
 		},
 	},
-	site: "https://preview.omerbalyali.com",
+	site: "https://omerbalyali.com",
 	trailingSlash: "always",
 	fonts: [
 		{

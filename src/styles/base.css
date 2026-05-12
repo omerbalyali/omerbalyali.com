@@ -48,7 +48,7 @@ body {
 	}
 
 	color: var(--s-color);
-	text-decoration: underline;
+	text-decoration: none;
 	text-decoration-color: var(--s-text-decoration-color);
 	text-decoration-thickness: var(--t-font-underline-thickness);
 	text-underline-offset: var(--t-font-underline-offset-comfortable);

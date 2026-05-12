@@ -3,7 +3,7 @@ const { pathname } = Astro.url;
 
 const links = [
 	{ href: "/", label: "Home", priority: 3, isHome: true },
-	{ href: "/works/", label: "Works", priority: 2 },
+	// { href: "/works/", label: "Works", priority: 2 },
 	{ href: "/writing/", label: "Writing", priority: 2 },
 	{ href: "/about/", label: "About", priority: 1 },
 	{
@@ -235,7 +235,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					padding-inline: var(--t-space-4);
 					border-radius: var(--t-radius-full);
 					border: 0;
-					text-decoration: none;
 					font-size: var(--t-font-size-small);
 					font-weight: var(--t-font-weight-medium);
 					color: var(--s-color);
@@ -370,7 +369,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					font-weight: var(--t-font-weight-medium);
 					color: var(--s-color);
 					background-color: var(--s-background-color);
-					text-decoration: none;
 					transition: var(--s-transition);
 
 					&:hover {
