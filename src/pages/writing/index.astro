@@ -44,7 +44,7 @@ const metadata = {
 	<section class="writing-page">
 		<header>
 			<h1>Writing</h1>
-			<a href="/writing/" class="view-all">View All</a>
+			<!-- <a href="/writing/" class="view-all">View All</a> -->
 		</header>
 		{
 			yearlyArchive.length > 0 ? (
@@ -53,11 +53,13 @@ const metadata = {
 						<div>
 							<h2 id={`writing-year-${year}`}>{year}</h2>
 						</div>
-						<div>
+						<ul class="writing-cards" role="list">
 							{yearPosts.map((postEntry) => (
-								<Card post={postEntry} />
+								<li>
+									<Card post={postEntry} />
+								</li>
 							))}
-						</div>
+						</ul>
 					</section>
 				))
 			) : (
@@ -74,56 +76,62 @@ const metadata = {
 		display: flex;
 		flex-direction: column;
 		gap: var(--t-space-6);
+	}
 
-		& > header {
-			display: flex;
-			flex-direction: row;
-			justify-content: space-between;
-			align-items: center;
+	header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
 
-			& > h1 {
-				font-size: var(--t-font-size-small);
-				font-weight: var(--t-font-weight-medium);
-				color: color-mix(in oklch, currentColor 80%, transparent);
-				letter-spacing: var(--t-letter-spacing-wide);
-			}
+	h1 {
+		/* font-size: var(--t-font-size-small); */
+		font-weight: var(--t-font-weight-semibold);
+		color: color-mix(in oklch, currentColor 80%, transparent);
+		letter-spacing: var(--t-letter-spacing-wide);
+		margin-block-end: var(--t-space-8);
+	}
 
-			& > .view-all {
-				&:where(&) {
-					--s-text-color: color-mix(in oklch, currentColor 80%, transparent);
-					--s-background-color: transparent;
-					--s-border-color: transparent;
-					--s-outline-color: transparent;
-					--_padding-block: var(--t-space-2);
-					--_padding-inline: var(--t-space-3);
-				}
-
-				max-width: max-content;
-				margin-block-start: var(--t-space-3);
-				font-size: var(--t-font-size-small);
-				font-weight: var(--t-font-weight-semibold);
-				border-radius: var(--t-radius-medium);
-				padding: var(--_padding-block) var(--_padding-inline);
-				margin: calc(var(--_padding-block) * -1) calc(var(--_padding-inline) * -1);
-				color: var(--s-text-color);
-				background-color: var(--s-background-color);
-				border: var(--t-border-thin) solid var(--s-border-color);
-				text-decoration: none;
-				outline-color: var(--s-outline-color);
-				outline-offset: 2px;
-
-				&:hover,
-				&:focus-visible {
-					--s-text-color: var(--t-color-accent);
-					--s-background-color: color-mix(in oklch, currentColor 3%, transparent);
-					--s-border-color: color-mix(in oklch, currentColor 4%, transparent);
-				}
-
-				&:focus-visible {
-					--s-outline-color: var(--t-color-accent);
-					--s-border-color: transparent;
-				}
-			}
+	.view-all {
+		&:where(&) {
+			--s-text-color: color-mix(in oklch, currentColor 80%, transparent);
+			--s-background-color: transparent;
+			--s-border-color: transparent;
+			--s-outline-color: transparent;
+			--_padding-block: var(--t-space-2);
+			--_padding-inline: var(--t-space-3);
 		}
+
+		max-width: max-content;
+		margin-block-start: var(--t-space-3);
+		font-size: var(--t-font-size-small);
+		font-weight: var(--t-font-weight-semibold);
+		border-radius: var(--t-radius-medium);
+		padding: var(--_padding-block) var(--_padding-inline);
+		margin: calc(var(--_padding-block) * -1) calc(var(--_padding-inline) * -1);
+		color: var(--s-text-color);
+		background-color: var(--s-background-color);
+		border: var(--t-border-thin) solid var(--s-border-color);
+		outline-color: var(--s-outline-color);
+		outline-offset: 2px;
+
+		&:hover,
+		&:focus-visible {
+			--s-text-color: var(--t-color-accent);
+			--s-background-color: color-mix(in oklch, currentColor 3%, transparent);
+			--s-border-color: color-mix(in oklch, currentColor 4%, transparent);
+		}
+
+		&:focus-visible {
+			--s-outline-color: var(--t-color-accent);
+			--s-border-color: transparent;
+		}
+	}
+
+	.writing-cards {
+		display: flex;
+		flex-direction: column;
+		margin-block-start: var(--t-space-4);
 	}
 </style>
