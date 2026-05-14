@@ -22,6 +22,12 @@
 	"env": {
 		"preview": {
 			"name": "preview-omerbalyali-com",
+			"routes": [
+				{
+					"pattern": "preview.omerbalyali.com",
+					"custom_domain": true,
+				},
+			],
 		},
 	},
 	"upload_source_maps": true,
