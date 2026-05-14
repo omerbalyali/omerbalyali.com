@@ -39,7 +39,7 @@ export default defineConfig({
 			},
 		},
 	},
-	site: "https://omerbalyali.com",
+	site: process.env.SITE_URL ?? "https://omerbalyali.com",
 	trailingSlash: "always",
 	fonts: [
 		{

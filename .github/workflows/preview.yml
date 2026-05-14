@@ -45,6 +45,8 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+        env:
+          SITE_URL: https://preview.omerbalyali.com
 
       - name: Deploy to Cloudflare preview
         id: deploy

@@ -1,6 +1,6 @@
 export const SITE = {
 	name: "Ömer Balyalı",
-	url: "https://omerbalyali.com",
+	url: import.meta.env.SITE_URL ?? "https://omerbalyali.com",
 	description: "Personal website of Ömer Balyalı.",
 	locale: "en_US",
 	themeColor: "#fff",

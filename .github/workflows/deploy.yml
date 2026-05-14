@@ -45,6 +45,8 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+        env:
+          SITE_URL: https://omerbalyali.com
 
       - name: Deploy to Cloudflare production
         uses: cloudflare/wrangler-action@v3
