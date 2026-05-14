@@ -9,6 +9,8 @@ import rehypeSlug from "rehype-slug";
 import { markdownConfig } from "./markdown.config.mjs";
 
 // https://astro.build/config
+const siteUrl = process.env.SITE_URL ?? "https://omerbalyali.com";
+
 export default defineConfig({
 	adapter: cloudflare({
 		imageService: { build: "compile", runtime: "cloudflare-binding" },
@@ -26,6 +28,9 @@ export default defineConfig({
 		enabled: false,
 	},
 	vite: {
+		define: {
+			"import.meta.env.SITE_URL": JSON.stringify(siteUrl),
+		},
 		ssr: {
 			external: ["@resvg/resvg-wasm", "satori"],
 		},
@@ -39,7 +44,7 @@ export default defineConfig({
 			},
 		},
 	},
-	site: "https://omerbalyali.com",
+	site: siteUrl,
 	trailingSlash: "always",
 	fonts: [
 		{
