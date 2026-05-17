@@ -9,7 +9,7 @@ const isHome = Astro.url.pathname === "/";
 	<span>
 		<a href="/" class="branding">Ömer Balyalı</a>
 	</span>
-	<div class="intro-shell">
+	<div class="intro-wrapper">
 		<p class="intro" aria-hidden={isHome ? undefined : "true"} inert={!isHome ? "" : undefined}>
 			I'm a Design Engineer at{" "}
 			<a href="https://humaninterface.studio" class="studio-link">Human Interface Studio</a>{" "}
@@ -110,19 +110,18 @@ const isHome = Astro.url.pathname === "/";
 		}
 	}
 
-	.intro-shell {
+	.intro-wrapper {
 		display: grid;
 		grid-template-rows: 0fr;
 		transition: grid-template-rows var(--t-duration-faster) var(--t-ease-out);
 	}
 
-	.app-header[data-intro-visible] .intro-shell {
+	.app-header[data-intro-visible] .intro-wrapper {
 		grid-template-rows: 1fr;
 	}
 
 	.intro {
 		min-block-size: 0;
-		overflow: hidden;
 		opacity: 0;
 		transition: opacity var(--t-duration-faster) var(--t-ease-out);
 	}
@@ -139,7 +138,7 @@ const isHome = Astro.url.pathname === "/";
 	@media (prefers-reduced-motion: reduce) {
 		.app-header,
 		.intro,
-		.intro-shell {
+		.intro-wrapper {
 			transition: none;
 		}
 	}
