@@ -9,12 +9,14 @@ const links = [
 	{
 		href: "https://linkedin.com/in/omerbalyali",
 		label: "LinkedIn",
+		icon: "linkedin",
 		priority: 0,
 		external: true,
 	},
 	{
 		href: "https://github.com/omerbalyali",
 		label: "GitHub",
+		icon: "github",
 		priority: 0,
 		external: true,
 	},
@@ -71,6 +73,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 						<a
 							href={link.href}
 							aria-current={isActive(link.href) ? "page" : undefined}
+							data-icon={"icon" in link ? link.icon : undefined}
 							{...("external" in link && link.external
 								? { target: "_blank", rel: "noopener noreferrer" }
 								: {})}>
@@ -381,6 +384,30 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					color: var(--s-color);
 					background-color: var(--s-background-color);
 					transition: var(--s-transition);
+
+					&[data-icon] {
+						--s-display: flex;
+
+						align-items: center;
+						gap: var(--t-space-2);
+					}
+
+					&[data-icon]::before {
+						content: "";
+						flex: 0 0 auto;
+						inline-size: 1em;
+						aspect-ratio: 1 / 1;
+						background-color: currentColor;
+						mask: var(--s-icon) center / contain no-repeat;
+					}
+
+					&[data-icon="github"] {
+						--s-icon: var(--t-icon-github);
+					}
+
+					&[data-icon="linkedin"] {
+						--s-icon: var(--t-icon-linkedin);
+					}
 
 					&:hover {
 						--s-color: currentColor;
