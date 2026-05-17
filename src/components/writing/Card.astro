@@ -22,23 +22,27 @@ const { post } = Astro.props;
 			--s-background-color: transparent;
 			--s-border-color: transparent;
 			--s-color: currentColor;
+			--s-outline: var(--t-border-thin) solid var(--s-outline-color);
+			--s-outline-color: transparent;
 			--s-padding-block: var(--t-space-4);
 			--s-padding-inline: var(--t-space-4);
+			--s-transition:
+				color var(--t-transition-preset), background-color var(--t-transition-preset),
+				border-color var(--t-transition-preset), outline-color var(--t-transition-preset);
 		}
 
 		display: flex;
 		flex-direction: column;
-		gap: var(--t-space-1);
+		gap: var(--t-space-1-5);
 		background-color: var(--s-background-color);
 		border-radius: var(--t-radius-medium);
 		border: var(--t-border-thin) solid var(--s-border-color);
 		padding: var(--s-padding-block) var(--s-padding-inline);
 		margin-inline: calc((var(--s-padding-inline) + var(--t-border-thin)) * -1);
 		font-weight: var(--t-font-weight-medium);
-		transition:
-			color var(--t-transition-preset),
-			background-color var(--t-transition-preset),
-			border-color var(--t-transition-preset);
+		transition: var(--s-transition);
+		outline: var(--s-outline);
+		outline-offset: 0;
 
 		&:hover {
 			--s-color: var(--t-color-accent);
@@ -46,12 +50,19 @@ const { post } = Astro.props;
 			--s-border-color: color-mix(in oklch, currentColor 5%, transparent);
 		}
 
+		&:focus-visible {
+			--s-color: var(--t-color-accent);
+			--s-background-color: color-mix(in oklch, currentColor 5%, transparent);
+			--s-outline-color: color-mix(in oklch, currentColor 40%, transparent);
+			--s-transition: none;
+		}
+
 		.title {
 			text-wrap: pretty;
 		}
 
 		.published-date {
-			font-size: var(--t-font-size-small);
+			font-size: var(--t-font-size-xsmall);
 			color: color-mix(in oklch, currentColor 80%, transparent);
 		}
 	}
