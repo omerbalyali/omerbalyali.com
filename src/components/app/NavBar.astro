@@ -9,17 +9,31 @@ const links = [
 	{
 		href: "https://linkedin.com/in/omerbalyali",
 		label: "LinkedIn",
+		icon: "linkedin",
 		priority: 0,
 		external: true,
 	},
 	{
 		href: "https://github.com/omerbalyali",
 		label: "GitHub",
+		icon: "github",
 		priority: 0,
 		external: true,
 	},
-	{ href: "/privacy-policy/", label: "Privacy Policy", priority: 0 },
-	{ href: "/legal-notice/", label: "Legal Notice", priority: 0 },
+	{
+		href: "https://bsky.app/profile/omerbalyali.com",
+		label: "Bluesky",
+		icon: "bluesky",
+		priority: 0,
+		external: true,
+	},
+	{
+		href: "https://x.com/omerbalyali",
+		label: "X",
+		icon: "x",
+		priority: 0,
+		external: true,
+	},
 ] as const;
 
 const isActive = (href: string) => {
@@ -71,6 +85,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 						<a
 							href={link.href}
 							aria-current={isActive(link.href) ? "page" : undefined}
+							data-icon={"icon" in link ? link.icon : undefined}
 							{...("external" in link && link.external
 								? { target: "_blank", rel: "noopener noreferrer" }
 								: {})}>
@@ -236,7 +251,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 						--s-color: color-mix(in oklab, currentColor 75%, transparent);
 						--s-display: flex;
 						--s-outline-color: transparent;
-						--s-transition: color var(--t-duration-fast) var(--t-ease-out);
+						--s-transition: color var(--t-duration-base) var(--t-ease-out);
 					}
 
 					display: var(--s-display);
@@ -253,10 +268,9 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					outline: var(--t-border-default) solid var(--s-outline-color);
 					outline-offset: var(--t-border-thin);
 					transition: var(--s-transition);
-					cursor: pointer;
 
-					&:hover {
-						--s-color: currentColor;
+					&:not(button):hover {
+						--s-color: var(--t-color-accent);
 					}
 
 					&:focus-visible {
@@ -269,7 +283,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 
 					&:is(button) {
 						--s-display: grid;
-						--s-background-color: color-mix(in oklab, currentColor 5%, transparent);
 
 						place-items: center;
 						aspect-ratio: 1 / 1;
@@ -277,6 +290,10 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 
 						.navbar[data-menu-active] & {
 							--s-color: var(--t-color-accent);
+						}
+
+						&[aria-expanded="true"] {
+							--s-background-color: color-mix(in oklab, currentColor 5%, transparent);
 						}
 					}
 
@@ -382,8 +399,40 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 					background-color: var(--s-background-color);
 					transition: var(--s-transition);
 
+					&[data-icon] {
+						--s-display: flex;
+
+						align-items: center;
+						gap: var(--t-space-2);
+					}
+
+					&[data-icon]::before {
+						content: "";
+						flex: 0 0 auto;
+						inline-size: 1em;
+						aspect-ratio: 1 / 1;
+						background-color: currentColor;
+						mask: var(--s-icon) center / contain no-repeat;
+					}
+
+					&[data-icon="github"] {
+						--s-icon: var(--t-icon-github);
+					}
+
+					&[data-icon="linkedin"] {
+						--s-icon: var(--t-icon-linkedin);
+					}
+
+					&[data-icon="bluesky"] {
+						--s-icon: var(--t-icon-bluesky);
+					}
+
+					&[data-icon="x"] {
+						--s-icon: var(--t-icon-x);
+					}
+
 					&:hover {
-						--s-color: currentColor;
+						--s-color: var(--t-color-accent);
 						--s-background-color: color-mix(in oklab, currentColor 5%, transparent);
 					}
 

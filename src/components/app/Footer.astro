@@ -12,6 +12,9 @@
 			<li>
 				<a href="/privacy-policy/">Privacy Policy</a>
 			</li>
+			<li>
+				<a href="/rss.xml" data-icon="rss">RSS</a>
+			</li>
 		</ul>
 	</nav>
 </footer>
@@ -30,12 +33,32 @@
 		background-color: var(--t-color-background-root);
 	}
 
-	.legal-nav {
-		ul {
-			display: flex;
-			gap: var(--t-space-4);
-			list-style: none;
-			align-items: flex-start;
+	.legal-nav > ul {
+		display: flex;
+		list-style: none;
+		align-items: flex-start;
+	}
+
+	a {
+		display: flex;
+		gap: var(--t-space-1);
+		padding-inline: var(--t-space-2);
+		padding-block: var(--t-space-1);
+		border-radius: var(--t-radius-medium);
+
+		&[data-icon] {
+			&::before {
+				content: "";
+				flex: 0 0 auto;
+				inline-size: 1em;
+				aspect-ratio: 1 / 1;
+				background-color: currentColor;
+				mask: var(--s-icon) center / contain no-repeat;
+			}
+
+			&[data-icon="rss"] {
+				--s-icon: var(--t-icon-rss);
+			}
 		}
 	}
 </style>
