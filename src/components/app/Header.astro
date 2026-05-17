@@ -10,11 +10,13 @@ const isHome = Astro.url.pathname === "/";
 		<a href="/" class="branding">Ömer Balyalı</a>
 	</span>
 	<div class="intro-shell">
-		<p class="intro" aria-hidden={isHome ? undefined : "true"} inert={!isHome ? "" : undefined}>
-			I'm a Design Engineer at{" "}
-			<a href="https://humaninterface.studio" class="studio-link">Human Interface Studio</a>{" "}
-			with a focus on Accessibility, Design Systems, Branding, and Software Development.
-		</p>
+		<div class="intro-clip">
+			<p class="intro" aria-hidden={isHome ? undefined : "true"} inert={!isHome ? "" : undefined}>
+				I'm a Design Engineer at{" "}
+				<a href="https://humaninterface.studio" class="studio-link">Human Interface Studio</a>{" "}
+				with a focus on Accessibility, Design Systems, Branding, and Software Development.
+			</p>
+		</div>
 	</div>
 </header>
 
@@ -120,11 +122,17 @@ const isHome = Astro.url.pathname === "/";
 		grid-template-rows: 1fr;
 	}
 
-	.intro {
+	.intro-clip {
 		min-block-size: 0;
-		overflow: clip;
+		overflow: hidden;
+	}
+
+	.intro {
 		opacity: 0;
 		transition: opacity var(--t-duration-base) var(--t-ease-out);
+		will-change: opacity;
+		transform: translateZ(0);
+		backface-visibility: hidden;
 	}
 
 	.app-header[data-intro-visible] .intro {
@@ -140,6 +148,7 @@ const isHome = Astro.url.pathname === "/";
 	@media (prefers-reduced-motion: reduce) {
 		.app-header,
 		.intro,
+		.intro-clip,
 		.intro-shell {
 			transition: none;
 		}
