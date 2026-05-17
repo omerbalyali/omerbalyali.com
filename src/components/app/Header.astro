@@ -64,7 +64,7 @@ const isHome = Astro.url.pathname === "/";
 		row-gap: 0;
 		padding-block: var(--t-space-12);
 		background-color: var(--t-color-background-root);
-		transition: row-gap var(--t-duration-slow) var(--t-ease-out);
+		transition: row-gap var(--t-duration-base) var(--t-ease-out);
 	}
 
 	.app-header[data-intro-visible] {
@@ -113,7 +113,7 @@ const isHome = Astro.url.pathname === "/";
 	.intro-shell {
 		display: grid;
 		grid-template-rows: 0fr;
-		transition: grid-template-rows var(--t-duration-fast) var(--t-ease-out);
+		transition: grid-template-rows var(--t-duration-faster) var(--t-ease-out);
 	}
 
 	.app-header[data-intro-visible] .intro-shell {
@@ -122,14 +122,13 @@ const isHome = Astro.url.pathname === "/";
 
 	.intro {
 		min-block-size: 0;
-		overflow: clip;
+		overflow: hidden;
 		opacity: 0;
-		transition: opacity var(--t-duration-base) var(--t-ease-out);
+		transition: opacity var(--t-duration-faster) var(--t-ease-out);
 	}
 
 	.app-header[data-intro-visible] .intro {
 		opacity: 1;
-		transition-delay: var(--t-duration-fast);
 	}
 
 	.studio-link {
