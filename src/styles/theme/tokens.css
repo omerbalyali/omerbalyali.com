@@ -109,6 +109,7 @@
 /* Motion */
 [data-theme] {
 	--t-duration-instant: 0s;
+	--t-duration-faster: 0.075s;
 	--t-duration-fast: 0.15s;
 	--t-duration-base: 0.2s;
 	--t-duration-slow: 0.3s;
