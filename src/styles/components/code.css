@@ -4,14 +4,14 @@
 		--c-code-padding-block-start: var(--t-space-6);
 		--c-code-padding-block-end: var(--t-space-6);
 		--c-code-padding-inline: var(--t-space-6);
-		--c-code-line-number-width: var(--t-space-6);
+		--c-code-line-number-width: var(--t-space-8);
 		--c-code-line-number-padding-inline-start: calc(
 			var(--c-code-padding-inline) + var(--c-code-line-number-width)
 		);
 	}
 
 	position: relative;
-	overflow-x: auto;
+	overflow-x: hidden !important;
 	margin-block: 1.5lh;
 	margin-inline: calc(var(--t-space-4) * -1);
 	padding: var(--t-space-4);
@@ -37,6 +37,7 @@
 /* Code block */
 .prose :where(pre.astro-code code) {
 	display: block;
+	overflow-x: auto;
 	min-inline-size: 100%;
 	font-family: var(--t-font-family-monospace);
 }
@@ -94,12 +95,11 @@
 /* Language badge */
 .prose :where(pre.astro-code.has-language-badge[data-language])::before {
 	content: attr(data-language);
-	position: sticky;
-	display: block;
-	float: right;
+	position: absolute;
+	z-index: 1;
+	inset-block-start: var(--t-space-2);
+	inset-inline-end: var(--t-space-2);
 	inline-size: max-content;
-	margin-block: calc(var(--t-space-5) * -1);
-	margin-inline-end: var(--t-space-2);
 	padding: var(--t-space-1) var(--t-space-2);
 	border-radius: var(--t-radius-small);
 	background: color-mix(in oklch, currentColor 8%, transparent);
@@ -109,11 +109,12 @@
 	line-height: 1;
 	text-transform: uppercase;
 	text-size-adjust: 100%;
+	pointer-events: none;
 }
 
 /* Code container with language badge */
 .prose :where(pre.astro-code.has-language-badge) {
-	--c-code-padding-block-start: var(--t-space-7);
+	--c-code-padding-block-start: var(--t-space-6);
 }
 
 /* Code block with line numbers */
@@ -132,7 +133,7 @@
 	content: counter(code-line);
 	display: inline-block;
 	inline-size: var(--c-code-line-number-width);
-	margin-inline: calc(var(--c-code-line-number-width) * -1.5) var(--t-space-3);
+	margin-inline: calc(var(--c-code-line-number-width) * -1.5) var(--t-space-4);
 	color: color-mix(in oklch, currentColor 35%, transparent);
 	font-variant-numeric: tabular-nums;
 	text-align: right;
