@@ -1,12 +1,15 @@
 /* Code container */
 .prose :where(pre.astro-code) {
 	:where(&) {
+		--c-code-background-color: light-dark(#fff, oklch(0.26 0 0)) !important;
 		--c-code-padding-block-start: var(--t-space-6);
 		--c-code-padding-block-end: var(--t-space-6);
 		--c-code-padding-inline: var(--t-space-6);
-		--c-code-line-number-width: var(--t-space-8);
+		--c-code-line-number-width: var(--t-space-0-5);
+		--c-code-line-number-gap: var(--t-space-8);
+		--c-code-line-number-background: var(--c-code-background-color);
 		--c-code-line-number-padding-inline-start: calc(
-			var(--c-code-padding-inline) + var(--c-code-line-number-width)
+			var(--c-code-padding-inline) + var(--c-code-line-number-width) + var(--c-code-line-number-gap)
 		);
 	}
 
@@ -19,7 +22,7 @@
 	padding-inline: 0;
 	border: var(--t-border-thin) solid color-mix(in oklch, currentColor 12%, transparent);
 	border-radius: var(--t-radius-medium);
-	background-color: light-dark(oklch(0.9 0.01 0), oklch(0.2 0.01 0));
+	background-color: var(--c-code-background-color) !important;
 	box-shadow: 0 2px 2px 0 oklch(0.4 0 0 / 0.0375);
 	font-size: var(--t-font-size-xsmall);
 	tab-size: 2;
@@ -42,6 +45,13 @@
 	font-family: var(--t-font-family-monospace);
 }
 
+/* Shared scrollable width for all Shiki lines. */
+.prose :where(pre.astro-code .code-lines) {
+	display: block;
+	inline-size: max-content;
+	min-inline-size: 100%;
+}
+
 /* Prevent iOS Safari from selectively inflating long code lines. */
 .prose :where(pre.astro-code, pre.astro-code *) {
 	text-size-adjust: 100%;
@@ -50,7 +60,8 @@
 /* Code block line */
 .prose :where(pre.astro-code .line) {
 	display: block;
-	inline-size: max-content;
+	box-sizing: border-box;
+	inline-size: 100%;
 	min-inline-size: 100%;
 	padding-inline: var(--c-code-padding-inline);
 }
@@ -119,34 +130,45 @@
 
 /* Code block with line numbers */
 .prose :where(pre.astro-code.has-line-numbers code) {
-	counter-reset: code-line;
+	padding-inline-start: var(--c-code-line-number-padding-inline-start);
 }
 
 /* Code block line with line numbers */
 .prose :where(pre.astro-code.has-line-numbers .line) {
-	counter-increment: code-line;
-	padding-inline-start: var(--c-code-line-number-padding-inline-start);
+	padding-inline-start: 0;
 }
 
-/* Line numbers line */
-.prose :where(pre.astro-code.has-line-numbers .line)::before {
-	content: counter(code-line);
-	display: inline-block;
-	inline-size: var(--c-code-line-number-width);
-	margin-inline: calc(var(--c-code-line-number-width) * -1.5) var(--t-space-4);
-	color: color-mix(in oklch, currentColor 35%, transparent);
+/* Line number gutter */
+.prose :where(pre.astro-code.has-line-numbers .line-numbers) {
+	position: absolute;
+	z-index: 1;
+	inset-block-start: var(--c-code-padding-block-start);
+	inset-inline-start: 0;
+	display: block;
+	inline-size: var(--c-code-line-number-padding-inline-start);
+	background: color-mix(in oklch, var(--c-code-line-number-background) 70%, transparent);
+	backdrop-filter: blur(1.5px);
+	color: color-mix(in oklch, currentColor 40%, transparent);
 	font-variant-numeric: tabular-nums;
 	text-align: right;
 	user-select: none;
+	pointer-events: none;
+}
+
+/* Line number */
+.prose :where(pre.astro-code.has-line-numbers .line-number) {
+	display: block;
+	inline-size: var(--c-code-line-number-width);
+	padding-inline-start: var(--c-code-padding-inline);
 }
 
 @media (prefers-color-scheme: dark) {
 	.prose :where(pre.astro-code) {
-		background-color: var(--shiki-dark-bg) !important;
+		/* background-color: var(--shiki-dark-bg) !important; */
 		color: var(--shiki-dark) !important;
 	}
 
-	.prose :where(pre.astro-code span) {
+	.prose :where(pre.astro-code span[style*="--shiki-dark"]) {
 		color: var(--shiki-dark) !important;
 	}
 }
@@ -156,6 +178,6 @@
 	color: var(--shiki-dark) !important;
 }
 
-[data-scheme="dark"] .prose :where(pre.astro-code span) {
+[data-scheme="dark"] .prose :where(pre.astro-code span[style*="--shiki-dark"]) {
 	color: var(--shiki-dark) !important;
 }
