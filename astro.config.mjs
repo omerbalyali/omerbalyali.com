@@ -10,6 +10,7 @@ import { markdownConfig } from "./markdown.config.mjs";
 
 // https://astro.build/config
 const siteUrl = process.env.SITE_URL ?? "https://omerbalyali.com";
+const cssTarget = (major, minor = 0, patch = 0) => (major << 16) | (minor << 8) | patch;
 
 export default defineConfig({
 	adapter: cloudflare({
@@ -41,6 +42,10 @@ export default defineConfig({
 			transformer: "lightningcss",
 			lightningcss: {
 				include: Features.LightDark,
+				targets: {
+					ios_saf: cssTarget(16),
+					safari: cssTarget(16),
+				},
 			},
 		},
 	},

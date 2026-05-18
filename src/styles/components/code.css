@@ -37,13 +37,19 @@
 /* Code block */
 .prose :where(pre.astro-code code) {
 	display: block;
-	min-inline-size: max-content;
+	min-inline-size: 100%;
 	font-family: var(--t-font-family-monospace);
+}
+
+/* Prevent iOS Safari from selectively inflating long code lines. */
+.prose :where(pre.astro-code, pre.astro-code *) {
+	text-size-adjust: 100%;
 }
 
 /* Code block line */
 .prose :where(pre.astro-code .line) {
 	display: block;
+	inline-size: max-content;
 	min-inline-size: 100%;
 	padding-inline: var(--c-code-padding-inline);
 }
@@ -102,6 +108,7 @@
 	font-weight: var(--t-font-weight-semibold);
 	line-height: 1;
 	text-transform: uppercase;
+	text-size-adjust: 100%;
 }
 
 /* Code container with language badge */
