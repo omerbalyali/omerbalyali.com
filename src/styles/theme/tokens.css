@@ -64,7 +64,7 @@
 
 /* Layout */
 [data-theme] {
-	--t-app-page-max-width: 50rem;
+	--t-app-page-max-width: 54rem;
 	--t-app-page-gutter: var(--t-space-6);
 
 	--t-app-container-gutter-inline: max(
