@@ -159,7 +159,10 @@ body {
 }
 
 ::selection {
-	background-color: color-mix(in oklch, currentColor 8%, transparent);
+	/* stylelint-disable-next-line custom-property-pattern */
+	--_selection-opacity: light-dark(8%, 20%);
+	/* stylelint-disable-next-line custom-property-pattern */
+	background-color: color-mix(in oklch, currentColor var(--_selection-opacity), transparent);
 }
 
 :is(img, picture, video)::selection {
