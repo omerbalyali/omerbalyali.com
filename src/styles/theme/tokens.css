@@ -2,9 +2,9 @@
 
 /* Typography */
 [data-theme="default"] {
-	--t-font-family: var(--font-inter);
-	--t-font-family-monospace: var(--font-jetbrains-mono);
-	--t-font-family-serif: var(--font-newsreader);
+	--t-font-family: var(--font-inter), ui-sans-serif, sans-serif;
+	--t-font-family-monospace: var(--font-jetbrains-mono), ui-monospace, monospace;
+	--t-font-family-serif: var(--font-newsreader), ui-serif, serif;
 
 	--t-font-size-2xsmall: 0.75rem; /* 12px */
 	--t-font-size-xsmall: 0.875rem; /* 14px */

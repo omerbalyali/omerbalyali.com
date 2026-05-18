@@ -66,5 +66,19 @@ export default defineConfig({
 				],
 			},
 		},
+		{
+			provider: fontProviders.local(),
+			name: "JetBrains Mono",
+			cssVariable: "--font-jetbrains-mono",
+			options: {
+				variants: [
+					{
+						src: ["./src/assets/fonts/JetBrainsMono-Variable.woff2"],
+						weight: "100 900",
+						style: "normal",
+					},
+				],
+			},
+		},
 	],
 });
