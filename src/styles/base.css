@@ -159,8 +159,7 @@ body {
 }
 
 ::selection {
-	/* color: var(--t-color-background-root); */
-	background-color: color-mix(in oklch, var(--t-color-accent) 35%, transparent);
+	background-color: color-mix(in oklch, currentColor 8%, transparent);
 }
 
 :is(img, picture, video)::selection {
