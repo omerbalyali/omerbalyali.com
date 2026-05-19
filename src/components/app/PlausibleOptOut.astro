@@ -1,0 +1,132 @@
+<div class="plausible-opt-out" data-plausible-opt-out>
+	<p class="plausible-opt-out-status" data-plausible-opt-out-status aria-live="polite">
+		Checking your analytics preference...
+	</p>
+	<button class="plausible-opt-out-button" type="button" data-plausible-opt-out-toggle disabled>
+		Update analytics preference
+	</button>
+	<p class="plausible-opt-out-note" data-plausible-opt-out-note>
+		JavaScript is required to update this preference in your browser.
+	</p>
+</div>
+
+<script>
+	const storageKey = "plausible_ignore";
+
+	const readPreference = () => {
+		try {
+			return localStorage.getItem(storageKey) === "true";
+		} catch {
+			return false;
+		}
+	};
+
+	const writePreference = (isOptedOut: boolean) => {
+		try {
+			if (isOptedOut) {
+				localStorage.setItem(storageKey, "true");
+			} else {
+				localStorage.removeItem(storageKey);
+			}
+
+			return true;
+		} catch {
+			return false;
+		}
+	};
+
+	const updateControl = (control: HTMLElement) => {
+		const isOptedOut = readPreference();
+		const status = control.querySelector<HTMLElement>("[data-plausible-opt-out-status]");
+		const button = control.querySelector<HTMLButtonElement>("[data-plausible-opt-out-toggle]");
+
+		if (!status || !button) {
+			return;
+		}
+
+		status.textContent = isOptedOut
+			? "Plausible Analytics is currently disabled in this browser."
+			: "Plausible Analytics is currently enabled in this browser.";
+		button.textContent = isOptedOut ? "Allow analytics" : "Opt out of analytics";
+		button.setAttribute("aria-pressed", String(isOptedOut));
+		button.disabled = false;
+	};
+
+	const setupOptOutControls = () => {
+		const optOutControls = document.querySelectorAll<HTMLElement>("[data-plausible-opt-out]");
+
+		for (const control of optOutControls) {
+			if (control.dataset.plausibleOptOutReady) {
+				updateControl(control);
+				continue;
+			}
+
+			const button = control.querySelector<HTMLButtonElement>("[data-plausible-opt-out-toggle]");
+			const note = control.querySelector<HTMLElement>("[data-plausible-opt-out-note]");
+
+			control.dataset.plausibleOptOutReady = "true";
+			note?.setAttribute("hidden", "");
+			updateControl(control);
+
+			button?.addEventListener("click", () => {
+				const didUpdate = writePreference(!readPreference());
+
+				if (!didUpdate) {
+					const status = control.querySelector<HTMLElement>("[data-plausible-opt-out-status]");
+					if (status) {
+						status.textContent = "Your browser did not allow this site to update localStorage.";
+					}
+					return;
+				}
+
+				updateControl(control);
+			});
+		}
+	};
+
+	setupOptOutControls();
+	document.addEventListener("astro:page-load", setupOptOutControls);
+</script>
+
+<style>
+	.plausible-opt-out {
+		display: grid;
+		gap: var(--t-space-2);
+		align-items: start;
+		padding-block: 0.5lh 1lh;
+	}
+
+	.plausible-opt-out-status {
+		margin-block: 0;
+	}
+
+	.plausible-opt-out-button {
+		inline-size: fit-content;
+		border: var(--t-border-thin) solid color-mix(in oklch, currentColor 22%, transparent);
+		border-radius: var(--t-border-radius-small, 0.375rem);
+		background: color-mix(in oklch, currentColor 6%, transparent);
+		color: inherit;
+		font-weight: var(--t-font-weight-medium);
+		padding: 0.45em 0.75em;
+		cursor: pointer;
+		transition:
+			background-color var(--t-transition-preset),
+			border-color var(--t-transition-preset),
+			color var(--t-transition-preset);
+	}
+
+	.plausible-opt-out-button:hover {
+		border-color: color-mix(in oklch, currentColor 38%, transparent);
+		background: color-mix(in oklch, currentColor 10%, transparent);
+	}
+
+	.plausible-opt-out-button:focus-visible {
+		outline: 2px solid var(--t-color-accent);
+		outline-offset: 3px;
+	}
+
+	.plausible-opt-out-note {
+		font-size: var(--t-font-size-small);
+		margin-block: 0;
+	}
+</style>

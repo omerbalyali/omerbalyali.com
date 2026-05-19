@@ -3,9 +3,11 @@ layout: ../layouts/LegalProse.astro
 title: Privacy Policy
 ---
 
+import PlausibleOptOut from "../components/app/PlausibleOptOut.astro";
+
 # Privacy Policy
 
-**Last updated: 27 January 2026**
+**Last updated: 19 May 2026**
 
 ## 1. Introduction
 
@@ -111,19 +113,21 @@ and I will do my best to assist.
 
 You can opt out of Plausible Analytics by setting a preference below:
 
-(PLACEHOLDER)
+<PlausibleOptOut />
 
-This preference is stored in your browser's localStorage. If you clear your browser data or
-use a different browser/device, you will need to set this preference again.
+This preference is stored in your browser's localStorage as `plausible_ignore`. If you clear
+your browser data or use a different browser/device, you will need to set this preference again.
 
 ## 8. Cookies
 
-This Website does not use cookies for analytics or tracking purposes.
+This Website does not use marketing cookies.
 
 Cloudflare may set essential security cookies that are strictly necessary for website
 functionality and security. These are exempt from consent requirements under GDPR.
 
-The analytics opt-out preference (Section 7) uses localStorage, which is not a cookie.
+You may see a first-party `_plausible_prod` cookie from Plausible Analytics in browser developer
+tools. This cookie is separate from the opt-out preference. The analytics opt-out preference
+(Section 7) uses localStorage, which is not a cookie.
 
 ## 9. International Data Transfers
 
