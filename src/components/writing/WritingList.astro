@@ -4,7 +4,7 @@ import Card from "../../components/writing/Card.astro";
 
 const posts = (
 	await getCollection("writing", ({ data }) => {
-		return import.meta.env.PROD ? data.draft !== true : true;
+		return data.unlisted !== true && (import.meta.env.PROD ? data.draft !== true : true);
 	})
 ).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---

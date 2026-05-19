@@ -10,6 +10,7 @@ import { markdownConfig } from "./markdown.config.mjs";
 
 // https://astro.build/config
 const siteUrl = process.env.SITE_URL ?? "https://omerbalyali.com";
+const cssTarget = (major, minor = 0, patch = 0) => (major << 16) | (minor << 8) | patch;
 
 export default defineConfig({
 	adapter: cloudflare({
@@ -41,6 +42,10 @@ export default defineConfig({
 			transformer: "lightningcss",
 			lightningcss: {
 				include: Features.LightDark,
+				targets: {
+					ios_saf: cssTarget(16),
+					safari: cssTarget(16),
+				},
 			},
 		},
 	},
@@ -62,6 +67,20 @@ export default defineConfig({
 						src: ["./src/assets/fonts/Inter-Variable-Italic.woff2"],
 						weight: "100 900",
 						style: "italic",
+					},
+				],
+			},
+		},
+		{
+			provider: fontProviders.local(),
+			name: "JetBrains Mono",
+			cssVariable: "--font-jetbrains-mono",
+			options: {
+				variants: [
+					{
+						src: ["./src/assets/fonts/JetBrainsMono-Variable.woff2"],
+						weight: "100 900",
+						style: "normal",
 					},
 				],
 			},

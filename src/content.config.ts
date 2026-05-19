@@ -13,6 +13,7 @@ const writing = defineCollection({
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
 		draft: z.boolean().default(false),
+		unlisted: z.boolean().default(false),
 		tags: z.array(z.string()).default([]),
 		ogImage: z.string().optional(),
 		canonicalURL: z.url().optional(),

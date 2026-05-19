@@ -4,7 +4,7 @@ import { getWritingPath } from "../lib/seo";
 import { SITE } from "../site";
 
 export async function GET(context: RSSOptions) {
-	const posts = await getCollection("writing", ({ data }) => data.draft !== true);
+	const posts = await getCollection("writing", ({ data }) => data.draft !== true && data.unlisted !== true);
 
 	posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 

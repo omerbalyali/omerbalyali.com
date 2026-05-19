@@ -1,0 +1,183 @@
+/* Code container */
+.prose :where(pre.astro-code) {
+	:where(&) {
+		--c-code-background-color: light-dark(#fff, oklch(0.26 0 0)) !important;
+		--c-code-padding-block-start: var(--t-space-6);
+		--c-code-padding-block-end: var(--t-space-6);
+		--c-code-padding-inline: var(--t-space-6);
+		--c-code-line-number-width: var(--t-space-0-5);
+		--c-code-line-number-gap: var(--t-space-8);
+		--c-code-line-number-background: var(--c-code-background-color);
+		--c-code-line-number-padding-inline-start: calc(
+			var(--c-code-padding-inline) + var(--c-code-line-number-width) + var(--c-code-line-number-gap)
+		);
+	}
+
+	position: relative;
+	overflow-x: hidden !important;
+	margin-block: 1.5lh;
+	margin-inline: calc(var(--t-space-4) * -1);
+	padding: var(--t-space-4);
+	padding-block: var(--c-code-padding-block-start) var(--c-code-padding-block-end);
+	padding-inline: 0;
+	border: var(--t-border-thin) solid color-mix(in oklch, currentColor 12%, transparent);
+	border-radius: var(--t-radius-medium);
+	background-color: var(--c-code-background-color) !important;
+	box-shadow: 0 2px 2px 0 oklch(0.4 0 0 / 0.0375);
+	font-size: var(--t-font-size-xsmall);
+	tab-size: 2;
+
+	::selection {
+		background: oklch(0.7 0.2 250 / 0.18);
+	}
+}
+
+/* Code container focus styles */
+.prose :where(pre.astro-code:focus-visible) {
+	outline: var(--t-border-default) solid var(--t-color-accent);
+}
+
+/* Code block */
+.prose :where(pre.astro-code code) {
+	display: block;
+	overflow-x: auto;
+	min-inline-size: 100%;
+	font-family: var(--t-font-family-monospace);
+}
+
+/* Shared scrollable width for all Shiki lines. */
+.prose :where(pre.astro-code .code-lines) {
+	display: block;
+	inline-size: max-content;
+	min-inline-size: 100%;
+}
+
+/* Prevent iOS Safari from selectively inflating long code lines. */
+.prose :where(pre.astro-code, pre.astro-code *) {
+	text-size-adjust: 100%;
+}
+
+/* Code block line */
+.prose :where(pre.astro-code .line) {
+	display: block;
+	box-sizing: border-box;
+	inline-size: 100%;
+	min-inline-size: 100%;
+	padding-inline: var(--c-code-padding-inline);
+}
+
+/* Inline code */
+.prose :where(:not(pre) > code) {
+	padding-block: var(--t-space-1);
+	padding-inline: var(--t-space-1-5);
+	border-radius: var(--t-radius-small);
+	background: color-mix(in oklch, currentColor 7%, transparent);
+	font-family: var(--t-font-family-monospace);
+	font-weight: var(--t-font-weight-medium);
+	font-size: var(--t-font-size-xsmall);
+}
+
+/* Highlighted code line */
+.prose :where(pre.astro-code .line.highlighted) {
+	background: color-mix(in oklch, var(--t-color-accent) 8%, transparent);
+}
+
+/* Blurred code line */
+.prose :where(pre.astro-code.has-focused .line:not(.focused)) {
+	opacity: 0.75;
+	filter: saturate(0.75);
+}
+
+/* Focused code line */
+.prose :where(pre.astro-code .line.focused) {
+	background: color-mix(in oklch, var(--t-color-accent) 12%, transparent);
+}
+
+/* Added code line */
+.prose :where(pre.astro-code .line.diff.add) {
+	background: oklch(0.72 0.18 145 / 0.15);
+}
+
+/* Removed code line */
+.prose :where(pre.astro-code .line.diff.remove) {
+	background: oklch(0.62 0.2 25 / 0.16);
+}
+
+/* Language badge */
+.prose :where(pre.astro-code.has-language-badge[data-language])::before {
+	content: attr(data-language);
+	position: absolute;
+	z-index: 1;
+	inset-block-start: var(--t-space-2);
+	inset-inline-end: var(--t-space-2);
+	inline-size: max-content;
+	padding: var(--t-space-1) var(--t-space-2);
+	border-radius: var(--t-radius-small);
+	background: color-mix(in oklch, currentColor 8%, transparent);
+	color: color-mix(in oklch, currentColor 62%, transparent);
+	font-size: var(--t-font-size-2xsmall);
+	font-weight: var(--t-font-weight-semibold);
+	line-height: 1;
+	text-transform: uppercase;
+	text-size-adjust: 100%;
+	pointer-events: none;
+}
+
+/* Code container with language badge */
+.prose :where(pre.astro-code.has-language-badge) {
+	--c-code-padding-block-start: var(--t-space-6);
+}
+
+/* Code block with line numbers */
+.prose :where(pre.astro-code.has-line-numbers code) {
+	padding-inline-start: var(--c-code-line-number-padding-inline-start);
+}
+
+/* Code block line with line numbers */
+.prose :where(pre.astro-code.has-line-numbers .line) {
+	padding-inline-start: 0;
+}
+
+/* Line number gutter */
+.prose :where(pre.astro-code.has-line-numbers .line-numbers) {
+	position: absolute;
+	z-index: 1;
+	inset-block-start: var(--c-code-padding-block-start);
+	inset-inline-start: 0;
+	display: block;
+	inline-size: var(--c-code-line-number-padding-inline-start);
+	background: color-mix(in oklch, var(--c-code-line-number-background) 70%, transparent);
+	backdrop-filter: blur(1.5px);
+	color: color-mix(in oklch, currentColor 40%, transparent);
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+	user-select: none;
+	pointer-events: none;
+}
+
+/* Line number */
+.prose :where(pre.astro-code.has-line-numbers .line-number) {
+	display: block;
+	inline-size: var(--c-code-line-number-width);
+	padding-inline-start: var(--c-code-padding-inline);
+}
+
+@media (prefers-color-scheme: dark) {
+	.prose :where(pre.astro-code) {
+		/* background-color: var(--shiki-dark-bg) !important; */
+		color: var(--shiki-dark) !important;
+	}
+
+	.prose :where(pre.astro-code span[style*="--shiki-dark"]) {
+		color: var(--shiki-dark) !important;
+	}
+}
+
+[data-scheme="dark"] .prose :where(pre.astro-code) {
+	background-color: var(--shiki-dark-bg) !important;
+	color: var(--shiki-dark) !important;
+}
+
+[data-scheme="dark"] .prose :where(pre.astro-code span[style*="--shiki-dark"]) {
+	color: var(--shiki-dark) !important;
+}
