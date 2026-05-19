@@ -35,6 +35,7 @@ const publishedIso = serializeDate(publishedTime);
 const modifiedIso = serializeDate(modifiedTime);
 const robots = noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large";
 const schemas = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
+const plausibleDomain = new URL(SITE.url).hostname;
 ---
 
 <meta charset="UTF-8" />
@@ -69,4 +70,18 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 {modifiedIso && type === "article" && <meta property="article:modified_time" content={modifiedIso} />}
 {type === "article" && tags.map((tag: string) => <meta property="article:tag" content={tag} />)}
 {schemas.map((schema) => <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />)}
+{
+	import.meta.env.PROD && (
+		<script is:inline define:vars={{ plausibleDomain }}>
+			{`if (location.hostname === plausibleDomain && !window.__plausibleLoaded) {
+	window.__plausibleLoaded = true;
+	var s = document.createElement("script");
+	s.defer = true;
+	s.setAttribute("data-domain", plausibleDomain);
+	s.src = "https://plausible.io/js/script.js";
+	document.head.appendChild(s);
+}`}
+		</script>
+	)
+}
 <ClientRouter />
