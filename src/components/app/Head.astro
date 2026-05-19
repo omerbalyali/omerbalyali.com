@@ -35,7 +35,6 @@ const publishedIso = serializeDate(publishedTime);
 const modifiedIso = serializeDate(modifiedTime);
 const robots = noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large";
 const schemas = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
-const plausibleDomain = new URL(SITE.url).hostname;
 ---
 
 <meta charset="UTF-8" />
@@ -72,16 +71,14 @@ const plausibleDomain = new URL(SITE.url).hostname;
 {schemas.map((schema) => <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />)}
 {
 	import.meta.env.PROD && (
-		<script is:inline define:vars={{ plausibleDomain }}>
-			{`if (location.hostname === plausibleDomain && !window.__plausibleLoaded) {
-	window.__plausibleLoaded = true;
-	var s = document.createElement("script");
-	s.defer = true;
-	s.setAttribute("data-domain", plausibleDomain);
-	s.src = "https://plausible.io/js/script.js";
-	document.head.appendChild(s);
-}`}
-		</script>
+		<>
+			<script is:inline async src="https://plausible.io/js/pa-tvo-4wkugbTWqxuFix3DB.js" />
+			<script
+				is:inline
+				set:html={`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+plausible.init()`}
+			/>
+		</>
 	)
 }
 <ClientRouter />
