@@ -1,16 +1,36 @@
-// @ts-check
 import cloudflare from "@astrojs/cloudflare";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig, fontProviders } from "astro/config";
 import { Features } from "lightningcss";
+import { existsSync, readFileSync } from "node:fs";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
-import { markdownConfig } from "./markdown.config.mjs";
+import { markdownConfig } from "./markdown.config";
 
 // https://astro.build/config
 const siteUrl = process.env.SITE_URL ?? "https://omerbalyali.com";
-const cssTarget = (major, minor = 0, patch = 0) => (major << 16) | (minor << 8) | patch;
+const cssTarget = (major: number, minor = 0, patch = 0) => (major << 16) | (minor << 8) | patch;
+const useLocalHttps = ["1", "true", "yes"].includes((process.env.LOCAL_HTTPS ?? "").toLowerCase());
+const localHttpsKey = "./localhost-key.pem";
+const localHttpsCert = "./localhost.pem";
+
+const localHttps = () => {
+	if (!useLocalHttps) {
+		return undefined;
+	}
+
+	if (!existsSync(localHttpsKey) || !existsSync(localHttpsCert)) {
+		throw new Error(
+			`LOCAL_HTTPS is enabled, but ${localHttpsKey} and/or ${localHttpsCert} could not be found.`,
+		);
+	}
+
+	return {
+		key: readFileSync(localHttpsKey),
+		cert: readFileSync(localHttpsCert),
+	};
+};
 
 export default defineConfig({
 	adapter: cloudflare({
@@ -31,6 +51,9 @@ export default defineConfig({
 	vite: {
 		define: {
 			"import.meta.env.SITE_URL": JSON.stringify(siteUrl),
+		},
+		server: {
+			https: localHttps(),
 		},
 		ssr: {
 			external: ["@resvg/resvg-wasm", "satori"],

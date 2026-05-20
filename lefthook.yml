@@ -1,14 +1,16 @@
 commit-msg:
   commands:
     commitlint:
-      run: pnpm exec commitlint --edit {1}
+      run: ./node_modules/.bin/commitlint --edit {1}
 
 pre-commit:
   parallel: true
   commands:
+    astro-check:
+      run: ./node_modules/.bin/astro check
     prettier:
       glob: "*.{ts,tsx,js,mjs,cjs,astro,css,md,mdx,json,yml,yaml}"
-      run: pnpm exec prettier --check {staged_files}
+      run: ./node_modules/.bin/prettier --check {staged_files}
     stylelint:
       glob: "*.{css,astro}"
-      run: pnpm exec stylelint --max-warnings 0 {staged_files}
+      run: ./node_modules/.bin/stylelint --max-warnings 0 {staged_files}
