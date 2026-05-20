@@ -37,7 +37,7 @@ export function serializeDate(value?: Date | string) {
 
 export function formatDate(value: Date | string, options?: Intl.DateTimeFormatOptions) {
 	const date = value instanceof Date ? value : new Date(value);
-	return new Intl.DateTimeFormat("en", {
+	return new Intl.DateTimeFormat("en-GB", {
 		year: "numeric",
 		month: "long",
 		day: "numeric",
