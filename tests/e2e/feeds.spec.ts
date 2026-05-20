@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test";
 
+const SITE_URL = process.env.SITE_URL ?? "https://omerbalyali.com";
+const siteOrigin = new URL(SITE_URL).origin;
+
 test.describe("generated feeds and discovery files", () => {
 	test("publishes RSS items newest first", async ({ request }) => {
 		const response = await request.get("/rss.xml");
@@ -15,7 +18,7 @@ test.describe("generated feeds and discovery files", () => {
 
 		expect(items.length).toBeGreaterThan(0);
 		expect(items.every((item) => item.title && item.link && item.pubDate)).toBe(true);
-		expect(items.every((item) => item.link?.startsWith("https://omerbalyali.com/writing/"))).toBe(true);
+		expect(items.every((item) => item.link?.startsWith(`${siteOrigin}/writing/`))).toBe(true);
 		expect(items.map((item) => Date.parse(item.pubDate ?? ""))).toEqual(
 			[...items].map((item) => Date.parse(item.pubDate ?? "")).sort((a, b) => b - a),
 		);
@@ -28,7 +31,7 @@ test.describe("generated feeds and discovery files", () => {
 		expect(response.headers()["content-type"]).toMatch(/^text\/plain/);
 
 		await expect(response.text()).resolves.toBe(
-			["User-agent: *", "Allow: /", "Sitemap: https://omerbalyali.com/sitemap-index.xml"].join("\n"),
+			["User-agent: *", "Allow: /", `Sitemap: ${siteOrigin}/sitemap-index.xml`].join("\n"),
 		);
 	});
 
@@ -41,15 +44,15 @@ test.describe("generated feeds and discovery files", () => {
 
 		expect(locations).toEqual(
 			expect.arrayContaining([
-				"https://omerbalyali.com/",
-				"https://omerbalyali.com/about/",
-				"https://omerbalyali.com/legal-notice/",
-				"https://omerbalyali.com/privacy-policy/",
-				"https://omerbalyali.com/writing/",
+				`${siteOrigin}/`,
+				`${siteOrigin}/about/`,
+				`${siteOrigin}/legal-notice/`,
+				`${siteOrigin}/privacy-policy/`,
+				`${siteOrigin}/writing/`,
 			]),
 		);
 		expect(locations.length).toBeGreaterThanOrEqual(5);
-		expect(locations.every((location) => location.startsWith("https://omerbalyali.com/"))).toBe(true);
+		expect(locations.every((location) => location.startsWith(`${siteOrigin}/`))).toBe(true);
 		expect(locations.some((location) => location.includes("/_works/"))).toBe(false);
 		expect(locations.some((location) => location.includes("/og/"))).toBe(false);
 	});

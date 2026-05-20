@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { routes } from "./_fixtures";
 
-const SITE_URL = "https://omerbalyali.com";
+const SITE_URL = process.env.SITE_URL ?? "https://omerbalyali.com";
 
 const expectedTitles = new Map([
 	["/", "Ömer Balyalı"],
