@@ -8,6 +8,8 @@
 		"check": "astro check",
 		"deploy": "wrangler types && astro build && wrangler deploy",
 		"dev": "wrangler types && astro dev",
+		"dev:lan": "wrangler types && astro dev --host 0.0.0.0",
+		"dev:lan:https": "wrangler types && LOCAL_HTTPS=true astro dev --host 0.0.0.0",
 		"format": "prettier --write .",
 		"lint:style": "stylelint 'src/**/*.{css,astro}' --max-warnings 0",
 		"prepare": "lefthook install || true",
