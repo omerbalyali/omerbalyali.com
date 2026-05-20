@@ -5,12 +5,32 @@ import {
 	transformerNotationHighlight,
 	transformerRemoveLineBreak,
 } from "@shikijs/transformers";
-import { remarkReadingTime } from "./src/lib/remark-reading-time.mjs";
+import type { AstroUserConfig } from "astro";
+import { remarkReadingTime } from "./src/lib/remark-reading-time";
 
-const hasMetaFlag = (raw, flags) => flags.some((flag) => new RegExp(`\\b${flag}\\b`, "i").test(raw));
+type MarkdownConfig = NonNullable<AstroUserConfig["markdown"]>;
+type ShikiTransformer = NonNullable<NonNullable<MarkdownConfig["shikiConfig"]>["transformers"]>[number];
+type HastText = {
+	type: "text";
+	value: string;
+};
+type HastElement = {
+	type: "element";
+	tagName: string;
+	properties: {
+		class?: string | string[];
+		className?: string | string[];
+		[key: string]: string | number | boolean | (string | number)[] | null | undefined;
+	};
+	children: HastElementContent[];
+};
+type HastElementContent = HastElement | HastText;
+
+const hasMetaFlag = (raw: string, flags: string[]) =>
+	flags.some((flag) => new RegExp(`\\b${flag}\\b`, "i").test(raw));
 const lineNumberFlags = ["lineNumbers", "line-numbers", "lines"];
 
-function transformerCodeExampleMeta() {
+function transformerCodeExampleMeta(): ShikiTransformer {
 	return {
 		name: "code-example-meta",
 		pre(node) {
@@ -27,17 +47,21 @@ function transformerCodeExampleMeta() {
 	};
 }
 
-function transformerWrapCodeLines() {
-	const hasClass = (node, className) => {
+function transformerWrapCodeLines(): ShikiTransformer {
+	const hasClass = (node: HastElementContent, className: string) => {
+		if (node.type !== "element") {
+			return false;
+		}
+
 		const classes = node.properties?.className ?? node.properties?.class;
 		const list = Array.isArray(classes) ? classes : String(classes ?? "").split(/\s+/);
 
 		return list.includes(className);
 	};
-	const countLines = (children) =>
-		children.filter((child) => child.type === "element" && hasClass(child, "line") && child.children?.length)
+	const countLines = (children: HastElementContent[]) =>
+		children.filter((child) => child.type === "element" && hasClass(child, "line") && child.children.length)
 			.length;
-	const createLineNumbers = (count) => ({
+	const createLineNumbers = (count: number): HastElement => ({
 		type: "element",
 		tagName: "span",
 		properties: {
@@ -51,7 +75,7 @@ function transformerWrapCodeLines() {
 			children: [{ type: "text", value: String(index + 1) }],
 		})),
 	});
-	const createCodeLines = (children) => ({
+	const createCodeLines = (children: HastElementContent[]): HastElement => ({
 		type: "element",
 		tagName: "span",
 		properties: { className: ["code-lines"] },
@@ -62,7 +86,7 @@ function transformerWrapCodeLines() {
 		name: "wrap-code-lines",
 		code(node) {
 			const raw = this.options.meta?.__raw ?? "";
-			const children = node.children;
+			const children = node.children as HastElementContent[];
 			const lineNumbers = hasMetaFlag(raw, lineNumberFlags) ? [createLineNumbers(countLines(children))] : [];
 
 			node.children = [...lineNumbers, createCodeLines(children)];
@@ -70,14 +94,13 @@ function transformerWrapCodeLines() {
 	};
 }
 
-/** @type {import("astro").AstroUserConfig["markdown"]} */
 export const markdownConfig = {
 	remarkPlugins: [remarkReadingTime],
 	shikiConfig: {
-		themes: /** @type {const} */ ({
+		themes: {
 			light: "github-light",
 			dark: "github-dark",
-		}),
+		},
 		transformers: [
 			transformerMetaHighlight(),
 			transformerNotationDiff(),
@@ -88,4 +111,4 @@ export const markdownConfig = {
 			transformerWrapCodeLines(),
 		],
 	},
-};
+} satisfies MarkdownConfig;

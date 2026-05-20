@@ -6,7 +6,7 @@ import { Features } from "lightningcss";
 import { existsSync, readFileSync } from "node:fs";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
-import { markdownConfig } from "./markdown.config.mjs";
+import { markdownConfig } from "./markdown.config";
 
 // https://astro.build/config
 const siteUrl = process.env.SITE_URL ?? "https://omerbalyali.com";
