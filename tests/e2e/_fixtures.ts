@@ -8,10 +8,9 @@ function loadRoutes(): string[] {
 	try {
 		xml = readFileSync(SITEMAP_PATH, "utf8");
 	} catch (error) {
-		throw new Error(
-			`Could not read ${SITEMAP_PATH}. Run \`pnpm exec astro build\` before \`pnpm test:e2e\`.`,
-			{ cause: error },
-		);
+		throw new Error(`Could not read ${SITEMAP_PATH}. Run \`astro build\` before \`pnpm test:e2e\`.`, {
+			cause: error,
+		});
 	}
 	const matches = xml.matchAll(/<loc>(.*?)<\/loc>/g);
 	return Array.from(matches, (m) => new URL(m[1]).pathname).sort();

@@ -14,7 +14,7 @@ export default defineConfig({
 	},
 	projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 	webServer: {
-		command: `pnpm exec astro preview --port ${PORT}`,
+		command: `./node_modules/.bin/astro preview --port ${PORT}`,
 		url: `http://localhost:${PORT}`,
 		reuseExistingServer: !process.env.CI,
 		timeout: 60_000,
