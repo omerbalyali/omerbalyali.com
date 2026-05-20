@@ -36,8 +36,8 @@ describe("seo helpers", () => {
 	});
 
 	describe("formatDate", () => {
-		it("formats a date in en-US long form", () => {
-			expect(formatDate(new Date("2025-01-15T00:00:00Z"))).toBe("January 15, 2025");
+		it("formats a date in European long form", () => {
+			expect(formatDate(new Date("2025-01-15T00:00:00Z"))).toBe("15 January 2025");
 		});
 	});
 });
