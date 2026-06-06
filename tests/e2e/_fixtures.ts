@@ -1,14 +1,14 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
-const SITEMAP_PATH = resolve(process.cwd(), "dist/client/sitemap-0.xml");
+const SITEMAP_PATH = resolve(process.cwd(), "dist/sitemap-0.xml");
 
 function loadRoutes(): string[] {
 	let xml: string;
 	try {
 		xml = readFileSync(SITEMAP_PATH, "utf8");
 	} catch (error) {
-		throw new Error(`Could not read ${SITEMAP_PATH}. Run \`astro build\` before \`pnpm test:e2e\`.`, {
+		throw new Error(`Could not read ${SITEMAP_PATH}. Run \`pnpm run build\` before running e2e tests.`, {
 			cause: error,
 		});
 	}
