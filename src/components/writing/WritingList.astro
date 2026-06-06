@@ -61,21 +61,24 @@ const posts = (
 
 	.view-all {
 		&:where(&) {
+			--_padding-block: var(--t-space-2);
+			--_padding-inline: var(--t-space-3);
+
+			--s-padding: var(--_padding-block) var(--_padding-inline);
+			--s-margin: calc(var(--_padding-block) * -1) calc(var(--_padding-inline) * -1);
 			--s-text-color: color-mix(in oklch, currentColor 80%, transparent);
 			--s-background-color: transparent;
 			--s-border-color: transparent;
 			--s-outline-color: transparent;
-			--_padding-block: var(--t-space-2);
-			--_padding-inline: var(--t-space-3);
 		}
 
 		max-width: max-content;
 		margin-block-start: var(--t-space-3);
 		font-size: var(--t-font-size-small);
-		font-weight: var(--t-font-weight-semibold);
+		font-weight: var(--t-font-weight-medium);
 		border-radius: var(--t-radius-medium);
-		padding: var(--_padding-block) var(--_padding-inline);
-		margin: calc(var(--_padding-block) * -1) calc(var(--_padding-inline) * -1);
+		padding: var(--s-padding);
+		margin: var(--s-margin);
 		color: var(--s-text-color);
 		background-color: var(--s-background-color);
 		border: var(--t-border-thin) solid var(--s-border-color);

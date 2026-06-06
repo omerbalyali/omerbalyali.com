@@ -11,12 +11,6 @@ pnpm install
 pnpm exec playwright install chromium
 ```
 
-For Cloudflare binding/type updates, run:
-
-```sh
-pnpm run types:cf
-```
-
 ## Development
 
 ```sh
