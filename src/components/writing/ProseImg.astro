@@ -14,10 +14,10 @@ const { src, darkSrc, alt = "" } = Astro.props;
 <figure>
 	{
 		darkSrc ? (
-			<>
-				<Image class="light-image" src={src} alt={alt} />
-				<Image class="dark-image" src={darkSrc} alt={alt} />
-			</>
+			<picture>
+				<source srcset={darkSrc.src} media="(prefers-color-scheme: dark)" />
+				<Image src={src} alt={alt} />
+			</picture>
 		) : (
 			<Image src={src} alt={alt} />
 		)
@@ -34,19 +34,5 @@ const { src, darkSrc, alt = "" } = Astro.props;
 <style>
 	img {
 		border-radius: var(--t-radius-medium);
-	}
-
-	.dark-image {
-		display: none;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		.light-image {
-			display: none;
-		}
-
-		.dark-image {
-			display: block;
-		}
 	}
 </style>
