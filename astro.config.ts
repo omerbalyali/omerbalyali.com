@@ -1,4 +1,3 @@
-import cloudflare from "@astrojs/cloudflare";
 import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
@@ -34,10 +33,6 @@ const localHttps = () => {
 };
 
 export default defineConfig({
-	adapter: cloudflare({
-		imageService: { build: "compile", runtime: "cloudflare-binding" },
-		prerenderEnvironment: "node",
-	}),
 	markdown: {
 		processor: unified({
 			...markdownConfig,
