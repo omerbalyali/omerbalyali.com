@@ -1,4 +1,5 @@
 import cloudflare from "@astrojs/cloudflare";
+import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig, fontProviders } from "astro/config";
@@ -38,11 +39,13 @@ export default defineConfig({
 		prerenderEnvironment: "node",
 	}),
 	markdown: {
-		...markdownConfig,
-		rehypePlugins: [
-			rehypeSlug,
-			[rehypeAutolinkHeadings, { behavior: "wrap", test: ["h2", "h3", "h4", "h5", "h6"] }],
-		],
+		processor: unified({
+			...markdownConfig,
+			rehypePlugins: [
+				rehypeSlug,
+				[rehypeAutolinkHeadings, { behavior: "wrap", test: ["h2", "h3", "h4", "h5", "h6"] }],
+			],
+		}),
 	},
 	integrations: [mdx(), sitemap({ filter: (page) => !page.includes("/og/") })],
 	devToolbar: {
