@@ -75,6 +75,9 @@ importers:
       satori:
         specifier: ^0.26.0
         version: 0.26.0
+      sharp:
+        specifier: ^0.34.5
+        version: 0.34.5
       stylelint:
         specifier: 17.11.1
         version: 17.11.1(typescript@6.0.3)
