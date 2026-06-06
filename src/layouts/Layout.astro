@@ -6,14 +6,15 @@ import NavBar from "../components/app/NavBar.astro";
 import type { PageMetadata } from "../lib/seo";
 
 interface Props {
+	lang?: string;
 	metadata?: PageMetadata;
 }
 
-const { metadata } = Astro.props as Props;
+const { lang = "en", metadata } = Astro.props as Props;
 ---
 
 <!doctype html>
-<html lang="en" data-theme="default">
+<html lang={lang} data-theme="default">
 	<head>
 		<Head {...metadata} />
 	</head>

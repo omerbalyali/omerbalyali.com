@@ -11,19 +11,23 @@ const posts = (
 
 <section class="writing-list">
 	<header>
-		<h2>Writing</h2>
+		<h1 class="title">Writing</h1>
+		<a href="/writing/" class="view-all">View All</a>
 	</header>
 	{
-		posts.length > 0 &&
-			posts.map((post) => {
-				return (
-					<ul class="writing-cards" role="list">
+		posts.length > 0 ? (
+			<ul class="writing-cards" role="list">
+				{posts.map((post) => {
+					return (
 						<li>
 							<Card post={post} />
 						</li>
-					</ul>
-				);
-			})
+					);
+				})}
+			</ul>
+		) : (
+			<p>No published writing yet.</p>
+		)
 	}
 </section>
 
@@ -33,7 +37,7 @@ const posts = (
 	.writing-list {
 		display: flex;
 		flex-direction: column;
-		gap: var(--t-space-2);
+		gap: var(--t-space-4);
 	}
 
 	header {
@@ -43,7 +47,7 @@ const posts = (
 		align-items: center;
 	}
 
-	h2 {
+	.title {
 		font-size: var(--t-font-size-small);
 		font-weight: var(--t-font-weight-semibold);
 		color: color-mix(in oklch, currentColor 80%, transparent);
@@ -53,5 +57,41 @@ const posts = (
 	.writing-cards {
 		display: flex;
 		flex-direction: column;
+	}
+
+	.view-all {
+		&:where(&) {
+			--s-text-color: color-mix(in oklch, currentColor 80%, transparent);
+			--s-background-color: transparent;
+			--s-border-color: transparent;
+			--s-outline-color: transparent;
+			--_padding-block: var(--t-space-2);
+			--_padding-inline: var(--t-space-3);
+		}
+
+		max-width: max-content;
+		margin-block-start: var(--t-space-3);
+		font-size: var(--t-font-size-small);
+		font-weight: var(--t-font-weight-semibold);
+		border-radius: var(--t-radius-medium);
+		padding: var(--_padding-block) var(--_padding-inline);
+		margin: calc(var(--_padding-block) * -1) calc(var(--_padding-inline) * -1);
+		color: var(--s-text-color);
+		background-color: var(--s-background-color);
+		border: var(--t-border-thin) solid var(--s-border-color);
+		outline-color: var(--s-outline-color);
+		outline-offset: 2px;
+
+		&:hover,
+		&:focus-visible {
+			--s-text-color: var(--t-color-accent);
+			--s-background-color: color-mix(in oklch, currentColor 3%, transparent);
+			--s-border-color: color-mix(in oklch, currentColor 4%, transparent);
+		}
+
+		&:focus-visible {
+			--s-outline-color: var(--t-color-accent);
+			--s-border-color: transparent;
+		}
 	}
 </style>

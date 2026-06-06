@@ -1,8 +1,21 @@
 ---
 import Layout from "./Layout.astro";
+
+const { frontmatter = {} } = Astro.props;
+const {
+	title,
+	description,
+	canonicalURL = Astro.url.pathname,
+	lang = "en",
+} = frontmatter as {
+	title?: string;
+	description?: string;
+	canonicalURL?: string;
+	lang?: string;
+};
 ---
 
-<Layout>
+<Layout lang={lang} metadata={{ title, description, canonicalURL }}>
 	<article class="prose">
 		<slot />
 	</article>

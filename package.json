@@ -13,6 +13,7 @@
 		"dev:lan": "astro dev --host 0.0.0.0",
 		"dev:lan:https": "LOCAL_HTTPS=true astro dev --host 0.0.0.0",
 		"format": "prettier --write .",
+		"format:check": "prettier --check .",
 		"lint": "astro check && prettier --check . && stylelint 'src/**/*.{css,astro}' --max-warnings 0",
 		"lint:style": "stylelint 'src/**/*.{css,astro}' --max-warnings 0",
 		"prepare": "lefthook install || true",
