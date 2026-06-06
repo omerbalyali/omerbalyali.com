@@ -20,8 +20,8 @@
 		"preview": "astro preview",
 		"test": "astro build && vitest run && playwright test",
 		"test:unit": "vitest run",
-		"test:e2e": "playwright test tests/e2e/pages.spec.ts",
-		"test:a11y": "playwright test tests/e2e/a11y.spec.ts"
+		"test:e2e": "pnpm run build && playwright test tests/e2e/pages.spec.ts",
+		"test:a11y": "pnpm run build && playwright test tests/e2e/a11y.spec.ts"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^6.0.2",
