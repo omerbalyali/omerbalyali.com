@@ -5,6 +5,7 @@ import {
 	transformerNotationHighlight,
 	transformerRemoveLineBreak,
 } from "@shikijs/transformers";
+import type { UnifiedProcessorOptions } from "@astrojs/markdown-remark";
 import type { AstroUserConfig } from "astro";
 import { remarkReadingTime } from "./src/lib/remark-reading-time";
 
@@ -95,7 +96,6 @@ function transformerWrapCodeLines(): ShikiTransformer {
 }
 
 export const markdownConfig = {
-	remarkPlugins: [remarkReadingTime],
 	shikiConfig: {
 		themes: {
 			light: "github-light",
@@ -111,4 +111,8 @@ export const markdownConfig = {
 			transformerWrapCodeLines(),
 		],
 	},
-} satisfies MarkdownConfig;
+} satisfies Pick<MarkdownConfig, "shikiConfig">;
+
+export const markdownProcessorConfig = {
+	remarkPlugins: [remarkReadingTime],
+} satisfies UnifiedProcessorOptions;
