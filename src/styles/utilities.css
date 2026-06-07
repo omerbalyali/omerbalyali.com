@@ -1,3 +1,5 @@
+/* stylelint-disable custom-property-pattern */
+
 .app-container {
 	margin-inline: var(--t-app-container-gutter-inline);
 }
@@ -15,4 +17,44 @@
 	position: absolute;
 	white-space: nowrap;
 	width: 1px;
+}
+
+.bleed {
+	:where(&) {
+		--_bleed-gutter-inline: var(--t-app-container-gutter-inline);
+		--_bleed-page-inline-size: calc(100% + var(--_bleed-gutter-inline) + var(--_bleed-gutter-inline));
+		--_bleed-page-safe-inline-size: calc(100svw - var(--t-app-page-gutter) - var(--t-app-page-gutter));
+		--_bleed-wide-inline-size: min(var(--_bleed-page-safe-inline-size), var(--t-app-content-wide-max-width));
+		--s-inline-size: var(--_bleed-page-inline-size);
+		--s-max-inline-size: none;
+		--s-margin-inline: calc(var(--_bleed-gutter-inline) * -1);
+		--s-overflow: visible;
+		--s-border-radius: 0;
+	}
+
+	inline-size: var(--s-inline-size);
+	max-inline-size: var(--s-max-inline-size);
+	margin-inline: var(--s-margin-inline);
+	overflow: var(--s-overflow);
+	border-radius: var(--s-border-radius);
+
+	&[data-bleed="page"] {
+		--s-inline-size: var(--_bleed-page-inline-size);
+		--s-margin-inline: calc(var(--_bleed-gutter-inline) * -1);
+	}
+
+	&[data-bleed="wide"] {
+		--s-inline-size: var(--_bleed-wide-inline-size);
+		--s-margin-inline: calc((100% - var(--_bleed-wide-inline-size)) / 2);
+	}
+
+	&[data-bleed-rounded] {
+		--s-overflow: clip;
+		--s-border-radius: var(--t-radius-large);
+	}
+}
+
+.bleed > :where(img, picture, video, canvas, svg) {
+	inline-size: 100%;
+	max-inline-size: none;
 }
