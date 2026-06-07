@@ -1,0 +1,26 @@
+---
+layout: ../../layouts/WorkDetailNew.astro
+title: Isometry
+year: 2026
+description: Isometry is a concept for a developer tool that helps teams define, validate, and maintain design system components through machine-readable contracts. It gives components a shared specification layer that can be used by humans, CI pipelines, and AI workflows.
+---
+
+import { Image } from "astro:assets";
+import website from "../../assets/images/works/isometry/website.png";
+
+## Problem
+
+Design systems often rely on documentation, conventions, and manual review to keep components consistent. As teams scale, components drift: states go missing, accessibility rules become inconsistent, and implementation details fall out of sync with the original design intent. AI-generated code makes this faster, but not necessarily safer, because output still needs a reliable way to be checked against the system’s standards.
+
+## Context
+
+The project explores how design systems could become more enforceable and machine-readable, similar to how APIs use OpenAPI or infrastructure uses Terraform. Instead of treating component behavior, accessibility, and structure as scattered knowledge across docs and code, Isometry proposes a dedicated contract format that can sit beside the implementation and guide the development workflow.
+
+## Solution
+
+Isometry introduces a spec-first workflow for design system components. Teams define states, accessibility requirements, structural rules, variants, and constraints in an .isometry.yaml contract, then use the CLI to validate implementations locally or in CI. The same contract can support generation, review, documentation, and AI-assisted workflows, helping teams keep components aligned from spec to release.
+
+<br />
+<br />
+
+<Image src={website} alt="Isometry website" class="bleed" data-bleed="wide" data-bleed-rounded />
