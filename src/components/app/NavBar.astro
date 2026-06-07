@@ -3,7 +3,7 @@ const { pathname } = Astro.url;
 
 const links = [
 	{ href: "/", label: "Home", priority: 3, isHome: true },
-	// { href: "/works/", label: "Works", priority: 2 },
+	{ href: "/works/", label: "Works", priority: 2 },
 	{ href: "/writing/", label: "Writing", priority: 2 },
 	{ href: "/about/", label: "About", priority: 1 },
 	{
@@ -106,7 +106,8 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			position: fixed;
 			width: 100%;
 			height: var(--t-space-20);
-			background: linear-gradient(to top, var(--t-color-background-page), transparent);
+			mask: linear-gradient(to top, var(--t-color-background-page), transparent);
+			backdrop-filter: blur(2px);
 			z-index: 5;
 			pointer-events: none;
 			inset-block-end: 0;
@@ -128,7 +129,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			:where(&) {
 				--s-inset-inline: 0;
 				--s-margin-inline-end: auto;
-				--s-opacity: 0;
+				--s-opacity: 1;
 				--s-transition: none;
 			}
 
@@ -147,8 +148,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			-webkit-user-select: none;
 
 			&[data-ready] {
-				--s-opacity: 1;
-				--s-transition: opacity var(--t-duration-base) var(--t-ease-out);
+				--s-transition: none;
 			}
 
 			@media (width <= 319px) {
