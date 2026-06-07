@@ -129,7 +129,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			:where(&) {
 				--s-inset-inline: 0;
 				--s-margin-inline-end: auto;
-				--s-opacity: 0;
+				--s-opacity: 1;
 				--s-transition: none;
 			}
 
@@ -148,8 +148,7 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			-webkit-user-select: none;
 
 			&[data-ready] {
-				--s-opacity: 1;
-				--s-transition: opacity var(--t-duration-base) var(--t-ease-out);
+				--s-transition: none;
 			}
 
 			@media (width <= 319px) {
