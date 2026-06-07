@@ -65,7 +65,7 @@ test.describe("primary navigation", () => {
 		await page.goto("/writing/");
 
 		await page.setViewportSize({ width: 500, height: 700 });
-		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Writing", "About"]);
+		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "Writing", "About"]);
 		await moreButton(page).click();
 		await expect.poll(() => visibleMenuLinks(page)).not.toContain("Writing");
 		await expect.poll(() => visibleMenuLinks(page)).not.toContain("About");
@@ -78,12 +78,14 @@ test.describe("primary navigation", () => {
 		).toBe(true);
 
 		await page.setViewportSize({ width: 389, height: 700 });
-		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Writing"]);
+		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "Writing"]);
 		await expect.poll(() => visibleMenuLinks(page)).toContain("About");
 
 		await page.setViewportSize({ width: 319, height: 700 });
 		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home"]);
-		await expect.poll(() => visibleMenuLinks(page)).toEqual(expect.arrayContaining(["Writing", "About"]));
+		await expect
+			.poll(() => visibleMenuLinks(page))
+			.toEqual(expect.arrayContaining(["Works", "Writing", "About"]));
 
 		await expect(nav(page).getByRole("link", { name: "Writing" }).last()).toHaveAttribute(
 			"aria-current",
