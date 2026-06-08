@@ -79,8 +79,8 @@ test.describe("primary navigation", () => {
 		).toBe(true);
 
 		await page.setViewportSize({ width: 389, height: 700 });
-		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works"]);
-		await expect.poll(() => visibleMenuLinks(page)).toContain("About");
+		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "About"]);
+		await expect.poll(() => visibleMenuLinks(page)).not.toContain("About");
 
 		await page.setViewportSize({ width: 319, height: 700 });
 		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home"]);
