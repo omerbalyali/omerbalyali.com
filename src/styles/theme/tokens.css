@@ -32,7 +32,7 @@
 	--t-font-line-height-base: 1.5;
 	--t-font-line-height-relaxed: 1.65;
 
-	--t-font-letter-spacing: var(--t-font-letter-spacing-tighter, 0);
+	--t-font-letter-spacing: var(--t-font-letter-spacing-tight, 0);
 
 	--t-font-letter-spacing-tighter: -0.01875em;
 	--t-font-letter-spacing-tight: -0.01em;
