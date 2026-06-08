@@ -67,80 +67,75 @@ const isHome = Astro.url.pathname === "/";
 		padding-block: var(--t-space-12);
 		background-color: var(--t-color-background-root);
 		transition: row-gap var(--t-duration-base) var(--t-ease-out);
-	}
 
-	.app-header[data-intro-visible] {
-		row-gap: var(--t-space-4);
-	}
+		.branding {
+			:where(&) {
+				--s-background-color: transparent;
+				--s-outline: var(--t-border-thin) solid var(--s-outline-color);
+				--s-outline-color: transparent;
+			}
 
-	.branding {
-		:where(&) {
-			--s-background-color: transparent;
-			--s-outline: var(--t-border-thin) solid var(--s-outline-color);
-			--s-outline-color: transparent;
+			max-width: max-content;
+			font-weight: var(--t-font-weight-semibold);
+			position: relative;
+			padding-block: var(--t-space-3);
+			padding-inline: var(--t-space-3);
+			margin-inline: calc(var(--t-space-3) * -1);
+			display: flex;
+			gap: var(--t-space-3);
+			align-items: center;
+			border-radius: var(--t-radius-medium);
+			outline-offset: 0;
+
+			&::before {
+				content: "";
+				width: var(--t-space-4);
+				aspect-ratio: 1 / 1;
+				mask-image: var(--t-brand-logomark);
+				mask-repeat: no-repeat;
+				margin-block-end: 3.75%;
+				background-color: currentColor;
+			}
+
+			&:is(:hover, :active, :focus-visible) {
+				--s-color: var(--t-color-accent);
+			}
+
+			&:focus-visible {
+				--s-background-color: color-mix(in oklch, currentColor 5%, transparent);
+				--s-outline-color: color-mix(in oklch, currentColor 40%, transparent);
+			}
 		}
 
-		max-width: max-content;
-		font-weight: var(--t-font-weight-semibold);
-		position: relative;
-		padding-block: var(--t-space-3);
-		padding-inline: var(--t-space-3);
-		margin-inline: calc(var(--t-space-3) * -1);
-		display: flex;
-		gap: var(--t-space-3);
-		align-items: center;
-		border-radius: var(--t-radius-medium);
-		outline-offset: 0;
-
-		&::before {
-			content: "";
-			width: var(--t-space-4);
-			aspect-ratio: 1 / 1;
-			mask-image: var(--t-brand-logomark);
-			mask-repeat: no-repeat;
-			margin-block-end: 3.75%;
-			background-color: currentColor;
+		.intro-wrapper {
+			display: grid;
+			grid-template-rows: 0fr;
+			transition: grid-template-rows var(--t-duration-faster) var(--t-ease-out);
 		}
 
-		&:is(:hover, :active, :focus-visible) {
-			--s-color: var(--t-color-accent);
+		.intro {
+			min-block-size: 0;
+			opacity: 0;
+			transition: opacity var(--t-duration-faster) var(--t-ease-out);
 		}
 
-		&:focus-visible {
-			--s-background-color: color-mix(in oklch, currentColor 5%, transparent);
-			--s-outline-color: color-mix(in oklch, currentColor 40%, transparent);
+		&[data-intro-visible] {
+			row-gap: var(--t-space-4);
+
+			.intro-wrapper {
+				grid-template-rows: 1fr;
+			}
+
+			.intro {
+				opacity: 1;
+			}
 		}
-	}
-
-	.intro-wrapper {
-		display: grid;
-		grid-template-rows: 0fr;
-		transition: grid-template-rows var(--t-duration-faster) var(--t-ease-out);
-	}
-
-	.app-header[data-intro-visible] .intro-wrapper {
-		grid-template-rows: 1fr;
-	}
-
-	.intro {
-		min-block-size: 0;
-		opacity: 0;
-		transition: opacity var(--t-duration-faster) var(--t-ease-out);
-	}
-
-	.app-header[data-intro-visible] .intro {
-		opacity: 1;
-	}
-
-	.studio-link {
-		font-weight: var(--t-font-weight-semibold);
-		color: var(--t-color-accent);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.app-header,
-		.intro,
-		.intro-wrapper {
+		.app-header .intro,
+		.app-header .intro-wrapper {
 			transition: none;
 		}
 	}
