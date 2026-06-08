@@ -14,9 +14,15 @@ const metadata = {
 <Layout metadata={metadata}>
 	<h1>Works</h1>
 	<ul>
-		<li><a href="/works/isometry/">Isometry</a></li>
-		<li><a href="/works/keepspace/">Keepspace</a></li>
-		<li><a href="/works/stateful-ui/">Stateful UI</a></li>
+		<li data-work="isometry">
+			<a href="/works/isometry/"> <strong>Isometry</strong><time datetime="2026">2026</time></a>
+		</li>
+		<li data-work="stateful-ui">
+			<a href="/works/stateful-ui/"><strong>Stateful UI</strong><time datetime="2026">2026</time></a>
+		</li>
+		<li data-work="keepspace">
+			<a href="/works/keepspace/"><strong>Keepspace</strong><time datetime="2025">2025</time></a>
+		</li>
 	</ul>
 </Layout>
 
@@ -33,31 +39,56 @@ const metadata = {
 
 		li {
 			max-width: calc(50% - var(--t-space));
+
+			&[data-work="isometry"] {
+				--logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='240' fill='none'%3E%3Cpath fill='%23000' d='M209.999 137.326c4.148 0 7.509 3.418 7.509 7.635v24.431c0 4.217-3.361 7.634-7.509 7.634s-7.51-3.417-7.51-7.634v-24.431c0-4.217 3.362-7.635 7.51-7.635M209.987 62c4.139-.009 7.525 3.491 7.525 7.7v35.13c0 6.355 3.334 12.231 8.75 15.41l29.98 17.599.003.004c3.592 2.107 4.821 6.776 2.748 10.429-2.073 3.652-6.665 4.901-10.258 2.793l-29.983-17.599a17.25 17.25 0 0 0-17.503 0l-29.981 17.599c-3.592 2.107-8.185.859-10.257-2.793-2.073-3.653-.844-8.322 2.749-10.429l29.983-17.6c5.413-3.179 8.75-9.052 8.75-15.41V69.635c0-4.212 3.352-7.629 7.494-7.635m-48.98 28.756c2.072-3.652 6.665-4.902 10.258-2.795l20.81 12.216c3.592 2.107 4.821 6.776 2.748 10.428s-6.665 4.902-10.258 2.794l-20.809-12.214c-3.593-2.108-4.822-6.777-2.749-10.43m87.724-2.795c3.593-2.107 8.186-.858 10.258 2.795s.844 8.322-2.748 10.429l-20.81 12.214c-3.593 2.108-8.186.859-10.258-2.794-2.073-3.652-.844-8.321 2.749-10.428z' style='fill:%23000;fill-opacity:1'/%3E%3C/svg%3E");
+			}
+
+			&[data-work="keepspace"] {
+				--logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='240' fill='none'%3E%3Cpath fill='%23000' d='M210 98.573c11.835 0 21.43 9.595 21.43 21.43v28.57c0 11.835-9.595 21.43-21.43 21.43h-28.57c-11.835 0-21.43-9.592-21.43-21.43v-28.57c0-11.835 9.592-21.43 21.43-21.43zm-28.57 14.287a7.144 7.144 0 0 0-7.143 7.143v28.57a7.143 7.143 0 0 0 7.143 7.143H210a7.144 7.144 0 0 0 7.143-7.143v-28.57A7.143 7.143 0 0 0 210 112.86zm50-42.86A28.57 28.57 0 0 1 260 98.57v50a7.143 7.143 0 1 1-14.285 0V98.573a14.293 14.293 0 0 0-14.288-14.288H181.43a7.143 7.143 0 1 1 0-14.285z' style='fill:%23000;fill-opacity:1'/%3E%3C/svg%3E");
+			}
+
+			&[data-work="stateful-ui"] {
+				--logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='240' fill='none'%3E%3Cpath fill='%2318191b' d='M228.529 75h-37.058C176.851 75 165 86.851 165 101.471v37.058c0 14.62 11.851 26.471 26.471 26.471h37.058c14.62 0 26.471-11.851 26.471-26.471v-37.058C255 86.851 243.149 75 228.529 75m-31.235 78.882c-5.848 0-10.588-4.74-10.588-10.588s4.74-10.588 10.588-10.588 10.588 4.74 10.588 10.588-4.74 10.588-10.588 10.588m10.588-26.498a1.06 1.06 0 0 1-1.121 1.057c-11.174-.583-20.055-9.828-20.055-21.147s8.881-20.564 20.055-21.147a1.06 1.06 0 0 1 1.121 1.057zm5.357 26.469a1.06 1.06 0 0 1-1.121-1.057v-40.18c0-.61.512-1.089 1.121-1.057 11.174.583 20.055 9.828 20.055 21.147s-8.881 20.564-20.055 21.147m9.467-46.559c-5.848 0-10.588-4.74-10.588-10.588s4.74-10.588 10.588-10.588 10.588 4.74 10.588 10.588-4.74 10.588-10.588 10.588' style='fill:%2318191b;fill:color(display-p3 .095 .0983 .105);fill-opacity:1'/%3E%3C/svg%3E");
+			}
 		}
 
 		a {
+			position: relative;
 			display: flex;
 			align-items: center;
-			min-height: 4lh;
-			padding: var(--t-space-5);
+			justify-content: space-between;
+			min-height: 7rlh;
+			padding: var(--t-space-12);
+			padding-inline-start: var(--t-space-32);
+			font-size: var(--t-font-size-xlarge);
 			font-weight: var(--t-font-weight-medium);
-			background-color: color-mix(in oklch, currentColor 1%, transparent);
-			border: var(--t-border-thin) solid
-				light-dark(
-					color-mix(in oklch, currentColor 5%, transparent),
-					color-mix(in oklch, currentColor 2%, transparent)
-				);
+			background-color: var(--t-color-background-primary);
+			border: var(--t-border-thin) solid;
+			border-color: var(--t-color-border-primary);
 			border-radius: var(--t-radius-medium);
+			box-shadow: 0 0.125rem 0.25rem -0.125rem oklch(0 0 0 / 0.025);
 
-			&:hover {
-				background-color: light-dark(
-					color-mix(in oklch, currentColor 4%, transparent),
-					color-mix(in oklch, currentColor 2%, transparent)
-				);
-				border-color: light-dark(
-					color-mix(in oklch, currentColor 10%, transparent),
-					color-mix(in oklch, currentColor 3%, transparent)
-				);
+			time {
+				font-size: var(--t-font-size-base);
+				font-weight: var(--t-font-weight-semibold);
+				color: color-mix(in oklch, currentColor 70%, transparent);
+				letter-spacing: var(--t-letter-spacing-wide);
+			}
+
+			&::before {
+				content: "";
+				position: absolute;
+				inset-inline-start: 0;
+				display: block;
+				height: 8rem;
+				aspect-ratio: 1.75 / 1;
+				mask-repeat: no-repeat;
+				mask-position: 0 center;
+				mask-size: 85%;
+				mask-image: var(--logo);
+				margin-inline-start: -1.5rem;
+				background-color: color-mix(in oklch, currentColor 90%, transparent);
 			}
 		}
 	}
