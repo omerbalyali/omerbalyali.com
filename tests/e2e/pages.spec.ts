@@ -6,7 +6,6 @@ const SITE_URL = process.env.SITE_URL ?? "https://omerbalyali.com";
 const expectedTitles = new Map([
 	["/", "Ömer Balyalı"],
 	["/about/", "About | Ömer Balyalı"],
-	["/writing/", "Writing | Ömer Balyalı"],
 ]);
 
 test.describe("page smoke", () => {
@@ -47,6 +46,13 @@ test.describe("page smoke", () => {
 			"content",
 			"noindex, nofollow, noarchive, nocache",
 		);
+	});
+
+	test("redirects the writing index to the home page", async ({ page }) => {
+		await page.goto("/writing/");
+
+		await expect(page).toHaveURL("/");
+		await expect(page).toHaveTitle(expectedTitles.get("/") ?? "");
 	});
 
 	for (const route of routes.filter((route) => route.startsWith("/writing/") && route !== "/writing/")) {

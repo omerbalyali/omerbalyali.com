@@ -18,7 +18,7 @@ const shouldIncludeInSitemap = (page: string) => {
 	const { pathname } = new URL(page, siteUrl);
 	const isWorkDetailPage = pathname.startsWith("/works/") && pathname !== "/works/";
 
-	return !pathname.startsWith("/og/") && !isWorkDetailPage;
+	return !pathname.startsWith("/og/") && !isWorkDetailPage && pathname !== "/writing/";
 };
 
 const localHttps = () => {

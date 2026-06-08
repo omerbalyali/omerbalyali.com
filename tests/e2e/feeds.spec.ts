@@ -49,12 +49,12 @@ test.describe("generated feeds and discovery files", () => {
 				`${siteOrigin}/legal-notice/`,
 				`${siteOrigin}/privacy-policy/`,
 				`${siteOrigin}/works/`,
-				`${siteOrigin}/writing/`,
 			]),
 		);
 		expect(locations.length).toBeGreaterThanOrEqual(5);
 		expect(locations.every((location) => location.startsWith(`${siteOrigin}/`))).toBe(true);
 		expect(locations.some((location) => location.match(/\/works\/[^/]+\/$/))).toBe(false);
+		expect(locations).not.toContain(`${siteOrigin}/writing/`);
 		expect(locations.some((location) => location.includes("/og/"))).toBe(false);
 	});
 });

@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import WritingProseLayout from "../../layouts/WritingProseLayout.astro";
 
 export async function getStaticPaths() {
@@ -7,13 +7,27 @@ export async function getStaticPaths() {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: { post },
-	}));
+	return [
+		{
+			params: { slug: undefined },
+			props: { redirectTo: "/" },
+		},
+		...posts.map((post) => ({
+			params: { slug: post.id },
+			props: { post },
+		})),
+	];
 }
 
-const { post } = Astro.props;
+type Props = { post: CollectionEntry<"writing"> } | { redirectTo: string };
+
+const props = Astro.props as Props;
+
+if ("redirectTo" in props) {
+	return Astro.redirect(props.redirectTo, 308);
+}
+
+const { post } = props;
 const { Content, remarkPluginFrontmatter } = await render(post);
 ---
 
