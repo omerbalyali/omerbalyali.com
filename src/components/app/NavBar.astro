@@ -4,8 +4,7 @@ const { pathname } = Astro.url;
 const links = [
 	{ href: "/", label: "Home", priority: 3, isHome: true },
 	{ href: "/works/", label: "Works", priority: 2 },
-	{ href: "/writing/", label: "Writing", priority: 2 },
-	{ href: "/about/", label: "About", priority: 1 },
+	{ href: "/about/", label: "About", priority: 2 },
 	{
 		href: "https://linkedin.com/in/omerbalyali",
 		label: "LinkedIn",
@@ -112,17 +111,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			pointer-events: none;
 			inset-block-end: 0;
 			inset-inline: auto;
-
-			/* Solid extension layer for mobile firefox */
-			&::after {
-				content: "";
-				position: absolute;
-				width: 100%;
-				height: var(--t-space-40);
-				inset-block-end: 0;
-				background: var(--t-color-background-page);
-				transform: translateY(100%);
-			}
 		}
 
 		.navbar {

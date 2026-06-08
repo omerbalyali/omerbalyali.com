@@ -48,12 +48,13 @@ test.describe("generated feeds and discovery files", () => {
 				`${siteOrigin}/about/`,
 				`${siteOrigin}/legal-notice/`,
 				`${siteOrigin}/privacy-policy/`,
-				`${siteOrigin}/writing/`,
+				`${siteOrigin}/works/`,
 			]),
 		);
 		expect(locations.length).toBeGreaterThanOrEqual(5);
 		expect(locations.every((location) => location.startsWith(`${siteOrigin}/`))).toBe(true);
-		expect(locations.some((location) => location.includes("/_works/"))).toBe(false);
+		expect(locations.some((location) => location.match(/\/works\/[^/]+\/$/))).toBe(false);
+		expect(locations).not.toContain(`${siteOrigin}/writing/`);
 		expect(locations.some((location) => location.includes("/og/"))).toBe(false);
 	});
 });

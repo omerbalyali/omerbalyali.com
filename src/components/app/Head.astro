@@ -33,7 +33,7 @@ const ogImageWidth = providedOgImageWidth ?? (usingDefaultOgImage ? SITE.og.defa
 const ogImageHeight = providedOgImageHeight ?? (usingDefaultOgImage ? SITE.og.defaultImageHeight : undefined);
 const publishedIso = serializeDate(publishedTime);
 const modifiedIso = serializeDate(modifiedTime);
-const robots = noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large";
+const robots = noindex ? "noindex, nofollow, noarchive, nocache" : "index, follow, max-image-preview:large";
 const schemas = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
 ---
 

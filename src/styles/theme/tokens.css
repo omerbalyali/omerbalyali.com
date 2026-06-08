@@ -32,7 +32,7 @@
 	--t-font-line-height-base: 1.5;
 	--t-font-line-height-relaxed: 1.65;
 
-	--t-font-letter-spacing: var(--t-font-letter-spacing-tighter, 0);
+	--t-font-letter-spacing: var(--t-font-letter-spacing-tight, 0);
 
 	--t-font-letter-spacing-tighter: -0.01875em;
 	--t-font-letter-spacing-tight: -0.01em;
@@ -65,7 +65,8 @@
 /* Layout */
 [data-theme] {
 	--t-app-page-max-width: 54rem;
-	--t-app-content-wide-max-width: 90rem;
+	--t-app-content-wide-max-width: 64rem;
+	--t-app-content-extra-wide-max-width: 95rem;
 	--t-app-page-gutter: var(--t-space-6);
 
 	--t-app-container-gutter-inline: max(

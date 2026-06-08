@@ -39,7 +39,6 @@ const { post } = Astro.props;
 		border: var(--t-border-thin) solid var(--s-border-color);
 		padding: var(--s-padding-block) var(--s-padding-inline);
 		margin-inline: calc((var(--s-padding-inline) + var(--t-border-thin)) * -1);
-		font-weight: var(--t-font-weight-medium);
 		transition: var(--s-transition);
 		outline: var(--s-outline);
 		outline-offset: 0;
@@ -59,6 +58,7 @@ const { post } = Astro.props;
 
 		.title {
 			text-wrap: pretty;
+			font-weight: var(--t-font-weight-medium);
 		}
 
 		.published-date {

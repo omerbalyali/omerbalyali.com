@@ -12,7 +12,6 @@ const posts = (
 <section class="writing-list">
 	<header>
 		<h1 class="title">Writing</h1>
-		<a href="/writing/" class="view-all">View All</a>
 	</header>
 	{
 		posts.length > 0 ? (
@@ -32,8 +31,6 @@ const posts = (
 </section>
 
 <style>
-	/* stylelint-disable custom-property-pattern */
-
 	.writing-list {
 		display: flex;
 		flex-direction: column;
@@ -57,44 +54,6 @@ const posts = (
 	.writing-cards {
 		display: flex;
 		flex-direction: column;
-	}
-
-	.view-all {
-		&:where(&) {
-			--_padding-block: var(--t-space-2);
-			--_padding-inline: var(--t-space-3);
-
-			--s-padding: var(--_padding-block) var(--_padding-inline);
-			--s-margin: calc(var(--_padding-block) * -1) calc(var(--_padding-inline) * -1);
-			--s-text-color: color-mix(in oklch, currentColor 80%, transparent);
-			--s-background-color: transparent;
-			--s-border-color: transparent;
-			--s-outline-color: transparent;
-		}
-
-		max-width: max-content;
-		margin-block-start: var(--t-space-3);
-		font-size: var(--t-font-size-small);
-		font-weight: var(--t-font-weight-medium);
-		border-radius: var(--t-radius-medium);
-		padding: var(--s-padding);
-		margin: var(--s-margin);
-		color: var(--s-text-color);
-		background-color: var(--s-background-color);
-		border: var(--t-border-thin) solid var(--s-border-color);
-		outline-color: var(--s-outline-color);
-		outline-offset: 2px;
-
-		&:hover,
-		&:focus-visible {
-			--s-text-color: var(--t-color-accent);
-			--s-background-color: color-mix(in oklch, currentColor 3%, transparent);
-			--s-border-color: color-mix(in oklch, currentColor 4%, transparent);
-		}
-
-		&:focus-visible {
-			--s-outline-color: var(--t-color-accent);
-			--s-border-color: transparent;
-		}
+		gap: var(--t-space-2);
 	}
 </style>

@@ -41,12 +41,13 @@ async function visibleMenuHrefs(page: Page) {
 
 test.describe("primary navigation", () => {
 	test("keeps page state and menu interactions accessible", async ({ page }) => {
-		await page.goto("/writing/");
+		await page.goto("/works/");
 
-		await expect(nav(page).getByRole("link", { name: "Writing" }).first()).toHaveAttribute(
+		await expect(nav(page).getByRole("link", { name: "Works" }).first()).toHaveAttribute(
 			"aria-current",
 			"page",
 		);
+		await expect(nav(page).getByRole("link", { name: "Writing" })).toHaveCount(0);
 		await expect(moreButton(page)).toHaveAttribute("aria-expanded", "false");
 
 		await moreButton(page).click();
@@ -62,10 +63,10 @@ test.describe("primary navigation", () => {
 	});
 
 	test("moves lower priority links into the menu at narrow widths", async ({ page }) => {
-		await page.goto("/writing/");
+		await page.goto("/works/");
 
 		await page.setViewportSize({ width: 500, height: 700 });
-		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "Writing", "About"]);
+		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "About"]);
 		await moreButton(page).click();
 		await expect.poll(() => visibleMenuLinks(page)).not.toContain("Writing");
 		await expect.poll(() => visibleMenuLinks(page)).not.toContain("About");
@@ -78,16 +79,15 @@ test.describe("primary navigation", () => {
 		).toBe(true);
 
 		await page.setViewportSize({ width: 389, height: 700 });
-		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "Writing"]);
-		await expect.poll(() => visibleMenuLinks(page)).toContain("About");
+		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "About"]);
+		await expect.poll(() => visibleMenuLinks(page)).not.toContain("About");
 
 		await page.setViewportSize({ width: 319, height: 700 });
 		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home"]);
-		await expect
-			.poll(() => visibleMenuLinks(page))
-			.toEqual(expect.arrayContaining(["Works", "Writing", "About"]));
+		await expect.poll(() => visibleMenuLinks(page)).toEqual(expect.arrayContaining(["Works", "About"]));
+		await expect.poll(() => visibleMenuLinks(page)).not.toContain("Writing");
 
-		await expect(nav(page).getByRole("link", { name: "Writing" }).last()).toHaveAttribute(
+		await expect(nav(page).getByRole("link", { name: "Works" }).last()).toHaveAttribute(
 			"aria-current",
 			"page",
 		);
