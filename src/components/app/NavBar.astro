@@ -111,17 +111,6 @@ const menuLinks = links.filter((link) => !("isHome" in link && link.isHome));
 			pointer-events: none;
 			inset-block-end: 0;
 			inset-inline: auto;
-
-			/* Solid extension layer for mobile firefox */
-			&::after {
-				content: "";
-				position: absolute;
-				width: 100%;
-				height: var(--t-space-40);
-				inset-block-end: 0;
-				background: var(--t-color-background-page);
-				transform: translateY(100%);
-			}
 		}
 
 		.navbar {
