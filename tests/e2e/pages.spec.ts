@@ -40,6 +40,15 @@ test.describe("page smoke", () => {
 		});
 	}
 
+	test("work detail pages ask crawlers not to index or archive them", async ({ page }) => {
+		await page.goto("/works/isometry/");
+
+		await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+			"content",
+			"noindex, nofollow, noarchive, nocache",
+		);
+	});
+
 	for (const route of routes.filter((route) => route.startsWith("/writing/") && route !== "/writing/")) {
 		test(`${route} exposes article metadata and structured data`, async ({ page }) => {
 			await page.goto(route);

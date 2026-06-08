@@ -14,6 +14,12 @@ const cssTarget = (major: number, minor = 0, patch = 0) => (major << 16) | (mino
 const useLocalHttps = ["1", "true", "yes"].includes((process.env.LOCAL_HTTPS ?? "").toLowerCase());
 const localHttpsKey = "./localhost-key.pem";
 const localHttpsCert = "./localhost.pem";
+const shouldIncludeInSitemap = (page: string) => {
+	const { pathname } = new URL(page, siteUrl);
+	const isWorkDetailPage = pathname.startsWith("/works/") && pathname !== "/works/";
+
+	return !pathname.startsWith("/og/") && !isWorkDetailPage;
+};
 
 const localHttps = () => {
 	if (!useLocalHttps) {
@@ -43,7 +49,7 @@ export default defineConfig({
 			],
 		}),
 	},
-	integrations: [mdx(), sitemap({ filter: (page) => !page.includes("/og/") })],
+	integrations: [mdx(), sitemap({ filter: shouldIncludeInSitemap })],
 	devToolbar: {
 		enabled: false,
 	},
