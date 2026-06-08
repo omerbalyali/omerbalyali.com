@@ -25,6 +25,10 @@
 		--_bleed-page-inline-size: calc(100% + var(--_bleed-gutter-inline) + var(--_bleed-gutter-inline));
 		--_bleed-page-safe-inline-size: calc(100svw - var(--t-app-page-gutter) - var(--t-app-page-gutter));
 		--_bleed-wide-inline-size: min(var(--_bleed-page-safe-inline-size), var(--t-app-content-wide-max-width));
+		--_bleed-extra-wide-inline-size: min(
+			var(--_bleed-page-safe-inline-size),
+			var(--t-app-content-extra-wide-max-width)
+		);
 		--s-inline-size: var(--_bleed-page-inline-size);
 		--s-max-inline-size: none;
 		--s-margin-inline: calc(var(--_bleed-gutter-inline) * -1);
@@ -51,6 +55,11 @@
 	&[data-bleed="wide"] {
 		--s-inline-size: var(--_bleed-wide-inline-size);
 		--s-margin-inline: calc((100% - var(--_bleed-wide-inline-size)) / 2);
+	}
+
+	&[data-bleed="extra-wide"] {
+		--s-inline-size: var(--_bleed-extra-wide-inline-size);
+		--s-margin-inline: calc((100% - var(--_bleed-extra-wide-inline-size)) / 2);
 	}
 
 	&[data-rounded] {
