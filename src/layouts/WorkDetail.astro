@@ -12,6 +12,7 @@ const metadata: PageMetadata = {
 	title: frontmatter.title,
 	description: frontmatter.description ?? SITE.sections.works.description,
 	canonicalURL: Astro.url.pathname,
+	noindex: true,
 	...ogMetadata,
 	type: "article",
 };
@@ -24,25 +25,7 @@ const metadata: PageMetadata = {
 			<time datetime={frontmatter.year}>{frontmatter.year}</time>
 			<p class="description">{frontmatter.description}</p>
 		</header>
-		<dl class="meta">
-			<div>
-				<dt>Context</dt>
-				<dd>{frontmatter.context}</dd>
-			</div>
-			<div>
-				<dt>Scope</dt>
-				<dd>{frontmatter.scope}</dd>
-			</div>
-			<div>
-				<dt>Role</dt>
-				<dd>{frontmatter.role}</dd>
-			</div>
-			<div>
-				<dt>Tech Stack</dt>
-				<dd>{frontmatter.techStack}</dd>
-			</div>
-		</dl>
-		<section class="content">
+		<section class="content prose">
 			<slot />
 		</section>
 	</article>
@@ -50,54 +33,30 @@ const metadata: PageMetadata = {
 	<style>
 		header {
 			margin-block-end: var(--t-space-6);
+			font-weight: var(--t-font-weight-semibold);
 
 			h1 {
-				font-size: var(--t-font-size-xlarge);
-				font-weight: var(--t-font-weight-medium);
+				font-size: var(--t-font-size-large);
+				margin-block-end: var(--t-space-2);
 			}
 
 			time {
 				display: block;
 				font-size: var(--t-font-size-small);
-				font-weight: var(--t-font-weight-medium);
 				color: oklch(from currentColor calc(l + 0.3) c h);
 			}
 
 			.description {
-				margin-block-start: var(--t-space-6);
+				margin-block: var(--t-space-6) var(--t-space-16);
 				font-size: var(--t-font-size-medium);
+				font-weight: var(--t-font-weight-medium);
+				line-height: var(--t-font-line-height-tight);
+				color: color-mix(in srgb, currentColor 85%, transparent);
 			}
 		}
 
-		dl {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(min(100%, 22ch), 1fr));
-			gap: var(--t-space-4);
-			margin-block: var(--t-space-8);
-			padding: var(--t-space-6);
-			margin-inline: calc(var(--t-space-4) * -1);
-			background-color: color-mix(in oklch, currentColor 2%, transparent);
-			border: var(--t-border-thin) solid;
-			border-color: color-mix(in oklch, currentColor 4%, transparent);
-			border-radius: var(--t-radius-medium);
-
-			div {
-				display: flex;
-				flex-direction: column;
-				gap: var(--t-space-1);
-			}
-
-			dt {
-				font-size: var(--t-font-size-xsmall);
-				font-weight: var(--t-font-weight-semibold);
-				text-transform: uppercase;
-				color: color-mix(in oklch, currentColor 70%, transparent);
-			}
-
-			dd {
-				font-weight: var(--t-font-weight-medium);
-				text-wrap: pretty;
-			}
+		section {
+			margin-block-end: var(--t-space-24);
 		}
 	</style>
 </Layout>
