@@ -39,8 +39,6 @@
 	}
 
 	:is(h1, h2, h3, h4, h5, h6) {
-		font-size: var(--t-font-size-medium);
-		font-weight: var(--t-font-weight-semibold);
 		margin-block: 2lh 0.5lh;
 
 		&:is(h1) {
@@ -49,10 +47,22 @@
 			margin-block-start: 0;
 		}
 
+		&:is(h2) {
+			font-size: var(--t-font-size-medium);
+		}
+
 		&[id] > a {
 			position: relative;
 			text-decoration: none;
-			font-weight: var(--t-font-weight-semibold);
+			font-weight: var(--t-font-weight-medium);
+
+			:is(h2, h3) & {
+				font-weight: var(--t-font-weight-semibold);
+			}
+
+			:is(h3) & {
+				font-size: var(--t-font-size-small);
+			}
 
 			&:hover::before {
 				content: "#";
@@ -78,7 +88,7 @@
 	}
 
 	figure {
-		margin-block: 1.5lh;
+		margin-block: 1lh;
 	}
 
 	blockquote {
