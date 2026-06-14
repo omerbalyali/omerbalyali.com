@@ -1,0 +1,588 @@
+---
+import type { ImageMetadata } from "astro";
+
+type ImageSource = ImageMetadata | string;
+
+interface ImageCarouselItem {
+	src: ImageSource;
+	alt: string;
+	label?: string;
+}
+
+interface Props {
+	items: ImageCarouselItem[];
+	label?: string;
+	initialIndex?: number;
+	loop?: boolean;
+	indicatorPosition?: "below" | "bottom" | "top";
+	class?: string;
+	style?: string;
+	[key: string]: unknown;
+}
+
+const {
+	items,
+	label = "Image carousel",
+	initialIndex = 0,
+	loop = false,
+	indicatorPosition = "below",
+	class: className,
+	style: styleAttribute = "",
+	...attributes
+} = Astro.props;
+
+const imageAttributes = (source: ImageSource) =>
+	typeof source === "string"
+		? { src: source }
+		: { src: source.src, width: source.width, height: source.height };
+
+const total = items.length;
+const clampIndex = (index: number) => Math.min(Math.max(index, 0), Math.max(total - 1, 0));
+const currentIndex = clampIndex(initialIndex);
+const indexState =
+	total <= 1 ? "single" : currentIndex === 0 ? "start" : currentIndex === total - 1 ? "end" : "middle";
+const carouselStyle =
+	`--c-image-carousel-offset: ${currentIndex * -100}%;` + (styleAttribute ? ` ${styleAttribute}` : "");
+const statusText = total > 0 ? `Image ${currentIndex + 1} of ${total}` : "No images";
+---
+
+<figure
+	{...attributes}
+	class:list={["image-carousel", className]}
+	role="region"
+	aria-roledescription="carousel"
+	aria-label={label}
+	data-image-carousel
+	data-loop={String(loop)}
+	data-index={currentIndex}
+	data-index-state={indexState}
+	data-indicator-position={indicatorPosition}
+	style={carouselStyle}>
+	<div class="image-carousel-frame" data-image-carousel-frame>
+		<div class="image-carousel-track" data-image-carousel-track>
+			{
+				items.map((item, index) => {
+					const image = imageAttributes(item.src);
+					const slideLabel = item.label
+						? `${index + 1} of ${total}: ${item.label}`
+						: `${index + 1} of ${total}`;
+
+					return (
+						<div
+							class="image-carousel-slide"
+							role="group"
+							aria-roledescription="slide"
+							aria-label={slideLabel}
+							aria-hidden={index === currentIndex ? "false" : "true"}
+							data-image-carousel-slide
+							data-image-carousel-slide-label={item.label ?? item.alt}>
+							<img
+								class="image-carousel-image"
+								src={image.src}
+								width={image.width}
+								height={image.height}
+								alt={item.alt}
+								loading={index === 0 ? "eager" : "lazy"}
+								decoding="async"
+							/>
+						</div>
+					);
+				})
+			}
+		</div>
+		{
+			total > 1 && (
+				<>
+					<button
+						class="image-carousel-control"
+						type="button"
+						aria-label="Show previous image"
+						data-image-carousel-previous
+						data-direction="previous"
+						disabled={!loop && currentIndex === 0}>
+						<span class="visually-hidden" aria-hidden="true">
+							Prev
+						</span>
+					</button>
+					<button
+						class="image-carousel-control"
+						type="button"
+						aria-label="Show next image"
+						data-image-carousel-next
+						data-direction="next"
+						disabled={!loop && currentIndex === total - 1}>
+						<span class="visually-hidden" aria-hidden="true">
+							Next
+						</span>
+					</button>
+				</>
+			)
+		}
+	</div>
+	{
+		total > 1 && (
+			<div class="image-carousel-indicators" role="group" aria-label="Choose image">
+				{items.map((item, index) => (
+					<button
+						class="image-carousel-indicator"
+						type="button"
+						aria-label={`Show image ${index + 1}${item.label ? `: ${item.label}` : ""}`}
+						aria-current={index === currentIndex ? "true" : undefined}
+						data-image-carousel-indicator
+						data-index={index}>
+						<span class="visually-hidden">
+							{index + 1}
+							{item.label ? `: ${item.label}` : ""}
+						</span>
+					</button>
+				))}
+			</div>
+		)
+	}
+	<p class="visually-hidden" aria-live="polite" aria-atomic="true" data-image-carousel-status>
+		{statusText}
+	</p>
+	{
+		Astro.slots.has("default") && (
+			<figcaption>
+				<slot />
+			</figcaption>
+		)
+	}
+</figure>
+
+<style>
+	.image-carousel {
+		position: relative;
+		margin-block: 1lh;
+	}
+
+	.image-carousel-frame {
+		:where(&) {
+			--s-cursor: grab;
+		}
+
+		position: relative;
+		overflow: hidden;
+		border-radius: var(--c-image-carousel-border-radius, var(--t-radius-medium));
+		cursor: var(--s-cursor);
+		touch-action: pan-y;
+		user-select: none;
+
+		&:where([data-dragging] *) {
+			--s-cursor: grabbing;
+		}
+	}
+
+	.image-carousel-track {
+		:where(&) {
+			--s-transform: translateX(
+				calc(var(--c-image-carousel-offset, 0%) + var(--c-image-carousel-drag-offset, 0px))
+			);
+			--s-transition: transform var(--t-duration-slow) var(--t-ease-out);
+		}
+
+		display: flex;
+		transform: var(--s-transform);
+		transition: var(--s-transition);
+
+		&:where([data-dragging] *) {
+			--s-transition: none;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			--s-transition: none;
+		}
+	}
+
+	.image-carousel-slide {
+		flex: 0 0 100%;
+		min-inline-size: 0;
+	}
+
+	.image-carousel-image {
+		display: block;
+		inline-size: 100%;
+		block-size: auto;
+		object-fit: var(--c-image-carousel-object-fit, cover);
+		pointer-events: none;
+	}
+
+	.image-carousel-control {
+		:where(&) {
+			--s-background-color: color-mix(in oklch, var(--t-color-background-page) 85%, transparent);
+			--s-color: currentColor;
+			--s-cursor: pointer;
+			--s-opacity: 1;
+			--s-outline-color: transparent;
+		}
+
+		position: absolute;
+		inset-block-start: 50%;
+		z-index: 2;
+		display: grid;
+		place-items: center;
+		min-inline-size: var(--t-space-8);
+		block-size: var(--t-space-8);
+		aspect-ratio: 1;
+		padding-inline: var(--t-space-3);
+		border: var(--t-border-thin) solid color-mix(in oklch, currentColor 10%, transparent);
+		border-radius: var(--t-radius-full);
+		background-color: var(--s-background-color);
+		color: var(--s-color);
+		font-size: var(--t-font-size-xsmall);
+		font-weight: var(--t-font-weight-medium);
+		line-height: var(--t-font-line-height-tightest);
+		cursor: var(--s-cursor);
+		opacity: var(--s-opacity);
+		outline: var(--t-border-default) solid var(--s-outline-color);
+		outline-offset: var(--t-border-thin);
+		transform: translateY(-50%);
+		transition:
+			background-color var(--t-duration-fast) var(--t-ease-out),
+			color var(--t-duration-fast) var(--t-ease-out),
+			opacity var(--t-duration-fast) var(--t-ease-out);
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			inline-size: 50%;
+			aspect-ratio: 1;
+			margin: auto;
+			mask-position: center;
+			mask-repeat: no-repeat;
+			mask-size: 100%;
+			background-color: color-mix(in oklch, currentColor 80%, transparent);
+		}
+
+		&:focus-visible {
+			--s-outline-color: currentColor;
+		}
+
+		&:disabled {
+			--s-cursor: default;
+			--s-opacity: 0.35;
+		}
+
+		&:hover:not(:disabled) {
+			--s-background-color: var(--t-color-background-page);
+			--s-color: var(--t-color-accent);
+		}
+
+		&[data-direction="previous"] {
+			inset-inline-start: var(--c-image-carousel-control-inset, var(--t-space-3));
+
+			&::before {
+				mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none'%3E%3Cpath fill='%23000' d='M8.616 3.116a1.25 1.25 0 1 1 1.768 1.768L7.268 8l3.116 3.116a1.25 1.25 0 0 1-1.768 1.768l-4-4a1.25 1.25 0 0 1 0-1.768z'/%3E%3C/svg%3E");
+			}
+		}
+
+		&[data-direction="next"] {
+			inset-inline-end: var(--c-image-carousel-control-inset, var(--t-space-3));
+
+			&::before {
+				mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none'%3E%3Cpath fill='%23000' d='M7.384 12.884a1.25 1.25 0 1 1-1.768-1.768L8.732 8 5.616 4.884a1.25 1.25 0 1 1 1.768-1.768l4 4a1.25 1.25 0 0 1 0 1.768z'/%3E%3C/svg%3E");
+			}
+		}
+	}
+
+	.image-carousel-indicators {
+		:where(&) {
+			--s-backdrop-filter: none;
+			--s-background-color: transparent;
+			--s-inset-block: auto;
+			--s-margin-block-start: var(--t-space-3);
+			--s-padding: 0;
+			--s-position: static;
+			--s-transform: none;
+		}
+
+		position: var(--s-position);
+		inset-block: var(--s-inset-block);
+		inset-inline-start: 50%;
+		z-index: 2;
+		display: flex;
+		gap: var(--c-image-carousel-indicator-gap, var(--t-space-3));
+		inline-size: max-content;
+		max-inline-size: calc(100% - var(--t-space-6));
+		margin-block-start: var(--s-margin-block-start);
+		margin-inline: auto;
+		padding: var(--s-padding);
+		border-radius: var(--t-radius-full);
+		background-color: var(--s-background-color);
+		backdrop-filter: var(--s-backdrop-filter);
+		transform: var(--s-transform);
+
+		&:where([data-indicator-position="bottom"] *),
+		&:where([data-indicator-position="top"] *) {
+			--s-backdrop-filter: blur(3px);
+			--s-background-color: color-mix(
+				in oklch,
+				currentColor 4%,
+				oklch(from var(--t-color-background-page) l c h / 0.9)
+			);
+			--s-margin-block-start: 0;
+			--s-padding: var(--c-image-carousel-indicators-padding, var(--t-space-2)) var(--t-space-3);
+			--s-position: absolute;
+			--s-transform: translateX(-50%);
+		}
+
+		&:where([data-indicator-position="bottom"] *) {
+			--s-inset-block: auto var(--t-space-3);
+		}
+
+		&:where([data-indicator-position="top"] *) {
+			--s-inset-block: var(--t-space-3) auto;
+		}
+	}
+
+	.image-carousel-indicator {
+		:where(&) {
+			--s-opacity: 0.35;
+			--s-outline-color: transparent;
+			--s-transform: scale(1);
+		}
+
+		display: block;
+		position: relative;
+		inline-size: var(--c-image-carousel-indicator-size, calc(var(--t-space-2)));
+		block-size: var(--c-image-carousel-indicator-size, calc(var(--t-space-2)));
+		padding: 0;
+		border: 0;
+		border-radius: var(--t-radius-full);
+		background-color: currentColor;
+		cursor: pointer;
+		opacity: var(--s-opacity);
+		outline: var(--t-border-default) solid var(--s-outline-color);
+		outline-offset: var(--t-space-1);
+		transform: var(--s-transform);
+		transition: var(--t-duration-fast) var(--t-ease-out);
+		transition-property: opacity, transform;
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: calc(var(--c-image-carousel-indicator-hit-area, var(--t-space-2)) * -1);
+			border-radius: inherit;
+		}
+
+		&:hover {
+			--s-opacity: 0.7;
+			--s-transform: scale(1.15);
+		}
+
+		&:focus-visible {
+			--s-outline-color: currentColor;
+		}
+
+		&[aria-current="true"] {
+			--s-opacity: 1;
+			--s-transform: scale(1.25);
+		}
+	}
+</style>
+
+<script>
+	const normalizeIndex = (index: number, total: number, loop: boolean) => {
+		if (total <= 0) {
+			return 0;
+		}
+
+		if (loop) {
+			return ((index % total) + total) % total;
+		}
+
+		return Math.min(Math.max(index, 0), total - 1);
+	};
+
+	const getSlideAnnouncement = (slide: HTMLElement, index: number, total: number) => {
+		const label = slide.dataset.imageCarouselSlideLabel;
+		return `Image ${index + 1} of ${total}${label ? `: ${label}` : ""}`;
+	};
+
+	const updateCarousel = (carousel: HTMLElement, index: number) => {
+		const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-image-carousel-slide]"));
+		const indicators = Array.from(
+			carousel.querySelectorAll<HTMLButtonElement>("[data-image-carousel-indicator]"),
+		);
+		const previousButton = carousel.querySelector<HTMLButtonElement>("[data-image-carousel-previous]");
+		const nextButton = carousel.querySelector<HTMLButtonElement>("[data-image-carousel-next]");
+		const status = carousel.querySelector<HTMLElement>("[data-image-carousel-status]");
+		const total = slides.length;
+		const loop = carousel.dataset.loop === "true";
+		const nextIndex = normalizeIndex(index, total, loop);
+		const indexState =
+			total <= 1 ? "single" : nextIndex === 0 ? "start" : nextIndex === total - 1 ? "end" : "middle";
+
+		carousel.dataset.index = String(nextIndex);
+		carousel.dataset.indexState = indexState;
+		carousel.style.setProperty("--c-image-carousel-offset", `${nextIndex * -100}%`);
+		carousel.style.setProperty("--c-image-carousel-drag-offset", "0px");
+
+		slides.forEach((slide, slideIndex) => {
+			slide.setAttribute("aria-hidden", String(slideIndex !== nextIndex));
+		});
+
+		indicators.forEach((indicator, indicatorIndex) => {
+			if (indicatorIndex === nextIndex) {
+				indicator.setAttribute("aria-current", "true");
+			} else {
+				indicator.removeAttribute("aria-current");
+			}
+		});
+
+		if (previousButton) {
+			previousButton.disabled = total <= 1 || (!loop && nextIndex === 0);
+		}
+
+		if (nextButton) {
+			nextButton.disabled = total <= 1 || (!loop && nextIndex === total - 1);
+		}
+
+		if (status && slides[nextIndex]) {
+			status.textContent = getSlideAnnouncement(slides[nextIndex], nextIndex, total);
+		}
+	};
+
+	const navigateCarousel = (carousel: HTMLElement, step: number) => {
+		updateCarousel(carousel, Number(carousel.dataset.index) + step);
+	};
+
+	const initImageCarousel = (carousel: Element) => {
+		if (!(carousel instanceof HTMLElement) || carousel.dataset.imageCarouselReady === "true") {
+			return;
+		}
+
+		const frame = carousel.querySelector<HTMLElement>("[data-image-carousel-frame]");
+		const previousButton = carousel.querySelector<HTMLButtonElement>("[data-image-carousel-previous]");
+		const nextButton = carousel.querySelector<HTMLButtonElement>("[data-image-carousel-next]");
+		const indicators = Array.from(
+			carousel.querySelectorAll<HTMLButtonElement>("[data-image-carousel-indicator]"),
+		);
+
+		if (!frame) {
+			return;
+		}
+
+		carousel.dataset.imageCarouselReady = "true";
+
+		previousButton?.addEventListener("click", () => navigateCarousel(carousel, -1));
+		nextButton?.addEventListener("click", () => navigateCarousel(carousel, 1));
+
+		indicators.forEach((indicator) => {
+			indicator.addEventListener("click", () => updateCarousel(carousel, Number(indicator.dataset.index)));
+		});
+
+		carousel.addEventListener("keydown", (event) => {
+			if (event.key === "ArrowLeft") {
+				event.preventDefault();
+				navigateCarousel(carousel, -1);
+			}
+
+			if (event.key === "ArrowRight") {
+				event.preventDefault();
+				navigateCarousel(carousel, 1);
+			}
+
+			if (event.key === "Home") {
+				event.preventDefault();
+				updateCarousel(carousel, 0);
+			}
+
+			if (event.key === "End") {
+				event.preventDefault();
+				updateCarousel(carousel, carousel.querySelectorAll("[data-image-carousel-slide]").length - 1);
+			}
+		});
+
+		let pointerId: number | undefined;
+		let startX = 0;
+		let startY = 0;
+		let currentX = 0;
+		let currentY = 0;
+
+		const resetDrag = () => {
+			pointerId = undefined;
+			delete carousel.dataset.dragging;
+			carousel.style.setProperty("--c-image-carousel-drag-offset", "0px");
+		};
+
+		frame.addEventListener("pointerdown", (event) => {
+			if (event.button !== 0 || (event.target instanceof Element && event.target.closest("button"))) {
+				return;
+			}
+
+			pointerId = event.pointerId;
+			startX = event.clientX;
+			startY = event.clientY;
+			currentX = event.clientX;
+			currentY = event.clientY;
+			carousel.dataset.dragging = "true";
+			frame.setPointerCapture(event.pointerId);
+		});
+
+		frame.addEventListener("pointermove", (event) => {
+			if (event.pointerId !== pointerId) {
+				return;
+			}
+
+			currentX = event.clientX;
+			currentY = event.clientY;
+
+			const deltaX = currentX - startX;
+			const deltaY = currentY - startY;
+
+			if (Math.abs(deltaX) > Math.abs(deltaY)) {
+				event.preventDefault();
+			}
+
+			const index = Number(carousel.dataset.index);
+			const total = carousel.querySelectorAll("[data-image-carousel-slide]").length;
+			const loop = carousel.dataset.loop === "true";
+			const isPastStart = !loop && index === 0 && deltaX > 0;
+			const isPastEnd = !loop && index === total - 1 && deltaX < 0;
+			const dragOffset = isPastStart || isPastEnd ? deltaX * 0.35 : deltaX;
+
+			carousel.style.setProperty("--c-image-carousel-drag-offset", `${dragOffset}px`);
+		});
+
+		frame.addEventListener("pointerup", (event) => {
+			if (event.pointerId !== pointerId) {
+				return;
+			}
+
+			if (frame.hasPointerCapture(event.pointerId)) {
+				frame.releasePointerCapture(event.pointerId);
+			}
+
+			const deltaX = currentX - startX;
+			const deltaY = currentY - startY;
+			const threshold = Math.min(80, frame.clientWidth * 0.18);
+
+			delete carousel.dataset.dragging;
+
+			if (Math.abs(deltaX) >= threshold && Math.abs(deltaX) > Math.abs(deltaY)) {
+				navigateCarousel(carousel, deltaX < 0 ? 1 : -1);
+			} else {
+				updateCarousel(carousel, Number(carousel.dataset.index));
+			}
+
+			pointerId = undefined;
+		});
+
+		frame.addEventListener("pointercancel", resetDrag);
+	};
+
+	const initImageCarousels = () => {
+		document.querySelectorAll("[data-image-carousel]").forEach(initImageCarousel);
+	};
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initImageCarousels, { once: true });
+	} else {
+		initImageCarousels();
+	}
+
+	document.addEventListener("astro:page-load", initImageCarousels);
+</script>
