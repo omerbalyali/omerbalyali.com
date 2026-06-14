@@ -5,9 +5,9 @@ year: 2025
 description: "Keepspace is a private records app for the things people want to preserve: possessions, documents, receipts, warranties, family objects, and the stories attached to them. It starts as a home inventory tool, but is designed to feel more like a calm digital home for what matters."
 ---
 
-import { Image } from "astro:assets";
 import appDark from "../../assets/images/works/keepspace/app-dark.png";
 import app from "../../assets/images/works/keepspace/app.png";
+import ImageCompare from "../../components/ImageCompare.astro";
 
 ## Problem
 
@@ -24,6 +24,13 @@ The product organizes belongings into collections, with each item carrying both 
 <br />
 <br />
 
-<Image src={app} alt="Keepspace app" class="card bleed" data-bleed="extra-wide" />
-
-<Image src={appDark} alt="Keepspace app dark mode" class="card bleed" data-bleed="extra-wide" />
+<ImageCompare
+	before={app}
+	after={appDark}
+	beforeAlt="Keepspace app in light mode"
+	afterAlt="Keepspace app in dark mode"
+	beforeLabel="Light mode"
+	afterLabel="Dark mode"
+	class="bleed"
+	data-bleed="extra-wide"
+/>
