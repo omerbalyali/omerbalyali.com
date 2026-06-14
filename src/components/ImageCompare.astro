@@ -1,0 +1,357 @@
+---
+import type { ImageMetadata } from "astro";
+
+type ImageSource = ImageMetadata | string;
+
+interface Props {
+	before: ImageSource;
+	after: ImageSource;
+	beforeAlt: string;
+	afterAlt: string;
+	beforeLabel?: string;
+	afterLabel?: string;
+	value?: number;
+	handlePosition?: number;
+	dividerEdgeFade?: number;
+	orientation?: "horizontal" | "vertical";
+	class?: string;
+	style?: string;
+	[key: string]: unknown;
+}
+
+const {
+	before,
+	after,
+	beforeAlt,
+	afterAlt,
+	beforeLabel = "Before",
+	afterLabel = "After",
+	value = 50,
+	handlePosition = 50,
+	dividerEdgeFade = 2,
+	orientation = "horizontal",
+	class: className,
+	style: styleAttribute = "",
+	...attributes
+} = Astro.props;
+
+const clamp = (number: number) => Math.min(100, Math.max(0, number));
+const position = clamp(value);
+const handleOffset = clamp(handlePosition);
+const edgeFade = Math.max(0, dividerEdgeFade);
+const dividerOpacity = edgeFade === 0 ? 1 : Math.min(1, Math.min(position, 100 - position) / edgeFade);
+const imageAttributes = (source: ImageSource) =>
+	typeof source === "string"
+		? { src: source }
+		: { src: source.src, width: source.width, height: source.height };
+
+const beforeImage = imageAttributes(before);
+const afterImage = imageAttributes(after);
+const ariaOrientation = orientation === "vertical" ? "vertical" : undefined;
+const figureStyle = styleAttribute || undefined;
+const positionState = position === 0 ? "start" : position === 100 ? "end" : undefined;
+const overlayClipPath =
+	orientation === "vertical"
+		? `inset(0 0 calc(100% - ${position}%) 0)`
+		: `inset(0 calc(100% - ${position}%) 0 0)`;
+const crossAxisHandlePosition = `clamp(calc(var(--c-image-compare-handle-size, 2.5rem) / 2), ${handleOffset}%, calc(100% - calc(var(--c-image-compare-handle-size, 2.5rem) / 2)))`;
+const overlayStyle = `--c-image-compare-clip-path: ${overlayClipPath};`;
+const dividerStyle =
+	orientation === "vertical"
+		? `--c-image-compare-inset-block-start: ${position}%; --c-image-compare-opacity: ${dividerOpacity};`
+		: `--c-image-compare-inset-inline-start: ${position}%; --c-image-compare-opacity: ${dividerOpacity};`;
+const handleStyle =
+	orientation === "vertical"
+		? `--c-image-compare-inset-block-start: ${position}%; --c-image-compare-inset-inline-start: ${crossAxisHandlePosition};`
+		: `--c-image-compare-inset-block-start: ${crossAxisHandlePosition}; --c-image-compare-inset-inline-start: ${position}%;`;
+---
+
+<figure
+	{...attributes}
+	class:list={["image-compare", className]}
+	data-image-compare
+	data-orientation={orientation}
+	data-position-state={positionState}
+	data-divider-edge-fade={edgeFade}
+	style={figureStyle}>
+	<div class="image-compare-frame" data-image-compare-frame>
+		<img
+			class="image-compare-image"
+			src={beforeImage.src}
+			width={beforeImage.width}
+			height={beforeImage.height}
+			alt={beforeAlt}
+			loading="lazy"
+			decoding="async"
+		/>
+		<img
+			class="image-compare-image image-compare-image-overlay"
+			src={afterImage.src}
+			width={afterImage.width}
+			height={afterImage.height}
+			alt={afterAlt}
+			loading="lazy"
+			decoding="async"
+			style={overlayStyle}
+		/>
+		<input
+			class="image-compare-range"
+			type="range"
+			min="0"
+			max="100"
+			value={position}
+			step="0.1"
+			aria-label={`${afterLabel} reveal`}
+			aria-valuetext={`${position}% ${orientation === "vertical" ? "from top" : "from left"}`}
+			aria-orientation={ariaOrientation}
+			data-image-compare-range
+		/>
+		<span class="image-compare-divider" style={dividerStyle} aria-hidden="true"></span>
+		<span class="image-compare-handle" style={handleStyle} aria-hidden="true"></span>
+	</div>
+	{
+		Astro.slots.has("default") && (
+			<figcaption>
+				<slot />
+			</figcaption>
+		)
+	}
+</figure>
+
+<style>
+	.image-compare {
+		margin-block: 1lh;
+	}
+
+	.image-compare-frame {
+		:where(&) {
+			--s-cursor: ew-resize;
+		}
+
+		position: relative;
+		overflow: hidden;
+		border-radius: var(--c-image-compare-border-radius, var(--t-radius-medium));
+		cursor: var(--s-cursor);
+		touch-action: none;
+
+		[data-orientation="vertical"] & {
+			--s-cursor: ns-resize;
+		}
+	}
+
+	.image-compare-image {
+		display: block;
+		inline-size: 100%;
+		block-size: auto;
+		object-fit: var(--c-image-compare-object-fit, cover);
+		user-select: none;
+		pointer-events: none;
+	}
+
+	.image-compare-image-overlay {
+		:where(&) {
+			--s-clip-path: var(--c-image-compare-clip-path, none);
+			--s-display: block;
+		}
+
+		position: absolute;
+		inset: 0;
+		display: var(--s-display);
+		block-size: 100%;
+		clip-path: var(--s-clip-path);
+
+		[data-position-state="start"] & {
+			--s-display: none;
+		}
+
+		[data-position-state="end"] & {
+			--s-clip-path: none;
+		}
+	}
+
+	.image-compare-range {
+		position: absolute;
+		inset: 0;
+		z-index: 3;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.image-compare-divider {
+		:where(&) {
+			--s-block-size: auto;
+			--s-inline-size: 1px;
+			--s-inset-block: 0;
+			--s-inset-block-start: var(--c-image-compare-inset-block-start, 50%);
+			--s-inset-inline: auto;
+			--s-inset-inline-start: var(--c-image-compare-inset-inline-start, 50%);
+			--s-opacity: var(--c-image-compare-opacity, 1);
+			--s-transform: translateX(-50%);
+		}
+
+		position: absolute;
+		z-index: 2;
+		inset-block: var(--s-inset-block);
+		inset-inline: var(--s-inset-inline);
+		inset-inline-start: var(--s-inset-inline-start);
+		inline-size: var(--s-inline-size);
+		block-size: var(--s-block-size);
+		background: var(--c-image-compare-divider-background, currentColor);
+		opacity: var(--s-opacity);
+		transform: var(--s-transform);
+		pointer-events: none;
+
+		[data-orientation="vertical"] & {
+			--s-block-size: 1px;
+			--s-inline-size: auto;
+			--s-inset-block: var(--s-inset-block-start) auto;
+			--s-inset-inline: 0;
+			--s-inset-inline-start: auto;
+			--s-transform: translateY(-50%);
+		}
+	}
+
+	.image-compare-handle {
+		:where(&) {
+			--s-inset-block-start: var(--c-image-compare-inset-block-start, 50%);
+			--s-inset-inline-start: var(--c-image-compare-inset-inline-start, 50%);
+			--s-outline: none;
+			--s-outline-offset: 0;
+		}
+
+		position: absolute;
+		z-index: 2;
+		inset-block-start: var(--s-inset-block-start);
+		inset-inline-start: var(--s-inset-inline-start);
+		inline-size: var(--c-image-compare-handle-size, 2.5rem);
+		block-size: var(--c-image-compare-handle-size, 2.5rem);
+		border: var(
+			--c-image-compare-handle-border,
+			var(--t-border-thin) solid color-mix(in oklch, currentColor 25%, transparent)
+		);
+		border-radius: var(--c-image-compare-handle-border-radius, var(--t-radius-full));
+		background: var(--c-image-compare-handle-background, light-dark(oklch(0.99 0 0), oklch(0.24 0 0)));
+		box-shadow: var(--c-image-compare-handle-box-shadow, 0 0.125rem 0.375rem oklch(0 0 0 / 0.2));
+		outline: var(--s-outline);
+		outline-offset: var(--s-outline-offset);
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+
+		.image-compare-range:focus-visible ~ & {
+			--s-outline: var(--t-border-default) solid var(--t-color-accent);
+			--s-outline-offset: var(--t-space-1);
+		}
+	}
+</style>
+
+<script>
+	const clamp = (value: number) => Math.min(100, Math.max(0, value));
+
+	const updateCompare = (
+		compare: HTMLElement,
+		range: HTMLInputElement,
+		overlay: HTMLElement,
+		divider: HTMLElement,
+		handle: HTMLElement,
+		value: number | string,
+	) => {
+		const position = clamp(Number(value));
+		const orientation = compare.dataset.orientation;
+		const origin = orientation === "vertical" ? "from top" : "from left";
+		const roundedPosition = Math.round(position);
+		const edgeFade = Number(compare.dataset.dividerEdgeFade);
+		const dividerOpacity = edgeFade === 0 ? 1 : clamp(Math.min(position, 100 - position) / edgeFade);
+
+		range.value = String(position);
+		range.setAttribute("aria-valuetext", `${roundedPosition}% ${origin}`);
+		compare.dataset.positionState = position === 0 ? "start" : position === 100 ? "end" : "";
+		divider.style.setProperty("--c-image-compare-opacity", `${dividerOpacity}`);
+
+		if (orientation === "vertical") {
+			overlay.style.setProperty("--c-image-compare-clip-path", `inset(0 0 calc(100% - ${position}%) 0)`);
+			divider.style.setProperty("--c-image-compare-inset-block-start", `${position}%`);
+			handle.style.setProperty("--c-image-compare-inset-block-start", `${position}%`);
+		} else {
+			overlay.style.setProperty("--c-image-compare-clip-path", `inset(0 calc(100% - ${position}%) 0 0)`);
+			divider.style.setProperty("--c-image-compare-inset-inline-start", `${position}%`);
+			handle.style.setProperty("--c-image-compare-inset-inline-start", `${position}%`);
+		}
+	};
+
+	const updateCompareFromPointer = (
+		compare: HTMLElement,
+		frame: HTMLElement,
+		range: HTMLInputElement,
+		overlay: HTMLElement,
+		divider: HTMLElement,
+		handle: HTMLElement,
+		event: PointerEvent,
+	) => {
+		const rect = frame.getBoundingClientRect();
+		const position =
+			compare.dataset.orientation === "vertical"
+				? ((event.clientY - rect.top) / rect.height) * 100
+				: ((event.clientX - rect.left) / rect.width) * 100;
+
+		updateCompare(compare, range, overlay, divider, handle, position);
+	};
+
+	const initImageCompare = (compare: Element) => {
+		if (compare instanceof HTMLElement && compare.dataset.imageCompareReady === "true") {
+			return;
+		}
+
+		const frame = compare.querySelector("[data-image-compare-frame]");
+		const overlay = compare.querySelector(".image-compare-image-overlay");
+		const range = compare.querySelector("[data-image-compare-range]");
+		const divider = compare.querySelector(".image-compare-divider");
+		const handle = compare.querySelector(".image-compare-handle");
+
+		if (
+			!(compare instanceof HTMLElement) ||
+			!(frame instanceof HTMLElement) ||
+			!(overlay instanceof HTMLElement) ||
+			!(range instanceof HTMLInputElement) ||
+			!(divider instanceof HTMLElement) ||
+			!(handle instanceof HTMLElement)
+		) {
+			return;
+		}
+
+		compare.dataset.imageCompareReady = "true";
+
+		range.addEventListener("input", () =>
+			updateCompare(compare, range, overlay, divider, handle, range.value),
+		);
+
+		frame.addEventListener("pointerdown", (event) => {
+			if (event.button !== 0) {
+				return;
+			}
+
+			frame.setPointerCapture(event.pointerId);
+			range.focus({ preventScroll: true });
+			updateCompareFromPointer(compare, frame, range, overlay, divider, handle, event);
+		});
+
+		frame.addEventListener("pointermove", (event) => {
+			if (!frame.hasPointerCapture(event.pointerId)) {
+				return;
+			}
+
+			updateCompareFromPointer(compare, frame, range, overlay, divider, handle, event);
+		});
+	};
+
+	const initImageCompares = () => {
+		document.querySelectorAll("[data-image-compare]").forEach(initImageCompare);
+	};
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initImageCompares, { once: true });
+	} else {
+		initImageCompares();
+	}
+
+	document.addEventListener("astro:page-load", initImageCompares);
+</script>
