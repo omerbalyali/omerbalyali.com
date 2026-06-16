@@ -75,25 +75,27 @@ const handleStyle =
 	data-divider-edge-fade={edgeFade}
 	style={figureStyle}>
 	<div class="image-compare-frame" data-image-compare-frame>
-		<img
-			class="image-compare-image"
-			src={beforeImage.src}
-			width={beforeImage.width}
-			height={beforeImage.height}
-			alt={beforeAlt}
-			loading="lazy"
-			decoding="async"
-		/>
-		<img
-			class="image-compare-image image-compare-image-overlay"
-			src={afterImage.src}
-			width={afterImage.width}
-			height={afterImage.height}
-			alt={afterAlt}
-			loading="lazy"
-			decoding="async"
-			style={overlayStyle}
-		/>
+		<div class="image-compare-media">
+			<img
+				class="image-compare-image"
+				src={beforeImage.src}
+				width={beforeImage.width}
+				height={beforeImage.height}
+				alt={beforeAlt}
+				loading="lazy"
+				decoding="async"
+			/>
+			<img
+				class="image-compare-image image-compare-image-overlay"
+				src={afterImage.src}
+				width={afterImage.width}
+				height={afterImage.height}
+				alt={afterAlt}
+				loading="lazy"
+				decoding="async"
+				style={overlayStyle}
+			/>
+		</div>
 		<input
 			class="image-compare-range"
 			type="range"
@@ -129,7 +131,6 @@ const handleStyle =
 		}
 
 		position: relative;
-		overflow: hidden;
 		border-radius: var(--c-image-compare-border-radius, var(--t-radius-medium));
 		cursor: var(--s-cursor);
 		touch-action: none;
@@ -137,6 +138,12 @@ const handleStyle =
 		&:where([data-orientation="vertical"] *) {
 			--s-cursor: ns-resize;
 		}
+	}
+
+	.image-compare-media {
+		position: relative;
+		overflow: clip;
+		border-radius: inherit;
 	}
 
 	.image-compare-image {
@@ -187,6 +194,7 @@ const handleStyle =
 			--s-inset-inline-start: var(--c-image-compare-inset-inline-start, 50%);
 			--s-opacity: var(--c-image-compare-opacity, 1);
 			--s-transform: translateX(-50%);
+			--c-image-compare-divider-background: color-mix(in oklch, currentColor 80%, transparent);
 		}
 
 		position: absolute;
