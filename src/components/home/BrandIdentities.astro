@@ -71,7 +71,7 @@ const identities = [
 		display: flex;
 		flex-direction: column;
 		gap: var(--t-space-4);
-		margin-block-end: var(--t-space-16);
+		margin-block-end: var(--t-space-24);
 	}
 
 	header {
@@ -100,17 +100,18 @@ const identities = [
 			display: grid;
 			place-items: center;
 			border-radius: var(--t-radius-medium);
+			background-color: var(--t-color-background-primary);
+			box-shadow: 0 0.125rem 0.25rem -0.125rem oklch(0 0 0 / 0.025);
 			isolation: isolate;
 
 			&::before {
 				content: "";
 				position: absolute;
 				inset: 0;
-				z-index: 0;
+				z-index: 3;
 				border: var(--t-border-thin) solid var(--t-color-border-primary);
 				border-radius: inherit;
-				background-color: var(--t-color-background-primary);
-				box-shadow: 0 0.125rem 0.25rem -0.125rem oklch(0 0 0 / 0.025);
+				pointer-events: none;
 			}
 
 			&::after {
@@ -131,7 +132,7 @@ const identities = [
 				);
 				opacity: 0;
 				pointer-events: none;
-				transition: opacity var(--t-duration-slower) var(--t-ease-in-out);
+				transition: opacity var(--t-duration-base) var(--t-ease-in-out);
 			}
 
 			.logo {
@@ -143,7 +144,7 @@ const identities = [
 				min-inline-size: 0;
 				color: color-mix(in oklch, currentColor 90%, transparent);
 				fill: currentColor;
-				transition: transform var(--t-duration-slow) var(--t-ease-in-out);
+				transition: transform var(--t-duration-base) var(--t-ease-in-out);
 			}
 
 			&:hover {
@@ -152,7 +153,7 @@ const identities = [
 				}
 
 				& .logo {
-					transform: scale(1.1);
+					transform: scale(1.05);
 				}
 			}
 		}
