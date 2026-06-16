@@ -26,9 +26,7 @@ const { post } = Astro.props;
 			--s-outline-color: transparent;
 			--s-padding-block: var(--t-space-4);
 			--s-padding-inline: var(--t-space-4);
-			--s-transition:
-				color var(--t-transition-preset), background-color var(--t-transition-preset),
-				border-color var(--t-transition-preset), outline-color var(--t-transition-preset);
+			--s-transition: var(--t-transition-preset);
 		}
 
 		display: flex;
@@ -40,6 +38,7 @@ const { post } = Astro.props;
 		padding: var(--s-padding-block) var(--s-padding-inline);
 		margin-inline: calc((var(--s-padding-inline) + var(--t-border-thin)) * -1);
 		transition: var(--s-transition);
+		transition-property: color, background-color;
 		outline: var(--s-outline);
 		outline-offset: 0;
 

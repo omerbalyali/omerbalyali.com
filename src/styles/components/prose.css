@@ -13,9 +13,6 @@
 		text-decoration: underline;
 		text-decoration-color: var(--s-text-decoration-color);
 		text-decoration-skip-ink: all;
-		transition:
-			color text-decoration-color var(--t-transition-preset),
-			text-decoration-color var(--t-transition-preset);
 
 		&:hover {
 			--s-text-decoration-color: currentColor;

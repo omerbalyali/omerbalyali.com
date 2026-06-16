@@ -44,39 +44,6 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 <link rel="canonical" href={canonicalHref} />
 <link rel="sitemap" href="/sitemap-index.xml" />
 <title>{pageTitle}</title>
-<style is:inline>
-	:root,
-	[data-theme] {
-		--lightningcss-light: initial;
-		--lightningcss-dark: ;
-
-		color-scheme: light dark;
-	}
-
-	@media (prefers-color-scheme: dark) {
-		:root,
-		[data-theme] {
-			--lightningcss-light: ;
-			--lightningcss-dark: initial;
-		}
-	}
-
-	html:not([data-motion-ready]) *,
-	html:not([data-motion-ready]) *::before,
-	html:not([data-motion-ready]) *::after {
-		transition-duration: 0s !important;
-		transition-delay: 0s !important;
-		animation-duration: 0s !important;
-		animation-delay: 0s !important;
-	}
-</style>
-<script is:inline>
-	requestAnimationFrame(() => {
-		requestAnimationFrame(() => {
-			document.documentElement.dataset.motionReady = "";
-		});
-	});
-</script>
 <Font cssVariable="--font-inter" preload />
 <Font cssVariable="--font-jetbrains-mono" preload />
 <meta name="description" content={description} />
