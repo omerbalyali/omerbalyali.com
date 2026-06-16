@@ -53,11 +53,8 @@ body {
 	text-decoration-thickness: var(--t-font-underline-thickness);
 	text-underline-offset: var(--t-font-underline-offset-comfortable);
 	touch-action: manipulation;
-	transition:
-		color var(--t-transition-preset),
-		background-color var(--t-transition-preset),
-		border-color var(--t-transition-preset),
-		text-decoration-color var(--t-transition-preset);
+	transition: var(--t-transition-preset);
+	transition-property: color, text-decoration-color;
 
 	&:hover {
 		--s-color: var(--t-color-accent);
