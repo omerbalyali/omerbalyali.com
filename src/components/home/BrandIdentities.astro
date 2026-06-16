@@ -171,7 +171,14 @@ const identities = [
 	}
 
 	/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
-	:global([data-astro-transition]) :is(.brand-grid li::after, .brand-grid .logo) {
+	:global([data-astro-transition]) .brand-grid li::after {
+		opacity: 0;
+		transition: none;
+	}
+
+	/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+	:global([data-astro-transition]) .brand-grid li:hover .logo {
+		transform: none;
 		transition: none;
 	}
 </style>
