@@ -11,36 +11,6 @@ interface Props {
 }
 
 const { lang = "en", metadata } = Astro.props as Props;
-const pageTransition = {
-	forwards: {
-		old: {
-			name: "page-slide-out",
-			duration: "160ms",
-			easing: "cubic-bezier(0.2, 0, 0, 1)",
-			fillMode: "both",
-		},
-		new: {
-			name: "page-slide-in",
-			duration: "220ms",
-			easing: "cubic-bezier(0.2, 0, 0, 1)",
-			fillMode: "both",
-		},
-	},
-	backwards: {
-		old: {
-			name: "page-slide-out-reverse",
-			duration: "160ms",
-			easing: "cubic-bezier(0.2, 0, 0, 1)",
-			fillMode: "both",
-		},
-		new: {
-			name: "page-slide-in-reverse",
-			duration: "220ms",
-			easing: "cubic-bezier(0.2, 0, 0, 1)",
-			fillMode: "both",
-		},
-	},
-} as const;
 ---
 
 <!doctype html>
@@ -51,11 +21,7 @@ const pageTransition = {
 	<body>
 		<div class="layout">
 			<Header />
-			<main
-				id="main-content"
-				class="page app-container-padded"
-				transition:name="page-content"
-				transition:animate={pageTransition}>
+			<main id="main-content" class="page app-container-padded">
 				<slot />
 			</main>
 			<NavBar />
@@ -79,29 +45,5 @@ const pageTransition = {
 		padding-block: var(--t-space-16);
 		background-color: var(--t-color-background-page);
 		border-block: var(--t-border-thin) solid var(--t-color-border-primary);
-	}
-
-	@keyframes page-slide-out {
-		to {
-			transform: translateY(-0.5rem);
-		}
-	}
-
-	@keyframes page-slide-in {
-		from {
-			transform: translateY(0.5rem);
-		}
-	}
-
-	@keyframes page-slide-out-reverse {
-		to {
-			transform: translateY(0.5rem);
-		}
-	}
-
-	@keyframes page-slide-in-reverse {
-		from {
-			transform: translateY(-0.5rem);
-		}
 	}
 </style>
