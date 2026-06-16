@@ -184,4 +184,9 @@ const metadata = {
 			max-height: 27rem;
 		}
 	}
+
+	/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+	:global([data-astro-transition]) :is(.work-card, .work-media) {
+		transition: none;
+	}
 </style>

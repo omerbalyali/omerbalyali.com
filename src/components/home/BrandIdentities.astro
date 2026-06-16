@@ -56,10 +56,9 @@ const identities = [
 		{
 			identities.map((identity) => (
 				<li data-identity={identity.id} data-identity-label={identity.label}>
-					<svg class="logo" viewBox="0 0 420 240" aria-hidden="true" focusable="false">
+					<svg class="logo" viewBox="0 0 420 240" role="img" aria-label={identity.label} focusable="false">
 						<path d={identity.path} />
 					</svg>
-					<span class="visually-hidden">{identity.label}</span>
 				</li>
 			))
 		}
@@ -169,5 +168,10 @@ const identities = [
 		.brand-grid {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
+	}
+
+	/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+	:global([data-astro-transition]) :is(.brand-grid li::after, .brand-grid .logo) {
+		transition: none;
 	}
 </style>
