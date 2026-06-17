@@ -65,4 +65,9 @@ const { post } = Astro.props;
 			color: color-mix(in oklch, currentColor 80%, transparent);
 		}
 	}
+
+	/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+	:global([data-astro-transition]) .writing-card {
+		transition: none;
+	}
 </style>
