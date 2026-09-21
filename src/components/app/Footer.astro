@@ -1,19 +1,39 @@
----
-
----
-
-<footer class="app-container-padded">
-	<p>&copy; 2026</p>
-	<nav aria-label="Legal links" class="legal-nav">
+<footer>
+	<div class="copyright">
+		&copy; {new Date().getFullYear()}
+	</div>
+	<nav class="social" aria-label="Social">
 		<ul>
 			<li>
-				<a href="/legal-notice/">Legal Notice</a>
+				<a href="https://github.com/omerbalyali" target="_blank" rel="noopener noreferrer">GitHub</a>
+			</li>
+			<li>
+				<a href="https://linkedin.com/in/omerbalyali" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+			</li>
+			<li>
+				<a href="https://x.com/omerbalyali" target="_blank" rel="noopener noreferrer">X</a>
+			</li>
+			<li>
+				<a href="https://bsky.app/profile/omerbalyali.com" target="_blank" rel="noopener noreferrer"
+					>Bluesky</a
+				>
+			</li>
+		</ul>
+	</nav>
+
+	<nav class="legal" aria-label="Legal">
+		<ul>
+			<li>
+				<a href="/accessibility/">Accessibility</a>
 			</li>
 			<li>
 				<a href="/privacy-policy/">Privacy Policy</a>
 			</li>
 			<li>
-				<a href="/rss.xml" data-icon="rss">RSS</a>
+				<a href="/legal-notice/">Legal Notice</a>
+			</li>
+			<li>
+				<a href="/rss.xml">RSS</a>
 			</li>
 		</ul>
 	</nav>
@@ -21,45 +41,67 @@
 
 <style>
 	footer {
-		position: sticky;
-		inset-inline: 0;
+		/* position: sticky; */
 		inset-block-end: 0;
+		inset-inline: 0;
 		z-index: 0;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding-block: var(--t-space-12) var(--t-space-27);
+		display: grid;
+		/* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+		grid-template-columns: auto 1fr;
+		grid-template-rows: auto auto;
+		grid-template-areas:
+			"social social"
+			"copyright legal";
+		/* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
+		row-gap: var(--t-space-18);
+		column-gap: var(--t-space-4);
+		padding: var(--t-space-12) var(--t-app-gutter);
+		background-color: var(--t-color-background-footer);
+		color: var(--t-color-foreground-footer);
 		font-size: var(--t-font-size-small);
-		font-weight: var(--t-font-weight-medium);
-		background-color: var(--t-color-background-root);
-	}
-
-	.legal-nav > ul {
-		display: flex;
-		list-style: none;
-		align-items: flex-start;
+		font-weight: var(--t-font-weight-semibold);
+		text-wrap: nowrap;
 	}
 
 	a {
+		text-decoration-color: transparent;
+		transition: var(--t-transition-default);
+		transition-property: color, text-decoration-color;
+
+		&:hover {
+			color: var(--t-color-brand-primary);
+			text-decoration-color: currentColor;
+		}
+	}
+
+	nav > ul {
 		display: flex;
-		gap: var(--t-space-1);
-		padding-inline: var(--t-space-2);
-		padding-block: var(--t-space-1);
-		border-radius: var(--t-radius-medium);
+		gap: var(--t-space-4);
+	}
 
-		&[data-icon] {
-			&::before {
-				content: "";
-				flex: 0 0 auto;
-				inline-size: 1em;
-				aspect-ratio: 1 / 1;
-				background-color: currentColor;
-				mask: var(--s-icon) center / contain no-repeat;
-			}
+	.social {
+		grid-area: social;
+		font-size: var(--t-font-size-large);
 
-			&[data-icon="rss"] {
-				--s-icon: var(--t-icon-rss);
-			}
+		a {
+			padding-inline: var(--t-space-1-5);
+			margin-inline: calc(var(--t-space-1-5) * -1);
+		}
+	}
+
+	.copyright {
+		grid-area: copyright;
+	}
+
+	.legal {
+		grid-area: legal;
+	}
+
+	:is(.copyright, .legal) {
+		color: color-mix(in srgb, currentColor 65%, transparent);
+
+		& a:hover {
+			color: var(--t-color-foreground-footer);
 		}
 	}
 </style>

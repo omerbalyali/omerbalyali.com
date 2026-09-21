@@ -2,141 +2,110 @@
 const isHome = Astro.url.pathname === "/";
 ---
 
-<header
-	class="app-header app-container-padded"
-	data-intro-visible={isHome ? "" : undefined}
-	transition:persist="app-header">
-	<span>
-		<a href="/" class="branding">Ömer Balyalı</a>
-	</span>
-	<div class="intro-wrapper">
-		<p class="intro" aria-hidden={isHome ? undefined : "true"} inert={!isHome}>
-			<strong>Design Engineer based in Berlin</strong> with 10+ years of experience bridging interface design and
-			frontend development. I design and build <strong
-				>accessible component systems, design-system tooling, and web applications in TypeScript, React,
-				Next.js, and CSS</strong
-			> &mdash; from concept to production.
-		</p>
+<header>
+	<a href="/" class="brand"><span class:list={[{ "visually-hidden": isHome }]}>Ömer Balyalı</span></a>
+	<div class="actions">
+		<button class="scheme-toggle" aria-label="Toggle colorscheme"></button>
+		<a href="/" class="active">omerbalyali.com</a>
 	</div>
 </header>
 
-<script is:inline>
-	(() => {
-		const listenerKey = "__appHeaderRouteState";
-
-		if (window[listenerKey]) {
-			return;
-		}
-
-		window[listenerKey] = true;
-
-		const headerSelector = ".app-header";
-		const syncHeaderRouteState = () => {
-			const header = document.querySelector(headerSelector);
-
-			if (!header) {
-				return;
-			}
-
-			const intro = header.querySelector(".intro");
-			const isHome = window.location.pathname === "/";
-
-			header.toggleAttribute("data-intro-visible", isHome);
-
-			if (intro) {
-				intro.inert = !isHome;
-
-				if (isHome) {
-					intro.removeAttribute("aria-hidden");
-				} else {
-					intro.setAttribute("aria-hidden", "true");
-				}
-			}
-		};
-
-		syncHeaderRouteState();
-		document.addEventListener("astro:page-load", syncHeaderRouteState);
-	})();
-</script>
-
 <style>
-	.app-header {
+	header {
+		position: relative;
+		inset-block-start: 0;
+		inset-inline: 0;
+		padding: var(--t-app-gutter);
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: var(--t-space-4);
+		align-items: center;
+	}
+
+	.brand {
+		grid-column: 1;
+		justify-self: start;
+		transition: var(--t-transition-default);
+		transition-property: background-color;
 		display: flex;
-		flex-direction: column;
-		row-gap: 0;
-		padding-block: var(--t-space-12);
-		background-color: var(--t-color-background-root);
-		transition: row-gap var(--t-duration-base) var(--t-ease-out);
+		gap: var(--t-space-4);
+		align-items: center;
+		text-decoration: none;
 
-		.branding {
-			:where(&) {
-				--s-background-color: transparent;
-				--s-outline: var(--t-border-thin) solid var(--s-outline-color);
-				--s-outline-color: transparent;
-			}
-
-			max-width: max-content;
-			font-weight: var(--t-font-weight-semibold);
-			position: relative;
-			padding-block: var(--t-space-3);
-			padding-inline: var(--t-space-3);
-			margin-inline: calc(var(--t-space-3) * -1);
-			display: flex;
-			gap: var(--t-space-3);
-			align-items: center;
-			border-radius: var(--t-radius-medium);
-			outline-offset: 0;
-
-			&::before {
-				content: "";
-				width: var(--t-space-4);
-				aspect-ratio: 1 / 1;
-				mask-image: var(--t-brand-logomark);
-				mask-repeat: no-repeat;
-				margin-block-end: 3.75%;
-				background-color: currentColor;
-			}
-
-			&:is(:hover, :active, :focus-visible) {
-				--s-color: var(--t-color-accent);
-			}
-
-			&:focus-visible {
-				--s-background-color: color-mix(in oklch, currentColor 5%, transparent);
-				--s-outline-color: color-mix(in oklch, currentColor 40%, transparent);
-			}
+		&::before {
+			content: "";
+			display: block;
+			width: 1.25rlh;
+			aspect-ratio: 1 / 1;
+			background-color: currentColor;
+			mask-image: var(--t-app-brand-logomark);
+			mask-size: contain;
+			mask-repeat: no-repeat;
+			mask-position: center;
 		}
 
-		.intro-wrapper {
-			display: grid;
-			grid-template-rows: 0fr;
-			transition: grid-template-rows var(--t-duration-faster) var(--t-ease-out);
+		& > span {
+			line-height: 1;
+			font-size: 1.675em;
+			font-size: var(--t-font-size-large);
+			padding-block-start: 0.675rlh;
+			font-weight: var(--t-font-weight-bold);
 		}
 
-		.intro {
-			min-block-size: 0;
-			opacity: 0;
-			transition: opacity var(--t-duration-faster) var(--t-ease-out);
-		}
-
-		&[data-intro-visible] {
-			row-gap: var(--t-space-4);
-
-			.intro-wrapper {
-				grid-template-rows: 1fr;
-			}
-
-			.intro {
-				opacity: 1;
-			}
+		&:hover::before {
+			color: var(--t-color-brand-primary);
 		}
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.app-header,
-		.app-header .intro,
-		.app-header .intro-wrapper {
-			transition: none;
+	.actions {
+		grid-column: 3;
+		justify-self: end;
+		display: flex;
+		gap: var(--t-space-2);
+		align-items: stretch;
+		height: var(--t-space-12);
+	}
+
+	.actions > * {
+		border: none;
+		border-radius: var(--t-radius-xlarge);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-inline: var(--t-space-4);
+		font-size: var(--t-font-size-medium);
+		font-weight: var(--t-font-weight-medium);
+		background-color: color-mix(in srgb, var(--t-color-foreground-base) 10%, transparent);
+		transition: var(--t-transition-default);
+		transition-property: background-color;
+
+		&:is(a) {
+			text-decoration: none;
+		}
+
+		&.active {
+			background-color: var(--t-color-foreground-base);
+			color: var(--t-color-background-root);
+		}
+
+		&:hover {
+			color: var(--t-color-background-root);
+			background-color: var(--t-color-brand-primary);
+		}
+	}
+
+	.scheme-toggle {
+		&::before {
+			content: "";
+			display: block;
+			width: var(--t-space-5);
+			height: var(--t-space-5);
+			aspect-ratio: 1 / 1;
+			background-color: currentColor;
+			border-radius: 100%;
+			mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none'%3E%3Cpath fill='%23000' d='M10 0c5.523 0 10 4.477 10 10s-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0m0 2.5a7.5 7.5 0 0 0 0 15z'/%3E%3C/svg%3E");
+			mask-repeat: no-repeat;
+			mask-position: center;
 		}
 	}
 </style>

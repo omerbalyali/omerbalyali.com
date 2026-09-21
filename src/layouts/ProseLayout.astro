@@ -36,7 +36,7 @@ const metadata: PageMetadata = {
 ---
 
 <Layout metadata={metadata}>
-	<article>
+	<article class="container">
 		<header>
 			{post.data.series && <p>Series: {post.data.series}</p>}
 			<h1>{post.data.title}</h1>
@@ -52,51 +52,45 @@ const metadata: PageMetadata = {
 
 		<section class="prose">
 			<slot />
-
-			<footer>
-				Find me on:
-				<a href="https://www.linkedin.com/in/omerbalyali/" rel="external">LinkedIn</a>,
-				<a href="https://bsky.app/profile/omerbalyali.com" rel="external">Bluesky</a>, or
-				<a href="https://twitter.com/omerbalyali" rel="external">X</a>
-			</footer>
 		</section>
 	</article>
+</Layout>
 
-	<style>
+<style>
+	@layer components {
+		.container {
+			max-width: 56rem;
+			margin-inline: auto;
+		}
+
 		header {
-			margin-block-end: 2lh;
+			display: flex;
+			flex-direction: column;
+			gap: var(--t-space-6);
+			margin-block-end: var(--t-space-12);
+		}
 
-			& > h1 {
-				font-size: var(--t-font-size-large);
-				letter-spacing: var(--t-letter-spacing-tight);
-				margin-block-end: 1lh;
-			}
+		h1 {
+			font-size: var(--t-font-size-4xlarge);
+			font-weight: var(--t-font-weight-bold);
+			line-height: var(--t-font-line-height-tighter);
+			text-align: center;
+			text-wrap: balance;
 		}
 
 		.meta-info {
 			display: flex;
-			gap: 0.375lh;
-			margin-block-end: 1.5lh;
-			font-size: var(--t-font-size-small);
+			gap: var(--t-space-3);
+			justify-content: center;
+			align-items: center;
 			font-weight: var(--t-font-weight-medium);
-			color: color-mix(in oklch, currentColor 70%, transparent);
+			color: color-mix(in oklch, currentColor 75%, transparent);
 
 			.reading-time::before {
 				content: "•";
-				margin-inline-end: 0.375lh;
-				font-size: var(--t-font-size-xsmall);
+				margin-inline-end: var(--t-space-3);
 				color: color-mix(in oklch, currentColor 70%, transparent);
 			}
 		}
-
-		footer {
-			border-block-start: var(--t-border-thin) solid color-mix(in oklch, currentColor 10%, transparent);
-			padding-block: 1.5lh;
-			margin-block: 2.5lh 0;
-
-			& > a {
-				font-weight: var(--t-font-weight-semibold);
-			}
-		}
-	</style>
-</Layout>
+	}
+</style>

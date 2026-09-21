@@ -1,6 +1,6 @@
 ---
 import { getCollection, render, type CollectionEntry } from "astro:content";
-import WritingProseLayout from "../../layouts/WritingProseLayout.astro";
+import ProseLayout from "../../layouts/ProseLayout.astro";
 
 export async function getStaticPaths() {
 	const posts = await getCollection("writing", ({ data }) => {
@@ -31,6 +31,6 @@ const { post } = props;
 const { Content, remarkPluginFrontmatter } = await render(post);
 ---
 
-<WritingProseLayout post={post} minutesRead={remarkPluginFrontmatter.minutesRead}>
+<ProseLayout post={post} minutesRead={remarkPluginFrontmatter.minutesRead}>
 	<Content />
-</WritingProseLayout>
+</ProseLayout>

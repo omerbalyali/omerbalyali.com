@@ -1,0 +1,57 @@
+---
+
+---
+
+<section class="intro">
+	<p>
+		Hi! I'm <strong>Ömer Balyalı</strong>, a design engineer based in Berlin.
+	</p>
+	<p>
+		I design interfaces and brand identities, build apps and websites, create frameworks and tools. Obsessive
+		about the smallest detail, deliberate about the whole system. Shaped by curiosity and a deep desire to
+		make things better &mdash; <strong>intentional, appropriate, effective</strong>.
+	</p>
+	<p>
+		Nowadays, I'm building design system infrastructure and tooling through <a
+			href="https://humaninterface.studio"
+			target="_blank"
+			rel="noopener noreferrer">Human Interface Studio</a
+		>.
+	</p>
+</section>
+
+<style>
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: 1rlh;
+	}
+
+	p {
+		max-width: 65ch;
+		font-size: 1.5rem;
+		font-weight: var(--t-font-weight-medium);
+		line-height: var(--t-font-line-height-tight);
+		text-wrap: balance;
+		color: color-mix(in srgb, var(--t-color-foreground-base) 85%, transparent);
+	}
+
+	strong {
+		font-weight: var(--t-font-weight-bold);
+		color: var(--t-color-foreground-base);
+	}
+
+	a {
+		font-weight: var(--t-font-weight-semibold);
+		text-wrap: nowrap;
+		color: var(--t-color-foreground-base);
+		text-decoration-color: transparent;
+		transition: var(--t-transition-default);
+		transition-property: color, text-decoration-color;
+
+		&:hover {
+			color: var(--t-color-brand-primary);
+			text-decoration-color: currentColor;
+		}
+	}
+</style>
