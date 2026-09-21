@@ -28,7 +28,7 @@ html {
 /* Keep short pages at least as tall as the dynamic viewport. */
 
 body {
-	min-block-size: 100dvh;
+	min-block-size: 100svh;
 }
 
 /*
