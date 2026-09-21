@@ -20,7 +20,7 @@ type HastElement = {
 	tagName: string;
 	properties: {
 		class?: string | string[];
-		className?: string | string[];
+		className?: string[];
 		[key: string]: string | number | boolean | (string | number)[] | null | undefined;
 	};
 	children: HastElementContent[];
