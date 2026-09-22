@@ -4,6 +4,7 @@
 	letter-spacing: var(--t-font-letter-spacing-regular);
 	line-height: var(--t-font-line-height-relaxed);
 	margin-block-end: var(--t-space-18);
+	text-wrap: pretty;
 
 	p {
 		&:not(:last-child) {
