@@ -1,15 +1,9 @@
 .prose {
 	--c-paragraph-margin-block-end: 1lh;
 
-	font-size: var(--t-font-size-medium);
 	letter-spacing: var(--t-font-letter-spacing-regular);
 	line-height: var(--t-font-line-height-relaxed);
 	margin-block-end: var(--t-space-18);
-
-	::selection {
-		/* background-color: color-mix(in oklch, var(--t-color-brand-primary) 80%, transparent); */
-		color: currentColor;
-	}
 
 	p {
 		&:not(:last-child) {
@@ -52,6 +46,10 @@
 		}
 	}
 
+	:is(h1) {
+		font-size: var(--t-font-size-xlarge);
+	}
+
 	:is(h2, h3, h4, h5, h6) {
 		margin-block: 2lh 1lh;
 		font-weight: var(--t-font-weight-semibold);
@@ -62,6 +60,47 @@
 	}
 
 	h2 {
-		font-size: var(--t-font-size-xlarge);
+		font-size: var(--t-font-size-large);
+	}
+
+	ul,
+	ol {
+		padding-inline-start: 1lh;
+		margin-block-end: 1lh;
+
+		& > li {
+			margin-block-start: 0.125lh;
+		}
+	}
+
+	ul {
+		list-style: disc;
+	}
+
+	ol {
+		list-style: decimal;
+	}
+
+	figcaption {
+		font-size: var(--t-font-size-xsmall);
+		padding-inline-start: var(--t-space-3);
+		margin-block: 0.5lh 1lh;
+		border-inline-start: var(--t-border-width-base) solid color-mix(in oklch, currentColor 10%, transparent);
+	}
+
+	blockquote {
+		font-size: var(--t-font-size-small);
+		padding: var(--t-space-6);
+		border-radius: var(--t-radius-medium);
+		background-color: var(--t-color-surface-primary);
+		margin-block: 1lh;
+	}
+
+	details {
+		& > summary {
+			font-weight: var(--t-font-weight-semibold);
+			margin-block: 0.25lh;
+			padding-block-start: 0.25lh;
+		}
 	}
 }
