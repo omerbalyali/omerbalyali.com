@@ -6,11 +6,13 @@
 	color-scheme: dark;
 }
 
-[data-theme] {
+[data-scheme="system"] {
 	color-scheme: light dark;
+}
 
+[data-theme] {
 	--t-color-background-root: light-dark(oklch(0.98 0 0), oklch(0.15 0.002 250));
-	--t-color-foreground-base: light-dark(oklch(0.12 0 0), oklch(0.9 0.002 250));
+	--t-color-foreground-base: light-dark(oklch(0.12 0 0), oklch(0.96 0.002 250));
 
 	--t-color-selection-background: color-mix(in srgb, var(--t-color-foreground-base) 90%, transparent);
 	--t-color-selection-foreground: light-dark(#fff, #000);
