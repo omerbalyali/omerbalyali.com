@@ -3,42 +3,26 @@ import Layout from "../../layouts/Layout.astro";
 import { getOgImageMetadata } from "../../lib/og-pages";
 import { SITE } from "../../site";
 
-import isometryImage from "../../assets/images/works/isometry/website.png";
-import keepspaceImage from "../../assets/images/works/keepspace/app.png";
-import statefulUiImage from "../../assets/images/works/stateful-ui/docs.png";
-import statefulCssImage from "../../assets/images/works/statefulcss/website.png";
-
 const works = [
 	{
 		slug: "stateful-css",
 		title: "Stateful CSS",
 		status: "WIP",
-		image: statefulCssImage,
-		imagePosition: "50% 15%",
-		imageScale: "125%",
 	},
 	{
 		slug: "isometry",
 		title: "Isometry",
 		status: "WIP",
-		image: isometryImage,
-		imagePosition: "50% 4%",
 	},
 	{
 		slug: "keepspace",
 		title: "Keepspace",
 		status: "WIP",
-		image: keepspaceImage,
-		imagePosition: "50% 0%",
-		imageScale: "100%",
 	},
 	{
 		slug: "stateful-ui",
 		title: "Stateful UI",
 		status: "WIP",
-		image: statefulUiImage,
-		imagePosition: "50% 0%",
-		imageScale: "125%",
 	},
 ];
 
@@ -57,19 +41,8 @@ const metadata = {
 			{
 				works.map((work) => (
 					<li>
-						<a href={`/works/${work.slug}/`} class="work-card">
-							<div class="work-heading">
-								<strong>{work.title}</strong>
-								<span class="work-status">{work.status}</span>
-							</div>
-
-							{work.image && (
-								<div
-									class="work-media"
-									aria-hidden="true"
-									style={`--c-image-src: url("${work.image.src}"); --c-image-position: ${work.imagePosition}; --c-image-size: ${work.imageScale ?? "cover"};`}
-								/>
-							)}
+						<a href={`/works/${work.slug}/`}>
+							<h2>{work.title}</h2>
 						</a>
 					</li>
 				))
@@ -102,25 +75,6 @@ const metadata = {
 		padding-block: var(--t-space-1-5);
 	}
 
-	.work-card {
-		position: relative;
-		max-height: 14rem;
-		overflow: hidden;
-		display: flex;
-		flex-direction: column;
-		gap: var(--t-space-6);
-		padding: var(--t-space-4);
-		background-color: color-mix(in oklch, var(--t-color-background-primary) 50%, transparent);
-		border-radius: var(--t-radius-large);
-		border: var(--t-border-thin) solid;
-		border-color: light-dark(oklch(0 0 0 / 0.0675), oklch(1 0 0 / 0.07));
-		box-shadow:
-			0 0.25rem 0.25rem -0.25rem oklch(0 0 0 / 0.125),
-			0 0.375rem 0.5rem 0 oklch(0 0 0 / 0.01);
-		transition: var(--t-duration-slow) var(--t-ease-in-out);
-		transition-property: max-height, box-shadow, border-color, background-color;
-	}
-
 	.work-heading {
 		display: flex;
 		justify-content: space-between;
@@ -128,60 +82,6 @@ const metadata = {
 
 		strong {
 			font-weight: var(--t-font-weight-semibold);
-		}
-
-		time {
-			font-size: var(--t-font-size-small);
-			font-weight: var(--t-font-weight-medium);
-			color: color-mix(in oklch, currentColor 80%, transparent);
-		}
-
-		.work-status {
-			font-size: var(--t-font-size-xsmall);
-			font-weight: var(--t-font-weight-bold);
-			color: color-mix(in oklch, currentColor 70%, transparent);
-			padding: var(--t-space-0-5) var(--t-space-1-5);
-			border-radius: var(--t-radius-medium);
-			text-transform: uppercase;
-			background-color: color-mix(in oklch, currentColor 8%, transparent);
-		}
-	}
-
-	.work-media {
-		aspect-ratio: 16 / 12;
-		border-radius: var(--t-radius-medium);
-		border: var(--t-border-thin) solid;
-		border-color: light-dark(oklch(0 0 0 / 0.025), oklch(1 0 0 / 0.07));
-		overflow: clip;
-		background-image: var(--c-image-src);
-		background-position: var(--c-image-position, 50% 50%);
-		background-size: var(--c-image-size, cover);
-		background-repeat: no-repeat;
-		transform: translateY(0.25rem);
-		will-change: transform;
-		transition: transform var(--t-duration-slow) var(--t-ease-in-out);
-	}
-
-	.work-card:hover {
-		max-height: 20rem;
-		background-color: color-mix(in oklch, var(--t-color-background-primary) 80%, transparent);
-		border-color: light-dark(oklch(0 0 0 / 0.0875), oklch(1 0 0 / 0.07));
-		box-shadow:
-			0 0.25rem 0.5rem -0.125rem oklch(0 0 0 / 0.025),
-			0 0.5rem 1.25rem -0.25rem oklch(0 0 0 / 0.0125);
-	}
-
-	.work-card:hover .work-media {
-		transform: translateY(-0.25rem);
-	}
-
-	@media (width >= 40rem) {
-		.work-card {
-			max-height: 16rem;
-		}
-
-		.work-card:hover {
-			max-height: 27rem;
 		}
 	}
 </style>
