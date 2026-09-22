@@ -1,12 +1,13 @@
 ---
+import ColorSchemePicker from "./ColorSchemePicker.astro";
+
 const isHome = Astro.url.pathname === "/";
 ---
 
 <header>
 	<a href="/" class="brand"><span class:list={[{ "visually-hidden": isHome }]}>Ömer Balyalı</span></a>
 	<div class="actions">
-		<button class="scheme-toggle" aria-label="Toggle colorscheme"></button>
-		<a href="/" class="active">omerbalyali.com</a>
+		<ColorSchemePicker />
 	</div>
 </header>
 
@@ -48,8 +49,9 @@ const isHome = Astro.url.pathname === "/";
 			line-height: 1;
 			font-size: 1.675em;
 			font-size: var(--t-font-size-large);
-			padding-block-start: 0.675rlh;
+			padding-block-start: 0.1375rlh;
 			font-weight: var(--t-font-weight-bold);
+			text-wrap: nowrap;
 		}
 
 		&:hover::before {
@@ -64,48 +66,5 @@ const isHome = Astro.url.pathname === "/";
 		gap: var(--t-space-2);
 		align-items: stretch;
 		height: var(--t-space-12);
-	}
-
-	.actions > * {
-		border: none;
-		border-radius: var(--t-radius-xlarge);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding-inline: var(--t-space-4);
-		font-size: var(--t-font-size-medium);
-		font-weight: var(--t-font-weight-medium);
-		background-color: color-mix(in srgb, var(--t-color-foreground-base) 10%, transparent);
-		transition: var(--t-transition-default);
-		transition-property: background-color;
-
-		&:is(a) {
-			text-decoration: none;
-		}
-
-		&.active {
-			background-color: var(--t-color-foreground-base);
-			color: var(--t-color-background-root);
-		}
-
-		&:hover {
-			color: var(--t-color-background-root);
-			background-color: var(--t-color-brand-primary);
-		}
-	}
-
-	.scheme-toggle {
-		&::before {
-			content: "";
-			display: block;
-			width: var(--t-space-5);
-			height: var(--t-space-5);
-			aspect-ratio: 1 / 1;
-			background-color: currentColor;
-			border-radius: 100%;
-			mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none'%3E%3Cpath fill='%23000' d='M10 0c5.523 0 10 4.477 10 10s-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0m0 2.5a7.5 7.5 0 0 0 0 15z'/%3E%3C/svg%3E");
-			mask-repeat: no-repeat;
-			mask-position: center;
-		}
 	}
 </style>

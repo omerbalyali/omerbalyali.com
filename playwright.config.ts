@@ -1,10 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 4321;
+const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 4321);
 
 export default defineConfig({
 	testDir: "./tests/e2e",
 	fullyParallel: true,
+	workers: process.env.CI ? 2 : undefined,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 2 : 0,
 	reporter: process.env.CI ? "github" : "list",
@@ -14,7 +15,7 @@ export default defineConfig({
 	},
 	projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
 	webServer: {
-		command: `./node_modules/.bin/astro preview --port ${PORT}`,
+		command: `./node_modules/.bin/astro preview --port ${PORT} --ignore-lock`,
 		url: `http://localhost:${PORT}`,
 		reuseExistingServer: !process.env.CI,
 		timeout: 60_000,

@@ -1,6 +1,7 @@
 ---
 import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
+import ColorSchemeScript from "./ColorSchemeScript.astro";
 import type { PageMetadata } from "../../lib/seo";
 import { absoluteUrl, resolveTitle, serializeDate } from "../../lib/seo";
 import { SITE } from "../../site";
@@ -38,6 +39,7 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 ---
 
 <meta charset="UTF-8" />
+<ColorSchemeScript />
 <meta name="viewport" content="width=device-width" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />

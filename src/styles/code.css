@@ -163,12 +163,12 @@
 }
 
 @media (prefers-color-scheme: dark) {
-	.prose :where(pre.astro-code) {
+	:root:not([data-scheme]) .prose :where(pre.astro-code) {
 		/* background-color: var(--shiki-dark-bg) !important; */
 		color: var(--shiki-dark) !important;
 	}
 
-	.prose :where(pre.astro-code span[style*="--shiki-dark"]) {
+	:root:not([data-scheme]) .prose :where(pre.astro-code span[style*="--shiki-dark"]) {
 		color: var(--shiki-dark) !important;
 	}
 }

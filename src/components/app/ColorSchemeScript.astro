@@ -1,0 +1,57 @@
+<!-- Run before the page paints; keep preference independent of the visual theme. -->
+<script is:inline>
+	(() => {
+		if (window.__colorSchemeInitialized) return;
+		window.__colorSchemeInitialized = true;
+
+		const key = "color-scheme";
+		const normalize = (value) => (value === "light" || value === "dark" ? value : "system");
+		const system = window.matchMedia("(prefers-color-scheme: dark)");
+		let preference = "system";
+		try {
+			preference = normalize(localStorage.getItem(key));
+		} catch {
+			// The control still works for this page session when storage is unavailable.
+		}
+
+		const apply = (root = document.documentElement) => {
+			root.dataset.schemePreference = preference;
+			root.dataset.scheme = preference === "system" ? (system.matches ? "dark" : "light") : preference;
+			// A picture's media query follows the OS, not CSS color-scheme. Override
+			// only marked dark variants, preserving one accessible fallback image.
+			for (const source of root.querySelectorAll("source[data-scheme-dark]")) {
+				source.media = root.dataset.scheme === "dark" ? "all" : "not all";
+			}
+		};
+		const notify = (persisted = true) => {
+			apply();
+			document.dispatchEvent(new CustomEvent("scheme:change", { detail: { persisted } }));
+		};
+
+		document.addEventListener("scheme:select", (event) => {
+			preference = normalize(event.detail);
+			let persisted = true;
+			try {
+				localStorage.setItem(key, preference);
+			} catch {
+				persisted = false;
+			}
+			notify(persisted);
+		});
+		system.addEventListener("change", () => notify());
+		window.addEventListener("storage", (event) => {
+			if (event.key !== key && event.key !== null) return;
+			try {
+				if (event.storageArea !== localStorage) return;
+			} catch {
+				return;
+			}
+			preference = normalize(event.newValue);
+			notify();
+		});
+		// Apply to the incoming document before Astro swaps it into view.
+		document.addEventListener("astro:before-swap", (event) => apply(event.newDocument.documentElement));
+		document.addEventListener("astro:page-load", () => notify());
+		apply();
+	})();
+</script>

@@ -6,7 +6,7 @@
 	color-scheme: dark;
 }
 
-[data-scheme="system"] {
+:root:not([data-scheme]) {
 	color-scheme: light dark;
 }
 
