@@ -32,6 +32,7 @@ body {
 	text-decoration-thickness: var(--t-text-underline-thickness, 0.125em);
 	text-underline-offset: var(--t-text-underline-offset, 0.075em);
 	touch-action: manipulation;
+	overflow-wrap: anywhere;
 }
 
 :where(p) {
