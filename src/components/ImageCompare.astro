@@ -235,7 +235,7 @@ const handleStyle =
 		block-size: var(--c-image-compare-handle-size, 2.5rem);
 		border: var(
 			--c-image-compare-handle-border,
-			var(--t-border-thin) solid color-mix(in oklch, currentColor 25%, transparent)
+			var(--t-border-width-thin) solid color-mix(in oklch, currentColor 25%, transparent)
 		);
 		border-radius: var(--c-image-compare-handle-border-radius, var(--t-radius-full));
 		background: var(--c-image-compare-handle-background, light-dark(oklch(0.99 0 0), oklch(0.24 0 0)));
@@ -246,7 +246,7 @@ const handleStyle =
 		pointer-events: none;
 
 		&:where(.image-compare-range:focus-visible ~ *) {
-			--s-outline: var(--t-border-default) solid var(--t-color-accent);
+			--s-outline: var(--t-border-width-base) solid var(--t-color-brand-primary);
 			--s-outline-offset: var(--t-space-1);
 		}
 

@@ -32,7 +32,7 @@
 	--t-font-weight-semibold: 550;
 	--t-font-weight-bold: 600;
 	--t-font-weight-black: 900;
-	--t-font-weight-base: var(--font-weight-regular);
+	--t-font-weight-base: var(--t-font-weight-regular);
 
 	--t-text-underline-style: underline;
 	--t-text-underline-thickness: 0.09375em;

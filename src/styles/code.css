@@ -20,7 +20,7 @@
 	padding: var(--t-space-4);
 	padding-block: var(--c-code-padding-block-start) var(--c-code-padding-block-end);
 	padding-inline: 0;
-	border: var(--t-border-thin) solid color-mix(in oklch, currentColor 12%, transparent);
+	border: var(--t-border-width-thin) solid color-mix(in oklch, currentColor 12%, transparent);
 	border-radius: var(--t-radius-medium);
 	background-color: var(--c-code-background-color) !important;
 	box-shadow: 0 2px 2px 0 oklch(0.4 0 0 / 0.0375);
@@ -34,7 +34,7 @@
 
 /* Code container focus styles */
 .prose :where(pre.astro-code:focus-visible) {
-	outline: var(--t-border-default) solid var(--t-color-accent);
+	outline: var(--t-border-width-base) solid var(--t-color-brand-primary);
 }
 
 /* Code block */
@@ -79,7 +79,7 @@
 
 /* Highlighted code line */
 .prose :where(pre.astro-code .line.highlighted) {
-	background: color-mix(in oklch, var(--t-color-accent) 8%, transparent);
+	background: color-mix(in oklch, var(--t-color-brand-primary) 8%, transparent);
 }
 
 /* Blurred code line */
@@ -90,7 +90,7 @@
 
 /* Focused code line */
 .prose :where(pre.astro-code .line.focused) {
-	background: color-mix(in oklch, var(--t-color-accent) 12%, transparent);
+	background: color-mix(in oklch, var(--t-color-brand-primary) 12%, transparent);
 }
 
 /* Added code line */

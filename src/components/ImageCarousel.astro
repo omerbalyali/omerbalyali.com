@@ -210,7 +210,7 @@ const statusText = total > 0 ? `Image ${currentIndex + 1} of ${total}` : "No ima
 
 	.image-carousel-control {
 		:where(&) {
-			--s-background-color: color-mix(in oklch, var(--t-color-background-page) 85%, transparent);
+			--s-background-color: color-mix(in oklch, var(--t-color-background-root) 85%, transparent);
 			--s-color: currentColor;
 			--s-cursor: pointer;
 			--s-opacity: 1;
@@ -226,7 +226,7 @@ const statusText = total > 0 ? `Image ${currentIndex + 1} of ${total}` : "No ima
 		block-size: var(--t-space-8);
 		aspect-ratio: 1;
 		padding-inline: var(--t-space-3);
-		border: var(--t-border-thin) solid color-mix(in oklch, currentColor 10%, transparent);
+		border: var(--t-border-width-thin) solid color-mix(in oklch, currentColor 10%, transparent);
 		border-radius: var(--t-radius-full);
 		background-color: var(--s-background-color);
 		color: var(--s-color);
@@ -235,8 +235,8 @@ const statusText = total > 0 ? `Image ${currentIndex + 1} of ${total}` : "No ima
 		line-height: var(--t-font-line-height-tightest);
 		cursor: var(--s-cursor);
 		opacity: var(--s-opacity);
-		outline: var(--t-border-default) solid var(--s-outline-color);
-		outline-offset: var(--t-border-thin);
+		outline: var(--t-border-width-base) solid var(--s-outline-color);
+		outline-offset: var(--t-border-width-thin);
 		transform: translateY(-50%);
 		transition:
 			background-color var(--t-duration-fast) var(--t-ease-out),
@@ -266,8 +266,8 @@ const statusText = total > 0 ? `Image ${currentIndex + 1} of ${total}` : "No ima
 		}
 
 		&:hover:not(:disabled) {
-			--s-background-color: var(--t-color-background-page);
-			--s-color: var(--t-color-accent);
+			--s-background-color: var(--t-color-background-root);
+			--s-color: var(--t-color-brand-primary);
 		}
 
 		&[data-direction="previous"] {
@@ -320,7 +320,7 @@ const statusText = total > 0 ? `Image ${currentIndex + 1} of ${total}` : "No ima
 			--s-background-color: color-mix(
 				in oklch,
 				currentColor 4%,
-				oklch(from var(--t-color-background-page) l c h / 0.9)
+				oklch(from var(--t-color-background-root) l c h / 0.9)
 			);
 			--s-margin-block-start: 0;
 			--s-padding: var(--c-image-carousel-indicators-padding, var(--t-space-2)) var(--t-space-3);
@@ -354,7 +354,7 @@ const statusText = total > 0 ? `Image ${currentIndex + 1} of ${total}` : "No ima
 		background-color: currentColor;
 		cursor: pointer;
 		opacity: var(--s-opacity);
-		outline: var(--t-border-default) solid var(--s-outline-color);
+		outline: var(--t-border-width-base) solid var(--s-outline-color);
 		outline-offset: var(--t-space-1);
 		transform: var(--s-transform);
 		transition: var(--t-duration-fast) var(--t-ease-out);
