@@ -1,7 +1,4 @@
 <footer>
-	<div class="copyright">
-		&copy; {new Date().getFullYear()}
-	</div>
 	<nav class="social" aria-label="Social">
 		<ul>
 			<li>
@@ -37,30 +34,32 @@
 			</li>
 		</ul>
 	</nav>
+
+	<div class="copyright">
+		&copy; {new Date().getFullYear()}
+	</div>
 </footer>
 
 <style>
 	footer {
-		/* position: sticky; */
-		inset-block-end: 0;
-		inset-inline: 0;
-		z-index: 0;
 		display: grid;
-		/* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-		grid-template-columns: auto 1fr;
-		grid-template-rows: auto auto;
+		grid-template: auto auto / auto 1fr;
 		grid-template-areas:
 			"social social"
-			"copyright legal";
-		/* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties */
-		row-gap: var(--t-space-18);
-		column-gap: var(--t-space-4);
+			"legal legal"
+			"copyright copyright";
+		gap: var(--t-space-4);
 		padding: var(--t-space-12) var(--t-app-gutter);
 		background-color: var(--t-color-background-footer);
 		color: var(--t-color-foreground-footer);
 		font-size: var(--t-font-size-small);
 		font-weight: var(--t-font-weight-semibold);
-		text-wrap: nowrap;
+
+		@media (width >= 36rem) {
+			grid-template-areas:
+				"social social"
+				"copyright legal";
+		}
 	}
 
 	a {
@@ -76,12 +75,16 @@
 
 	nav > ul {
 		display: flex;
+		flex-wrap: wrap;
 		gap: var(--t-space-4);
+		row-gap: var(--t-space-3);
+		text-wrap: nowrap;
 	}
 
 	.social {
 		grid-area: social;
 		font-size: var(--t-font-size-large);
+		margin-block-end: var(--t-space-9);
 
 		a {
 			padding-inline: var(--t-space-1-5);
@@ -91,6 +94,10 @@
 
 	.copyright {
 		grid-area: copyright;
+
+		@media (width < 36rem) {
+			margin-block-start: var(--t-space-3);
+		}
 	}
 
 	.legal {
