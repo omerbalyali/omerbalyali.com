@@ -1,31 +1,29 @@
 import { expect, test } from "@playwright/test";
 
-const header = ".app-header";
-const intro = ".app-header .intro";
+test("header branding stays accessible and updates when navigating home and back", async ({ page }) => {
+	await page.goto("/");
+	const brand = page.getByRole("banner").getByRole("link", { name: "Ömer Balyalı", exact: true });
+	const name = brand.getByText("Ömer Balyalı", { exact: true });
 
-test.describe("app header", () => {
-	test("shows the intro only on the home page", async ({ page }) => {
-		await page.goto("/");
+	await expect(brand).toBeVisible();
+	await expect(brand).toHaveAttribute("href", "/");
+	// The homepage shows only the logo, but its link still has an accessible name.
+	await expect(name).toHaveCSS("clip-path", "inset(50%)");
 
-		await expect(page.locator(header)).toHaveAttribute("data-intro-visible", "");
-		await expect(page.locator(intro)).not.toHaveAttribute("aria-hidden", "true");
-		await expect(page.locator(intro)).not.toHaveAttribute("inert", "");
+	await page
+		.getByRole("navigation", { name: "Legal", exact: true })
+		.getByRole("link", { name: "Privacy Policy" })
+		.click();
+	await expect(page).toHaveURL("/privacy-policy/");
+	await expect(name).toBeVisible();
+	await expect(name).toHaveCSS("clip-path", "none");
 
-		await page.goto("/about/");
+	await brand.focus();
+	await page.keyboard.press("Enter");
+	await expect(page).toHaveURL("/");
+	await expect(name).toHaveCSS("clip-path", "inset(50%)");
 
-		await expect(page.locator(header)).not.toHaveAttribute("data-intro-visible", "");
-		await expect(page.locator(intro)).toHaveAttribute("aria-hidden", "true");
-		await expect(page.locator(intro)).toHaveAttribute("inert", "");
-	});
-
-	test("updates the intro state after client-side navigation", async ({ page }) => {
-		await page.goto("/");
-
-		await page.getByRole("link", { name: "Works" }).first().click();
-		await expect(page).toHaveURL(/\/works\/$/);
-
-		await expect(page.locator(header)).not.toHaveAttribute("data-intro-visible", "");
-		await expect(page.locator(intro)).toHaveAttribute("aria-hidden", "true");
-		await expect(page.locator(intro)).toHaveAttribute("inert", "");
-	});
+	await page.goBack();
+	await expect(page).toHaveURL("/privacy-policy/");
+	await expect(name).toHaveCSS("clip-path", "none");
 });

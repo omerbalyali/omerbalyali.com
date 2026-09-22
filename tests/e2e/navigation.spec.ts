@@ -1,95 +1,33 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-const moreButton = (page: Page) => page.getByRole("button", { name: "More links" });
-const nav = (page: Page) => page.getByRole("navigation", { name: "Primary" });
+test.describe("footer navigation", () => {
+	test.use({ viewport: { width: 390, height: 844 } });
 
-async function visiblePrimaryLinks(page: Page) {
-	return page
-		.locator(".navbar-item")
-		.evaluateAll((items) =>
-			items
-				.filter((item) => getComputedStyle(item).display !== "none")
-				.map((item) => item.textContent?.trim() || item.querySelector("a")?.getAttribute("aria-label") || ""),
-		);
-}
-
-async function visibleMenuLinks(page: Page) {
-	return page
-		.locator(".navbar-menu-item")
-		.evaluateAll((items) =>
-			items
-				.filter((item) => getComputedStyle(item).display !== "none")
-				.map((item) => item.textContent?.trim() || ""),
-		);
-}
-
-async function visibleMenuHrefs(page: Page) {
-	return page.locator(".navbar-menu-item").evaluateAll((items) =>
-		items
-			.filter((item) => getComputedStyle(item).display !== "none")
-			.map((item) => {
-				const anchor = item.querySelector("a");
-				return {
-					text: item.textContent?.trim() || "",
-					href: anchor?.getAttribute("href") || "",
-					target: anchor?.getAttribute("target"),
-					rel: anchor?.getAttribute("rel"),
-				};
-			}),
-	);
-}
-
-test.describe("primary navigation", () => {
-	test("keeps page state and menu interactions accessible", async ({ page }) => {
-		await page.goto("/works/");
-
-		await expect(nav(page).getByRole("link", { name: "Works" }).first()).toHaveAttribute(
-			"aria-current",
-			"page",
-		);
-		await expect(nav(page).getByRole("link", { name: "Writing" })).toHaveCount(0);
-		await expect(moreButton(page)).toHaveAttribute("aria-expanded", "false");
-
-		await moreButton(page).click();
-		await expect(moreButton(page)).toHaveAttribute("aria-expanded", "true");
-		await expect(page.locator(".navbar-menu")).toBeVisible();
-
-		await page.keyboard.press("Escape");
-		await expect(moreButton(page)).toHaveAttribute("aria-expanded", "false");
-
-		await moreButton(page).click();
-		await page.locator("main").click();
-		await expect(moreButton(page)).toHaveAttribute("aria-expanded", "false");
+	test("legal links remain usable on mobile", async ({ page }) => {
+		await page.goto("/");
+		const legal = page.getByRole("navigation", { name: "Legal", exact: true });
+		for (const [label, path] of [
+			["Accessibility", "/accessibility/"],
+			["Privacy Policy", "/privacy-policy/"],
+			["Legal Notice", "/legal-notice/"],
+		]) {
+			await legal.getByRole("link", { name: label, exact: true }).click();
+			await expect(page).toHaveURL(path);
+			await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+		}
+		await expect(legal.getByRole("link", { name: "RSS", exact: true })).toHaveAttribute("href", "/rss.xml");
 	});
 
-	test("moves lower priority links into the menu at narrow widths", async ({ page }) => {
-		await page.goto("/works/");
-
-		await page.setViewportSize({ width: 500, height: 700 });
-		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "About"]);
-		await moreButton(page).click();
-		await expect.poll(() => visibleMenuLinks(page)).not.toContain("Writing");
-		await expect.poll(() => visibleMenuLinks(page)).not.toContain("About");
-		const desktopMenuLinks = await visibleMenuHrefs(page);
-		expect(
-			desktopMenuLinks.every(
-				(link) =>
-					link.href.startsWith("https://") && link.target === "_blank" && link.rel === "noopener noreferrer",
-			),
-		).toBe(true);
-
-		await page.setViewportSize({ width: 389, height: 700 });
-		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home", "Works", "About"]);
-		await expect.poll(() => visibleMenuLinks(page)).not.toContain("About");
-
-		await page.setViewportSize({ width: 319, height: 700 });
-		await expect.poll(() => visiblePrimaryLinks(page)).toEqual(["Home"]);
-		await expect.poll(() => visibleMenuLinks(page)).toEqual(expect.arrayContaining(["Works", "About"]));
-		await expect.poll(() => visibleMenuLinks(page)).not.toContain("Writing");
-
-		await expect(nav(page).getByRole("link", { name: "Works" }).last()).toHaveAttribute(
-			"aria-current",
-			"page",
-		);
+	test("social links have accessible names and safe external targets", async ({ page }) => {
+		await page.goto("/");
+		const links = page.getByRole("navigation", { name: "Social", exact: true }).getByRole("link");
+		await expect(links.first()).toBeVisible();
+		for (const link of await links.all()) {
+			await expect(link).toHaveAccessibleName(/\S/);
+			await expect(link).toHaveAttribute("href", /^https:\/\//);
+			await expect(link).toHaveAttribute("target", "_blank");
+			await expect(link).toHaveAttribute("rel", /\bnoopener\b/);
+			await expect(link).toHaveAttribute("rel", /\bnoreferrer\b/);
+		}
 	});
 });
