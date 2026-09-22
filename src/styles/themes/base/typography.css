@@ -1,7 +1,7 @@
 [data-theme] {
 	--t-font-family-base: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 	/* stylelint-disable-next-line value-keyword-case */
-	--t-font-family-monospace: ui-monospace, "SFMono-Regular", Consolas, monospace;
+	--t-font-family-monospace: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Consolas, monospace;
 	/* stylelint-disable-next-line value-keyword-case */
 	--t-font-family-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 
