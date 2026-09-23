@@ -49,7 +49,21 @@ export default defineConfig({
 			],
 		}),
 	},
-	integrations: [mdx(), sitemap({ filter: shouldIncludeInSitemap })],
+	integrations: [
+		mdx(),
+		sitemap({ filter: shouldIncludeInSitemap }),
+		// Import the global stylesheet at page level rather than from a component: Astro emits
+		// page-level CSS before any layout's or component's own styles, so the cascade layer
+		// order declared in index.css always comes first.
+		{
+			name: "global-styles",
+			hooks: {
+				"astro:config:setup": ({ injectScript }) => {
+					injectScript("page-ssr", 'import "/src/styles/index.css";');
+				},
+			},
+		},
+	],
 	devToolbar: {
 		enabled: false,
 	},
