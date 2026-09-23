@@ -43,13 +43,13 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 <!-- Scheme variants: before ColorSchemeScript, which points their media at a manually chosen scheme. -->
 <meta
 	name="theme-color"
-	content={SITE.themeColor.light}
+	content={SITE.colors.themeColor.light}
 	media="(prefers-color-scheme: light)"
 	data-scheme-light
 />
 <meta
 	name="theme-color"
-	content={SITE.themeColor.dark}
+	content={SITE.colors.themeColor.dark}
 	media="(prefers-color-scheme: dark)"
 	data-scheme-dark
 />
