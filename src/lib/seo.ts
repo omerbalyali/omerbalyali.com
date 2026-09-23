@@ -25,6 +25,22 @@ export function absoluteUrl(path: string | URL = "/") {
 	return new URL(path, SITE.url).toString();
 }
 
+const IMAGE_MIME_TYPES: Record<string, string> = {
+	avif: "image/avif",
+	gif: "image/gif",
+	jpeg: "image/jpeg",
+	jpg: "image/jpeg",
+	png: "image/png",
+	svg: "image/svg+xml",
+	webp: "image/webp",
+};
+
+export function getImageMimeType(path: string | URL) {
+	const { pathname } = new URL(path, SITE.url);
+	const extension = pathname.split(".").pop()?.toLowerCase() ?? "";
+	return IMAGE_MIME_TYPES[extension];
+}
+
 export function resolveTitle(title?: string) {
 	return title ? `${title} | ${SITE.name}` : SITE.name;
 }

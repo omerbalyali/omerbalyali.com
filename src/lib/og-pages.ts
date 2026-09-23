@@ -1,14 +1,13 @@
 import { type CollectionKey, getCollection } from "astro:content";
 import { SITE } from "../site";
-import { OG_SIZES, type OgSize, type OgVariant } from "./og";
+import type { OgVariant } from "./og";
+import { DEFAULT_OG_SLUG } from "./og-image";
 
 export interface OgRoute {
 	slug: string;
 	title?: string;
 	variant: OgVariant;
 }
-
-const DEFAULT_OG_SLUG = "default";
 
 const OG_COLLECTIONS = ["writing"] as const satisfies readonly CollectionKey[];
 
@@ -67,22 +66,4 @@ function pageFilePathToSlug(filePath: string): string {
 		.replace(/\.(astro|mdx)$/, "")
 		.replace(/\/index$/, "")
 		.replace(/^index$/, "");
-}
-
-function pathnameToSlug(pathname: string): string {
-	const trimmed = pathname.replace(/^\/+|\/+$/g, "");
-	return trimmed || DEFAULT_OG_SLUG;
-}
-
-export function getOgImagePath(pathname: string, size: OgSize = "wide"): string {
-	return `/og/${size}/${pathnameToSlug(pathname)}.png`;
-}
-
-export function getOgImageMetadata(pathname: string, size: OgSize = "wide") {
-	const dimensions = OG_SIZES[size];
-	return {
-		ogImage: getOgImagePath(pathname, size),
-		ogImageWidth: dimensions.width,
-		ogImageHeight: dimensions.height,
-	};
 }
