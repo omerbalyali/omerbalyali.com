@@ -29,8 +29,10 @@ const metadata: PageMetadata = {
 			<slot />
 		</section>
 	</article>
+</Layout>
 
-	<style>
+<style>
+	@layer components {
 		article {
 			max-width: 56rem;
 			margin-inline: auto;
@@ -67,5 +69,5 @@ const metadata: PageMetadata = {
 		section {
 			margin-block-end: var(--t-space-24);
 		}
-	</style>
-</Layout>
+	}
+</style>
