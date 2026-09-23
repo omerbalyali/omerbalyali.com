@@ -1,3 +1,7 @@
+---
+import { SITE } from "../../site";
+---
+
 <footer>
 	<nav class="social" aria-label="Social">
 		<ul>
@@ -30,7 +34,7 @@
 				<a href="/legal-notice/">Legal Notice</a>
 			</li>
 			<li>
-				<a href="/rss.xml">RSS</a>
+				<a href={SITE.feed.path}>RSS</a>
 			</li>
 		</ul>
 	</nav>

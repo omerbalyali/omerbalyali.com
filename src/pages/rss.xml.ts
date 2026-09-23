@@ -1,23 +1,27 @@
-import { default as rss, type RSSOptions } from "@astrojs/rss";
-import { getCollection } from "astro:content";
-import { getWritingPath } from "../lib/seo";
+import rss from "@astrojs/rss";
+import type { APIContext } from "astro";
+import { absoluteUrl, getWritingPath } from "../lib/seo";
+import { getListedPosts } from "../lib/writing";
 import { SITE } from "../site";
 
-export async function GET(context: RSSOptions) {
-	const posts = await getCollection("writing", ({ data }) => data.draft !== true && data.unlisted !== true);
-
-	posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+export async function GET(context: APIContext) {
+	const posts = await getListedPosts();
 
 	return rss({
-		title: SITE.sections.writing.title,
+		title: SITE.feed.title,
 		description: SITE.sections.writing.description,
-		site: context.site,
+		site: context.site ?? SITE.url,
+		xmlns: { atom: "http://www.w3.org/2005/Atom" },
+		customData: [
+			"<language>en-us</language>",
+			`<atom:link href="${absoluteUrl(SITE.feed.path)}" rel="self" type="application/rss+xml" />`,
+		].join(""),
 		items: posts.map((post) => ({
 			title: post.data.title,
 			description: post.data.description,
 			pubDate: post.data.pubDate,
 			link: getWritingPath(post.id),
+			categories: post.data.tags,
 		})),
-		customData: `<language>en-us</language>`,
 	});
 }

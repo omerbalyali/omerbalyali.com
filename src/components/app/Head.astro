@@ -59,6 +59,7 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
 <link rel="canonical" href={canonicalHref} />
 <link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="application/rss+xml" title={SITE.feed.title} href={SITE.feed.path} />
 <title>{pageTitle}</title>
 <Font cssVariable="--font-inter" preload={[{ style: "normal" }]} />
 <Font cssVariable="--font-jetbrains-mono" />
