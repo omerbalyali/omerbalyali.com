@@ -128,6 +128,22 @@ test("storage denial preserves a working session preference and announces the li
 	await expect(page.getByRole("button", { name: "Appearance: Dark" })).toBeVisible();
 });
 
+test("browser theme color follows the chosen scheme", async ({ page }) => {
+	await page.goto("/");
+	const light = page.locator('meta[name="theme-color"][data-scheme-light]');
+	const dark = page.locator('meta[name="theme-color"][data-scheme-dark]');
+	await expect(light).toHaveAttribute("media", "(prefers-color-scheme: light)");
+	await expect(dark).toHaveAttribute("media", "(prefers-color-scheme: dark)");
+
+	await selectScheme(page, "Dark");
+	await expect(dark).toHaveAttribute("media", "all");
+	await expect(light).toHaveAttribute("media", "not all");
+
+	await selectScheme(page, "System");
+	await expect(light).toHaveAttribute("media", "(prefers-color-scheme: light)");
+	await expect(dark).toHaveAttribute("media", "(prefers-color-scheme: dark)");
+});
+
 test.describe("mobile appearance menu", () => {
 	test.use({ viewport: { width: 320, height: 640 }, hasTouch: true });
 	test("fits the viewport and supports touch", async ({ page }) => {

@@ -5,7 +5,11 @@ export const SITE = {
 	url: import.meta.env.SITE_URL ?? PRODUCTION_URL,
 	description: "Personal website of Ömer Balyalı.",
 	locale: "en_US",
-	themeColor: "#fff",
+	// Hex equivalents of --t-color-background-root in each color scheme.
+	themeColor: {
+		light: "#f8f8f8",
+		dark: "#0a0b0c",
+	},
 	author: {
 		name: "Ömer Balyalı",
 	},

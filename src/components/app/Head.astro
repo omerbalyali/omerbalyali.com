@@ -40,6 +40,19 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 ---
 
 <meta charset="UTF-8" />
+<!-- Scheme variants: before ColorSchemeScript, which points their media at a manually chosen scheme. -->
+<meta
+	name="theme-color"
+	content={SITE.themeColor.light}
+	media="(prefers-color-scheme: light)"
+	data-scheme-light
+/>
+<meta
+	name="theme-color"
+	content={SITE.themeColor.dark}
+	media="(prefers-color-scheme: dark)"
+	data-scheme-dark
+/>
 <ColorSchemeScript />
 <meta name="viewport" content="width=device-width" />
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -51,7 +64,6 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 <Font cssVariable="--font-jetbrains-mono" preload />
 <meta name="description" content={description} />
 <meta name="author" content={SITE.author.name} />
-<meta name="theme-color" content={SITE.themeColor} />
 <meta name="robots" content={robots} />
 <meta property="og:site_name" content={SITE.name} />
 <meta property="og:locale" content={SITE.locale} />
