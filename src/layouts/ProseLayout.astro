@@ -7,7 +7,7 @@ import Layout from "./Layout.astro";
 
 interface Props {
 	post: CollectionEntry<"writing">;
-	minutesRead: number;
+	minutesRead: string;
 }
 
 const { post, minutesRead } = Astro.props as Props;
