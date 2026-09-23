@@ -70,6 +70,15 @@ export default defineConfig({
 		// page-level CSS before any layout's or component's own styles, so the cascade layer
 		// order declared in index.css always comes first.
 		{
+			name: "dev-pages",
+			hooks: {
+				"astro:config:setup": ({ command, injectRoute }) => {
+					if (command !== "dev") return;
+					injectRoute({ pattern: "/og/preview", entrypoint: "./src/dev/og-preview.astro" });
+				},
+			},
+		},
+		{
 			name: "global-styles",
 			hooks: {
 				"astro:config:setup": ({ injectScript }) => {
