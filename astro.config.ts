@@ -80,13 +80,21 @@ export default defineConfig({
 		optimizeDeps: {
 			exclude: ["@resvg/resvg-wasm", "satori"],
 		},
+		build: {
+			// The CSS minifier drops vendor prefixes its target doesn't need. Vite's default target
+			// has desktop Safari but not iOS, so -webkit-text-size-adjust (iOS only) was removed and
+			// mobile Safari inflated text. Keep this in sync with the Lightning CSS targets below.
+			cssTarget: ["chrome111", "edge111", "firefox114", "safari17", "ios17"],
+		},
 		css: {
 			transformer: "lightningcss",
 			lightningcss: {
 				include: Features.LightDark,
+				// Baseline: Safari 17 (Sep 2023). The site already needs it for popover, and it is
+				// the first Safari that doesn't crash on color-mix() with currentColor.
 				targets: {
-					ios_saf: cssTarget(16),
-					safari: cssTarget(16),
+					ios_saf: cssTarget(17),
+					safari: cssTarget(17),
 				},
 			},
 		},
