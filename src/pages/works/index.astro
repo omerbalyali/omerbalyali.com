@@ -7,22 +7,18 @@ const works = [
 	{
 		slug: "stateful-css",
 		title: "Stateful CSS",
-		status: "WIP",
 	},
 	{
 		slug: "isometry",
 		title: "Isometry",
-		status: "WIP",
 	},
 	{
 		slug: "keepspace",
 		title: "Keepspace",
-		status: "WIP",
 	},
 	{
 		slug: "stateful-ui",
 		title: "Stateful UI",
-		status: "WIP",
 	},
 ];
 
@@ -56,13 +52,6 @@ const metadata = {
 		display: flex;
 		flex-direction: column;
 		gap: var(--t-space-4);
-
-		& > h2 {
-			font-size: var(--t-font-size-small);
-			font-weight: var(--t-font-weight-medium);
-			color: color-mix(in oklch, currentColor 80%, transparent);
-			padding: var(--t-space-1-5) 0;
-		}
 	}
 
 	.works-list {
@@ -73,15 +62,5 @@ const metadata = {
 
 	.works-list > li {
 		padding-block: var(--t-space-1-5);
-	}
-
-	.work-heading {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-
-		strong {
-			font-weight: var(--t-font-weight-semibold);
-		}
 	}
 </style>
