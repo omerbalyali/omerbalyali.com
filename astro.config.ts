@@ -8,6 +8,7 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import csp from "./integrations/csp";
 import { markdownConfig, markdownProcessorConfig } from "./markdown.config";
+import { INTER_VARIANTS, JETBRAINS_MONO_VARIANTS, toAstroVariants } from "./src/lib/fonts";
 
 // https://astro.build/config
 const siteUrl = process.env.SITE_URL ?? "https://omerbalyali.com";
@@ -137,18 +138,7 @@ export default defineConfig({
 			name: "Inter",
 			cssVariable: "--font-inter",
 			options: {
-				variants: [
-					{
-						src: ["./src/assets/fonts/Inter-Variable.woff2"],
-						weight: "100 900",
-						style: "normal",
-					},
-					{
-						src: ["./src/assets/fonts/Inter-Variable-Italic.woff2"],
-						weight: "100 900",
-						style: "italic",
-					},
-				],
+				variants: toAstroVariants(INTER_VARIANTS),
 			},
 		},
 		{
@@ -156,13 +146,7 @@ export default defineConfig({
 			name: "JetBrains Mono",
 			cssVariable: "--font-jetbrains-mono",
 			options: {
-				variants: [
-					{
-						src: ["./src/assets/fonts/JetBrainsMono-Variable.woff2"],
-						weight: "100 900",
-						style: "normal",
-					},
-				],
+				variants: toAstroVariants(JETBRAINS_MONO_VARIANTS),
 			},
 		},
 	],

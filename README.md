@@ -49,6 +49,16 @@ pnpm run test:a11y   # Playwright accessibility checks
 
 The site targets current evergreen browsers with Safari 17 / iOS 17 as the baseline. CSS is compiled with Lightning CSS for that target (see `vite.css.lightningcss.targets` in `astro.config.ts`).
 
+## Fonts
+
+Web fonts are subset to Latin and Latin Extended, like Google Fonts. Only upright Latin Inter is preloaded; the other files load when a page uses their characters. The full source files live in `src/assets/fonts/source/`. After replacing them, regenerate the subsets (needs `pyftsubset` from `brew install fonttools`):
+
+```sh
+./scripts/subset-fonts.sh
+```
+
+The Unicode ranges are defined in both the script and `src/lib/fonts.ts`; keep them in sync.
+
 ## Security Headers
 
 `public/_headers` sets the static security headers. The Content-Security-Policy is generated at build time by `integrations/csp.ts`, which hashes every inline script and style in the built pages and appends the policy to `dist/_headers`. `tests/e2e/csp.spec.ts` checks the site works under it.
