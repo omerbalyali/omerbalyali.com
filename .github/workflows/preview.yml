@@ -66,12 +66,12 @@ jobs:
 
       # Uploads a version without deploying it, so PRs don't overwrite each other.
       - name: Upload preview version
-        uses: cloudflare/wrangler-action@4e88846969242f7752bcfdaf5511bfbb3985ca47 # v4.1.1
+        uses: cloudflare/wrangler-action@25853364521e0d392ece9b0c1e97a4b37b638087 # v4.1.2
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           packageManager: pnpm
-          command: versions upload --preview-alias ${{ env.PREVIEW_ALIAS }} --message "PR #${{ github.event.pull_request.number }}"
+          command: versions upload --preview-alias ${{ env.PREVIEW_ALIAS }} --message "Pull request ${{ github.event.pull_request.number }}"
 
       - name: Link the preview
         run: |
