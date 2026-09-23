@@ -28,7 +28,6 @@ const { lang = "en", metadata } = Astro.props as Props;
 
 <style>
 	main {
-		position: relative;
 		display: flex;
 		flex-direction: column;
 		gap: var(--t-space-18);
@@ -36,11 +35,5 @@ const { lang = "en", metadata } = Astro.props as Props;
 		padding-block-start: var(--t-app-gutter);
 		padding-inline: var(--t-app-gutter);
 		background-color: var(--t-color-background-root);
-		z-index: 10;
-
-		&.centered {
-			padding-inline: calc((100% - 60rem - var(--t-app-gutter)) / 2);
-			align-items: center;
-		}
 	}
 </style>

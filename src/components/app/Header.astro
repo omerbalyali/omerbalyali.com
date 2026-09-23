@@ -13,9 +13,6 @@ const isHome = Astro.url.pathname === "/";
 
 <style>
 	header {
-		position: relative;
-		inset-block-start: 0;
-		inset-inline: 0;
 		padding: var(--t-app-gutter);
 		display: grid;
 		grid-template-columns: auto 1fr auto;
@@ -47,7 +44,6 @@ const isHome = Astro.url.pathname === "/";
 
 		& > span {
 			line-height: 1;
-			font-size: 1.675em;
 			font-size: var(--t-font-size-large);
 			padding-block-start: 0.1375rlh;
 			font-weight: var(--t-font-weight-bold);
