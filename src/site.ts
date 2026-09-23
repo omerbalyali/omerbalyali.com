@@ -12,6 +12,7 @@ export const SITE = {
 		title: `${NAME} - ${new URL(SITE_URL).host}`,
 	},
 	locale: "en_US",
+	formatLocale: "en-DE",
 	// Fixed brand colors for contexts CSS tokens can't reach (browser UI, generated images).
 	colors: {
 		// Hex equivalents of --t-color-background-root in each color scheme.
@@ -27,8 +28,17 @@ export const SITE = {
 		},
 	},
 	author: {
-		name: "Ömer Balyalı",
+		name: NAME,
+		jobTitle: "Design Engineer",
+		location: "Berlin, Germany",
 	},
+	// Footer links and the Person structured data's `sameAs`.
+	social: [
+		{ label: "GitHub", url: "https://github.com/omerbalyali" },
+		{ label: "LinkedIn", url: "https://linkedin.com/in/omerbalyali" },
+		{ label: "X", url: "https://x.com/omerbalyali" },
+		{ label: "Bluesky", url: "https://bsky.app/profile/omerbalyali.com" },
+	],
 	sections: {
 		works: {
 			title: "Works",
