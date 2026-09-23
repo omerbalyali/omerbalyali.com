@@ -3,7 +3,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig, fontProviders } from "astro/config";
 import { Features } from "lightningcss";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import { markdownConfig, markdownProcessorConfig } from "./markdown.config";
@@ -14,11 +14,25 @@ const cssTarget = (major: number, minor = 0, patch = 0) => (major << 16) | (mino
 const useLocalHttps = ["1", "true", "yes"].includes((process.env.LOCAL_HTTPS ?? "").toLowerCase());
 const localHttpsKey = "./localhost-key.pem";
 const localHttpsCert = "./localhost.pem";
+// Unlisted posts are reachable by link only. The sitemap filter just sees URLs, so read the flag
+// from the posts' frontmatter (the content collection isn't available in the config).
+const writingDir = "./src/content/writing";
+const unlistedWritingPaths = new Set(
+	readdirSync(writingDir)
+		.filter((file) => /\.mdx?$/.test(file))
+		.filter((file) => /^unlisted:\s*true\s*$/m.test(readFileSync(`${writingDir}/${file}`, "utf8")))
+		.map((file) => `/writing/${file.replace(/\.mdx?$/, "")}/`),
+);
 const shouldIncludeInSitemap = (page: string) => {
 	const { pathname } = new URL(page, siteUrl);
 	const isWorkDetailPage = pathname.startsWith("/works/") && pathname !== "/works/";
 
-	return !pathname.startsWith("/og/") && !isWorkDetailPage && pathname !== "/writing/";
+	return (
+		!pathname.startsWith("/og/") &&
+		!isWorkDetailPage &&
+		pathname !== "/writing/" &&
+		!unlistedWritingPaths.has(pathname)
+	);
 };
 
 const localHttps = () => {
