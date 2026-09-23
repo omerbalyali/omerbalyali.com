@@ -4,8 +4,8 @@ import { ClientRouter } from "astro:transitions";
 import ColorSchemeScript from "./ColorSchemeScript.astro";
 import type { PageMetadata } from "../../lib/seo";
 import { absoluteUrl, resolveTitle, serializeDate } from "../../lib/seo";
-import { SITE } from "../../site";
 import "../../styles/index.css";
+import { IS_PRODUCTION_SITE, SITE } from "../../site";
 
 interface Props extends PageMetadata {}
 
@@ -34,7 +34,8 @@ const ogImageWidth = providedOgImageWidth ?? (usingDefaultOgImage ? SITE.og.defa
 const ogImageHeight = providedOgImageHeight ?? (usingDefaultOgImage ? SITE.og.defaultImageHeight : undefined);
 const publishedIso = serializeDate(publishedTime);
 const modifiedIso = serializeDate(modifiedTime);
-const robots = noindex ? "noindex, nofollow, noarchive, nocache" : "index, follow, max-image-preview:large";
+const robots =
+	noindex || !IS_PRODUCTION_SITE ? "noindex, nofollow, noarchive" : "index, follow, max-image-preview:large";
 const schemas = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
 ---
 

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { routes } from "./_fixtures";
+import { missingRoute, routes, workDetailRoutes } from "./_fixtures";
 
 const SITE_URL = process.env.SITE_URL ?? "https://omerbalyali.com";
 
@@ -9,7 +9,7 @@ const expectedTitles = new Map([
 ]);
 
 test.describe("page smoke", () => {
-	for (const route of routes) {
+	for (const route of [...routes, ...workDetailRoutes]) {
 		test(`${route} responds with 200, has title, canonical, and a reachable og:image`, async ({
 			page,
 			request,
@@ -39,12 +39,43 @@ test.describe("page smoke", () => {
 		});
 	}
 
-	test("work detail pages ask crawlers not to index or archive them", async ({ page }) => {
-		await page.goto("/works/isometry/");
+	for (const route of workDetailRoutes) {
+		test(`${route} asks crawlers not to index it and marks up its year(s) validly`, async ({ page }) => {
+			await page.goto(route);
 
+			await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+				"content",
+				"noindex, nofollow, noarchive",
+			);
+
+			const years = await page
+				.locator("article header time")
+				.evaluateAll((nodes) => nodes.map((node) => node.getAttribute("datetime")));
+			expect(years.length).toBeGreaterThan(0);
+			for (const year of years) expect(year).toMatch(/^\d{4}$/);
+		});
+	}
+
+	for (const route of [...routes, ...workDetailRoutes]) {
+		test(`${route} applies prose styles over reset/base on a fresh load`, async ({ page }) => {
+			await page.goto(route);
+			const heading = page.locator(".prose h2").first();
+			test.skip((await heading.count()) === 0, "no prose headings on this page");
+
+			// Guards the cascade layer order: if `components` is declared after `reset`/`base`,
+			// headings fall back to base's `font-size: initial` (16px).
+			await expect(heading).toHaveCSS("font-size", "20px");
+		});
+	}
+
+	test("unknown paths serve the 404 page with a 404 status", async ({ page }) => {
+		const response = await page.goto(missingRoute);
+
+		expect(response?.status()).toBe(404);
+		await expect(page).toHaveTitle("Page Not Found | Ömer Balyalı");
 		await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
 			"content",
-			"noindex, nofollow, noarchive, nocache",
+			"noindex, nofollow, noarchive",
 		);
 	});
 

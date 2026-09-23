@@ -1,6 +1,8 @@
+const PRODUCTION_URL = "https://omerbalyali.com";
+
 export const SITE = {
 	name: "Ömer Balyalı",
-	url: import.meta.env.SITE_URL ?? "https://omerbalyali.com",
+	url: import.meta.env.SITE_URL ?? PRODUCTION_URL,
 	description: "Personal website of Ömer Balyalı.",
 	locale: "en_US",
 	themeColor: "#fff",
@@ -27,3 +29,6 @@ export const SITE = {
 		defaultImageHeight: 630,
 	},
 } as const;
+
+/** False for preview and other non-production deployments, which should stay out of search results. */
+export const IS_PRODUCTION_SITE = new URL(SITE.url).origin === new URL(PRODUCTION_URL).origin;

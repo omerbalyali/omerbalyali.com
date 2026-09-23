@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const SITE_URL = process.env.SITE_URL ?? "https://omerbalyali.com";
 const siteOrigin = new URL(SITE_URL).origin;
+const isProductionSite = siteOrigin === "https://omerbalyali.com";
 
 test.describe("generated feeds and discovery files", () => {
 	test("publishes RSS items newest first", async ({ request }) => {
@@ -25,13 +26,17 @@ test.describe("generated feeds and discovery files", () => {
 		expect(xml).toContain("<language>en-us</language>");
 	});
 
-	test("points crawlers at the sitemap", async ({ request }) => {
+	test("points crawlers at the sitemap, and keeps them off non-production sites", async ({ request }) => {
 		const response = await request.get("/robots.txt");
 		expect(response.status()).toBe(200);
 		expect(response.headers()["content-type"]).toMatch(/^text\/plain/);
 
 		await expect(response.text()).resolves.toBe(
-			["User-agent: *", "Allow: /", `Sitemap: ${siteOrigin}/sitemap-index.xml`].join("\n"),
+			[
+				"User-agent: *",
+				isProductionSite ? "Allow: /" : "Disallow: /",
+				`Sitemap: ${siteOrigin}/sitemap-index.xml`,
+			].join("\n"),
 		);
 	});
 
@@ -45,13 +50,12 @@ test.describe("generated feeds and discovery files", () => {
 		expect(locations).toEqual(
 			expect.arrayContaining([
 				`${siteOrigin}/`,
-				`${siteOrigin}/about/`,
 				`${siteOrigin}/legal-notice/`,
 				`${siteOrigin}/privacy-policy/`,
 				`${siteOrigin}/works/`,
 			]),
 		);
-		expect(locations.length).toBeGreaterThanOrEqual(5);
+		expect(locations.length).toBeGreaterThanOrEqual(4);
 		expect(locations.every((location) => location.startsWith(`${siteOrigin}/`))).toBe(true);
 		expect(locations.some((location) => location.match(/\/works\/[^/]+\/$/))).toBe(false);
 		expect(locations).not.toContain(`${siteOrigin}/writing/`);

@@ -1,9 +1,9 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-import { routes } from "./_fixtures";
+import { missingRoute, routes, workDetailRoutes } from "./_fixtures";
 
 test.describe("accessibility", () => {
-	for (const route of routes) {
+	for (const route of [...routes, ...workDetailRoutes, missingRoute]) {
 		test(`${route} has no critical or serious axe violations`, async ({ page }) => {
 			await page.goto(route);
 			const results = await new AxeBuilder({ page })
