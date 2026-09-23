@@ -5,7 +5,9 @@ const isHome = Astro.url.pathname === "/";
 ---
 
 <header>
-	<a href="/" class="brand"><span class:list={[{ "visually-hidden": isHome }]}>Ömer Balyalı</span></a>
+	<a href="/" class="brand">
+		<span class:list={[{ "visually-hidden": isHome }]}>Ömer Balyalı</span>
+	</a>
 	<div class="actions">
 		<ColorSchemePicker />
 	</div>

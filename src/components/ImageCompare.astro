@@ -111,13 +111,11 @@ const handleStyle =
 		<span class="image-compare-divider" style={dividerStyle} aria-hidden="true"></span>
 		<span class="image-compare-handle" style={handleStyle} aria-hidden="true"></span>
 	</div>
-	{
-		Astro.slots.has("default") && (
-			<figcaption>
-				<slot />
-			</figcaption>
-		)
-	}
+	{Astro.slots.has("default") && (
+		<figcaption>
+			<slot />
+		</figcaption>
+	)}
 </figure>
 
 <style>

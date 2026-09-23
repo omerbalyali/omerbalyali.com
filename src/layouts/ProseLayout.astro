@@ -44,9 +44,9 @@ const metadata: PageMetadata = {
 			<div class="meta-info">
 				<time
 					datetime={post.data.pubDate.toISOString()}
-					title={post.data.updatedDate ? `Updated ${formatDate(post.data.updatedDate)}` : undefined}
-					>{formatDate(post.data.pubDate)}</time
-				>
+					title={post.data.updatedDate ? `Updated ${formatDate(post.data.updatedDate)}` : undefined}>
+					{formatDate(post.data.pubDate)}
+				</time>
 				<span class="reading-time">{minutesRead}</span>
 			</div>
 		</header>

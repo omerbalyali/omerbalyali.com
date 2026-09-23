@@ -53,15 +53,13 @@ const identities = [
 		<h1 class="title">Logomarks</h1>
 	</header>
 	<ul class="brand-grid bleed" data-bleed="wide" role="list">
-		{
-			identities.map((identity) => (
-				<li data-identity={identity.id} data-identity-label={identity.label}>
-					<svg class="logo" viewBox="0 0 420 240" role="img" aria-label={identity.label} focusable="false">
-						<path d={identity.path} />
-					</svg>
-				</li>
-			))
-		}
+		{identities.map((identity) => (
+			<li data-identity={identity.id} data-identity-label={identity.label}>
+				<svg class="logo" viewBox="0 0 420 240" role="img" aria-label={identity.label} focusable="false">
+					<path d={identity.path} />
+				</svg>
+			</li>
+		))}
 	</ul>
 </section>
 
