@@ -4,6 +4,11 @@ import { selectScheme } from "./_appearance";
 
 const article = "/writing/the-eslint-logo-story/";
 
+/** Every URL a `srcset` (or plain `src`) offers; the browser picks one by screen size. */
+function candidateUrls(srcset: string, base: string) {
+	return srcset.split(",").map((candidate) => new URL(candidate.trim().split(/\s+/)[0], base).href);
+}
+
 async function expectVariant(page: Page, variant: "light" | "dark") {
 	const pictures = page.locator("picture").filter({ has: page.locator("source[data-scheme-dark]") });
 	await expect(pictures.first()).toBeAttached();
@@ -13,17 +18,18 @@ async function expectVariant(page: Page, variant: "light" | "dark") {
 		const source =
 			variant === "dark"
 				? await picture.locator("source[data-scheme-dark]").getAttribute("srcset")
-				: await img.getAttribute("src");
+				: ((await img.getAttribute("srcset")) ?? (await img.getAttribute("src")));
 		expect(source).toBeTruthy();
-		const expectedUrl = new URL(source!, page.url()).href;
+		const expectedUrls = candidateUrls(source!, page.url());
 		await expect
-			.poll(() =>
-				img.evaluate((element: HTMLImageElement) => ({
+			.poll(async () => {
+				const { loaded, src } = await img.evaluate((element: HTMLImageElement) => ({
 					loaded: element.complete && element.naturalWidth > 0,
 					src: element.currentSrc,
-				})),
-			)
-			.toEqual({ loaded: true, src: expectedUrl });
+				}));
+				return loaded && expectedUrls.includes(src) ? "loaded expected variant" : `${loaded} ${src}`;
+			})
+			.toBe("loaded expected variant");
 	}
 }
 

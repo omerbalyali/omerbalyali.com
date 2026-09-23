@@ -1,5 +1,6 @@
 ---
 import { getImage, Image, type LocalImageProps } from "astro:assets";
+import { CONTENT_IMAGE_WIDTH, displayWidth } from "../../lib/images";
 
 interface Props {
 	src: LocalImageProps["src"];
@@ -8,7 +9,15 @@ interface Props {
 }
 
 const { src, darkSrc, alt = "" } = Astro.props;
-const darkImage = darkSrc ? await getImage({ src: darkSrc, alt }) : undefined;
+const width = await displayWidth(src, CONTENT_IMAGE_WIDTH);
+const darkImage = darkSrc
+	? await getImage({
+			src: darkSrc,
+			alt,
+			layout: "constrained",
+			width: await displayWidth(darkSrc, CONTENT_IMAGE_WIDTH),
+		})
+	: undefined;
 ---
 
 <figure>
@@ -17,15 +26,16 @@ const darkImage = darkSrc ? await getImage({ src: darkSrc, alt }) : undefined;
 			<picture>
 				<source
 					data-scheme-dark
-					srcset={darkImage.src}
+					srcset={darkImage.srcSet.attribute || darkImage.src}
+					sizes={darkImage.attributes.sizes}
 					media="(prefers-color-scheme: dark)"
 					width={darkImage.attributes.width}
 					height={darkImage.attributes.height}
 				/>
-				<Image src={src} alt={alt} />
+				<Image src={src} alt={alt} width={width} />
 			</picture>
 		) : (
-			<Image src={src} alt={alt} />
+			<Image src={src} alt={alt} width={width} />
 		)
 	}
 	{

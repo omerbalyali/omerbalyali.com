@@ -99,6 +99,11 @@ export default defineConfig({
 			},
 		},
 	},
+	// Responsive images: <Image> gets a srcset and sizes. Pass `width` as the largest CSS width
+	// the image is shown at (see src/lib/images.ts); layout styling stays in our own CSS.
+	image: {
+		layout: "constrained",
+	},
 	site: siteUrl,
 	trailingSlash: "always",
 	fonts: [
