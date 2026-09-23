@@ -186,18 +186,11 @@ body {
 /*
  * Placeholders: Firefox uses opacity, Chrome/Safari use a fixed gray. Set both
  * so the result is the same everywhere and still tracks the current text color.
- * Safari 16.x crashes on color-mix() with currentColor, so the color is gated
- * to non-Safari browsers and Safari 17+ (contain-intrinsic-size shipped in 17).
  */
 
 ::placeholder {
+	color: color-mix(in oklab, currentColor 50%, transparent);
 	opacity: 1;
-}
-
-@supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
-	::placeholder {
-		color: color-mix(in oklab, currentColor 50%, transparent);
-	}
 }
 
 /* Interaction */
