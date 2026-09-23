@@ -1,6 +1,4 @@
 [data-theme] {
-	--t-app-brand-logomark: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><path d="M200 100c55.23 0 100 44.77 100 100h100C400 89.54 310.46 0 200 0S0 89.54 0 200h100c0-55.23 44.77-100 100-100"/><circle cx="200" cy="300" r="100"/></svg>');
-
 	--t-app-gutter: var(--t-space-9);
 
 	--t-app-page-max-width: 54rem;

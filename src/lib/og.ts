@@ -13,22 +13,12 @@ export type OgVariant = "page" | "default";
 
 const COLORS = SITE.colors.og;
 
-// The logomark comes from the base theme's --t-app-brand-logomark token (the SVG the header
-// uses as a mask), so there is one source for the mark. Filled here with the OG text color.
-const THEME_APP_CSS = "src/styles/themes/base/app.css";
-const LOGO_SVG = readLogomarkFromTheme().replace("<svg ", `<svg fill="${COLORS.foreground}" `);
+// Same logomark file the site header uses as a mask, filled here with the OG text color.
+const LOGO_SVG = readFileSync(resolvePath(process.cwd(), "src/assets/brand/logomark.svg"), "utf8").replace(
+	"<svg ",
+	`<svg fill="${COLORS.foreground}" `,
+);
 const LOGO_DATA_URI = `data:image/svg+xml;utf8,${encodeURIComponent(LOGO_SVG)}`;
-
-function readLogomarkFromTheme(): string {
-	const css = readFileSync(resolvePath(process.cwd(), THEME_APP_CSS), "utf8");
-	const token = css.match(
-		/--t-app-brand-logomark:\s*url\((["'])data:image\/svg\+xml[^,]*,(<svg[\s\S]*?<\/svg>)\1\)/,
-	);
-	if (!token) {
-		throw new Error(`Couldn't read an inline SVG from --t-app-brand-logomark in ${THEME_APP_CSS}.`);
-	}
-	return decodeURIComponent(token[2]);
-}
 
 const HOST = SITE.url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
