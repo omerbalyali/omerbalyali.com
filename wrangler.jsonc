@@ -20,14 +20,15 @@
 		"enabled": true,
 	},
 	"env": {
+		// PR previews are versions of this Worker with per-PR aliases (see .github/workflows/preview.yml),
+		// served at <alias>-preview-omerbalyali-com.<account subdomain>.workers.dev.
 		"preview": {
 			"name": "preview-omerbalyali-com",
-			"routes": [
-				{
-					"pattern": "preview.omerbalyali.com",
-					"custom_domain": true,
-				},
-			],
+			// Must stay empty: otherwise the top-level custom domains are inherited, and deploying
+			// this environment would move omerbalyali.com to the preview Worker.
+			"routes": [],
+			"workers_dev": true,
+			"preview_urls": true,
 		},
 	},
 }

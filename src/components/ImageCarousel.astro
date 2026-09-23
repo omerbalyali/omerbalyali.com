@@ -60,95 +60,87 @@ const statusText = total > 0 ? `Image ${currentIndex + 1} of ${total}` : "No ima
 	style={carouselStyle}>
 	<div class="image-carousel-frame" data-image-carousel-frame>
 		<div class="image-carousel-track" data-image-carousel-track>
-			{
-				items.map((item, index) => {
-					const image = imageAttributes(item.src);
-					const slideLabel = item.label
-						? `${index + 1} of ${total}: ${item.label}`
-						: `${index + 1} of ${total}`;
+			{items.map((item, index) => {
+				const image = imageAttributes(item.src);
+				const slideLabel = item.label
+					? `${index + 1} of ${total}: ${item.label}`
+					: `${index + 1} of ${total}`;
 
-					return (
-						<div
-							class="image-carousel-slide"
-							role="group"
-							aria-roledescription="slide"
-							aria-label={slideLabel}
-							aria-hidden={index === currentIndex ? "false" : "true"}
-							data-image-carousel-slide
-							data-image-carousel-slide-label={item.label ?? item.alt}>
-							<img
-								class="image-carousel-image"
-								src={image.src}
-								width={image.width}
-								height={image.height}
-								alt={item.alt}
-								loading={index === 0 ? "eager" : "lazy"}
-								decoding="async"
-							/>
-						</div>
-					);
-				})
-			}
+				return (
+					<div
+						class="image-carousel-slide"
+						role="group"
+						aria-roledescription="slide"
+						aria-label={slideLabel}
+						aria-hidden={index === currentIndex ? "false" : "true"}
+						data-image-carousel-slide
+						data-image-carousel-slide-label={item.label ?? item.alt}>
+						<img
+							class="image-carousel-image"
+							src={image.src}
+							width={image.width}
+							height={image.height}
+							alt={item.alt}
+							loading={index === 0 ? "eager" : "lazy"}
+							decoding="async"
+						/>
+					</div>
+				);
+			})}
 		</div>
-		{
-			total > 1 && (
-				<>
-					<button
-						class="image-carousel-control"
-						type="button"
-						aria-label="Show previous image"
-						data-image-carousel-previous
-						data-direction="previous"
-						disabled={!loop && currentIndex === 0}>
-						<span class="visually-hidden" aria-hidden="true">
-							Prev
-						</span>
-					</button>
-					<button
-						class="image-carousel-control"
-						type="button"
-						aria-label="Show next image"
-						data-image-carousel-next
-						data-direction="next"
-						disabled={!loop && currentIndex === total - 1}>
-						<span class="visually-hidden" aria-hidden="true">
-							Next
-						</span>
-					</button>
-				</>
-			)
-		}
+		{total > 1 && (
+			<>
+				<button
+					class="image-carousel-control"
+					type="button"
+					aria-label="Show previous image"
+					data-image-carousel-previous
+					data-direction="previous"
+					disabled={!loop && currentIndex === 0}>
+					<span class="visually-hidden" aria-hidden="true">
+						Prev
+					</span>
+				</button>
+				<button
+					class="image-carousel-control"
+					type="button"
+					aria-label="Show next image"
+					data-image-carousel-next
+					data-direction="next"
+					disabled={!loop && currentIndex === total - 1}>
+					<span class="visually-hidden" aria-hidden="true">
+						Next
+					</span>
+				</button>
+			</>
+		)}
 	</div>
-	{
-		total > 1 && (
-			<div class="image-carousel-indicators" role="group" aria-label="Choose image">
-				{items.map((item, index) => (
-					<button
-						class="image-carousel-indicator"
-						type="button"
-						aria-label={`Show image ${index + 1}${item.label ? `: ${item.label}` : ""}`}
-						aria-current={index === currentIndex ? "true" : undefined}
-						data-image-carousel-indicator
-						data-index={index}>
-						<span class="visually-hidden">
-							{index + 1}
-							{item.label ? `: ${item.label}` : ""}
-						</span>
-					</button>
-				))}
-			</div>
-		)
-	}
+	{total > 1 && (
+		<div class="image-carousel-indicators" role="group" aria-label="Choose image">
+			{items.map((item, index) => (
+				<button
+					class="image-carousel-indicator"
+					type="button"
+					aria-label={`Show image ${index + 1}${item.label ? `: ${item.label}` : ""}`}
+					aria-current={index === currentIndex ? "true" : undefined}
+					data-image-carousel-indicator
+					data-index={index}>
+					<span class="visually-hidden">
+						{index + 1}
+						{item.label ? `: ${item.label}` : ""}
+					</span>
+				</button>
+			))}
+		</div>
+	)}
 	<p class="visually-hidden" aria-live="polite" aria-atomic="true" data-image-carousel-status>
 		{statusText}
 	</p>
-	{
-		Astro.slots.has("default") && (
-			<figcaption>
-				<slot />
-			</figcaption>
-		)
-	}
+	{Astro.slots.has("default") && (
+		<figcaption>
+			<slot />
+		</figcaption>
+	)}
 </figure>
 
 <style>

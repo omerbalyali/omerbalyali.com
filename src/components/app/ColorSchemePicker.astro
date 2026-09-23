@@ -9,27 +9,25 @@
 		popovertarget="color-scheme-menu"
 		disabled></button>
 	<div id="color-scheme-menu" popover="auto" role="menu" aria-label="Appearance">
-		{
-			["Light", "Dark", "System"].map((label) => (
-				<button
-					type="button"
-					role="menuitemradio"
-					aria-checked={label === "System" ? "true" : "false"}
-					data-scheme-value={label.toLowerCase()}
-					tabindex="-1">
-					<span>{label}</span>
-					<svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none">
-						<path
-							d="m4 10 4 4 8-8"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-						/>
-					</svg>
-				</button>
-			))
-		}
+		{["Light", "Dark", "System"].map((label) => (
+			<button
+				type="button"
+				role="menuitemradio"
+				aria-checked={label === "System" ? "true" : "false"}
+				data-scheme-value={label.toLowerCase()}
+				tabindex="-1">
+				<span>{label}</span>
+				<svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none">
+					<path
+						d="m4 10 4 4 8-8"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+				</svg>
+			</button>
+		))}
 	</div>
 	<span class="visually-hidden" role="status"></span>
 </color-scheme-picker>

@@ -6,7 +6,9 @@ import { Features } from "lightningcss";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
+import csp from "./integrations/csp";
 import { markdownConfig, markdownProcessorConfig } from "./markdown.config";
+import { INTER_VARIANTS, JETBRAINS_MONO_VARIANTS, toAstroVariants } from "./src/lib/fonts";
 
 // https://astro.build/config
 const siteUrl = process.env.SITE_URL ?? "https://omerbalyali.com";
@@ -66,9 +68,19 @@ export default defineConfig({
 	integrations: [
 		mdx(),
 		sitemap({ filter: shouldIncludeInSitemap }),
+		csp({ thirdPartyOrigins: ["https://plausible.io"] }),
 		// Import the global stylesheet at page level rather than from a component: Astro emits
 		// page-level CSS before any layout's or component's own styles, so the cascade layer
 		// order declared in index.css always comes first.
+		{
+			name: "dev-pages",
+			hooks: {
+				"astro:config:setup": ({ command, injectRoute }) => {
+					if (command !== "dev") return;
+					injectRoute({ pattern: "/og/preview", entrypoint: "./src/dev/og-preview.astro" });
+				},
+			},
+		},
 		{
 			name: "global-styles",
 			hooks: {
@@ -126,18 +138,7 @@ export default defineConfig({
 			name: "Inter",
 			cssVariable: "--font-inter",
 			options: {
-				variants: [
-					{
-						src: ["./src/assets/fonts/Inter-Variable.woff2"],
-						weight: "100 900",
-						style: "normal",
-					},
-					{
-						src: ["./src/assets/fonts/Inter-Variable-Italic.woff2"],
-						weight: "100 900",
-						style: "italic",
-					},
-				],
+				variants: toAstroVariants(INTER_VARIANTS),
 			},
 		},
 		{
@@ -145,13 +146,7 @@ export default defineConfig({
 			name: "JetBrains Mono",
 			cssVariable: "--font-jetbrains-mono",
 			options: {
-				variants: [
-					{
-						src: ["./src/assets/fonts/JetBrainsMono-Variable.woff2"],
-						weight: "100 900",
-						style: "normal",
-					},
-				],
+				variants: toAstroVariants(JETBRAINS_MONO_VARIANTS),
 			},
 		},
 	],

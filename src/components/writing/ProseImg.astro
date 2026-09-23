@@ -5,10 +5,11 @@ import { CONTENT_IMAGE_WIDTH, displayWidth } from "../../lib/images";
 interface Props {
 	src: LocalImageProps["src"];
 	darkSrc?: LocalImageProps["src"];
-	alt?: string;
+	/** Required: describe the image, or pass "" explicitly when it is purely decorative. */
+	alt: string;
 }
 
-const { src, darkSrc, alt = "" } = Astro.props;
+const { src, darkSrc, alt } = Astro.props;
 const width = await displayWidth(src, CONTENT_IMAGE_WIDTH);
 const darkImage = darkSrc
 	? await getImage({
@@ -21,30 +22,26 @@ const darkImage = darkSrc
 ---
 
 <figure>
-	{
-		darkImage ? (
-			<picture>
-				<source
-					data-scheme-dark
-					srcset={darkImage.srcSet.attribute || darkImage.src}
-					sizes={darkImage.attributes.sizes}
-					media="(prefers-color-scheme: dark)"
-					width={darkImage.attributes.width}
-					height={darkImage.attributes.height}
-				/>
-				<Image src={src} alt={alt} width={width} />
-			</picture>
-		) : (
+	{darkImage ? (
+		<picture>
+			<source
+				data-scheme-dark
+				srcset={darkImage.srcSet.attribute || darkImage.src}
+				sizes={darkImage.attributes.sizes}
+				media="(prefers-color-scheme: dark)"
+				width={darkImage.attributes.width}
+				height={darkImage.attributes.height}
+			/>
 			<Image src={src} alt={alt} width={width} />
-		)
-	}
-	{
-		Astro.slots.has("default") && (
-			<figcaption>
-				<slot />
-			</figcaption>
-		)
-	}
+		</picture>
+	) : (
+		<Image src={src} alt={alt} width={width} />
+	)}
+	{Astro.slots.has("default") && (
+		<figcaption>
+			<slot />
+		</figcaption>
+	)}
 </figure>
 
 <style>

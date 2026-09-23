@@ -1,29 +1,28 @@
 ---
-import { OG_SIZES, renderOgSvg, type OgSize } from "../../lib/og";
-import { discoverOgRoutes } from "../../lib/og-pages";
+// Dev-only page at /og/preview/: registered by the "dev-pages" integration in astro.config.ts
+// and absent from production builds.
+import { OG_SIZES, renderOgSvg, type OgSize } from "../lib/og";
+import { discoverOgRoutes } from "../lib/og-pages";
 
-const isDev = import.meta.env.DEV;
 const sizes = Object.keys(OG_SIZES) as OgSize[];
-const routes = isDev ? await discoverOgRoutes() : [];
+const routes = await discoverOgRoutes();
 
-const previews = isDev
-	? await Promise.all(
-			routes.map(async (route) => ({
-				route,
-				renders: await Promise.all(
-					sizes.map(async (size) => ({
-						size,
-						dimensions: OG_SIZES[size],
-						svg: await renderOgSvg({
-							size,
-							variant: route.variant,
-							title: route.title,
-						}),
-					})),
-				),
+const previews = await Promise.all(
+	routes.map(async (route) => ({
+		route,
+		renders: await Promise.all(
+			sizes.map(async (size) => ({
+				size,
+				dimensions: OG_SIZES[size],
+				svg: await renderOgSvg({
+					size,
+					variant: route.variant,
+					title: route.title,
+				}),
 			})),
-		)
-	: [];
+		),
+	})),
+);
 ---
 
 <!doctype html>
@@ -149,50 +148,42 @@ const previews = isDev
 		<div class="wrapper">
 			<div class="page-header">
 				<h1>OG Preview</h1>
-				{
-					isDev ? (
-						<small>
-							{previews.length} routes × {sizes.length} sizes — save lib/og.ts to hot-reload
-						</small>
-					) : (
-						<small>Preview is only rendered in development. Run `pnpm dev` and visit this URL.</small>
-					)
-				}
+				<small>
+					{previews.length} routes × {sizes.length} sizes — save lib/og.ts to hot-reload
+				</small>
 			</div>
-			{
-				previews.map(({ route, renders }) => (
-					<div class="card">
-						<div class="card-header">
-							<code>
-								/og/{`{size}`}/{route.slug}.png
-							</code>
+			{previews.map(({ route, renders }) => (
+				<div class="card">
+					<div class="card-header">
+						<code>
+							/og/{`{size}`}/{route.slug}.png
+						</code>
+						<span>
+							variant: <strong>{route.variant}</strong>
+						</span>
+						{route.title && (
 							<span>
-								variant: <strong>{route.variant}</strong>
+								title: <strong>{route.title}</strong>
 							</span>
-							{route.title && (
-								<span>
-									title: <strong>{route.title}</strong>
-								</span>
-							)}
-						</div>
-						<div class="previews">
-							{renders.map(({ size, dimensions, svg }) => (
-								<div class="preview-item">
-									<header>
-										<span>{size}</span>
-										<span>
-											{dimensions.width} × {dimensions.height}
-										</span>
-									</header>
-									<div class="frame">
-										<Fragment set:html={svg} />
-									</div>
-								</div>
-							))}
-						</div>
+						)}
 					</div>
-				))
-			}
+					<div class="previews">
+						{renders.map(({ size, dimensions, svg }) => (
+							<div class="preview-item">
+								<header>
+									<span>{size}</span>
+									<span>
+										{dimensions.width} × {dimensions.height}
+									</span>
+								</header>
+								<div class="frame">
+									<Fragment set:html={svg} />
+								</div>
+							</div>
+						))}
+					</div>
+				</div>
+			))}
 		</div>
 	</body>
 </html>

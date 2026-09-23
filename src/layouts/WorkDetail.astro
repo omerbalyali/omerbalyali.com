@@ -28,18 +28,16 @@ const years = year.split(/\s*[-–]\s*/).filter(Boolean);
 	<article>
 		<header>
 			<h1>{title}</h1>
-			{
-				years.length > 0 && (
-					<p class="year">
-						{years.map((year, index) => (
-							<>
-								{index > 0 && "–"}
-								<time datetime={year}>{year}</time>
-							</>
-						))}
-					</p>
-				)
-			}
+			{years.length > 0 && (
+				<p class="year">
+					{years.map((year, index) => (
+						<>
+							{index > 0 && "–"}
+							<time datetime={year}>{year}</time>
+						</>
+					))}
+				</p>
+			)}
 			<p class="description">{description}</p>
 		</header>
 		<section class="content prose">

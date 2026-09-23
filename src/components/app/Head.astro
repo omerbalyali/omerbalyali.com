@@ -1,7 +1,8 @@
 ---
-import { Font } from "astro:assets";
+import { Font, fontData } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 import ColorSchemeScript from "./ColorSchemeScript.astro";
+import { INTER_VARIANTS } from "../../lib/fonts";
 import type { PageMetadata } from "../../lib/seo";
 import { absoluteUrl, getImageMimeType, resolveTitle, serializeDate } from "../../lib/seo";
 import { IS_PRODUCTION_SITE, SITE } from "../../site";
@@ -36,6 +37,10 @@ const publishedIso = serializeDate(publishedTime);
 const modifiedIso = serializeDate(modifiedTime);
 const robots =
 	noindex || !IS_PRODUCTION_SITE ? "noindex, nofollow, noarchive" : "index, follow, max-image-preview:large";
+// Only the upright Latin Inter file is preloaded; fontData lists files in config order.
+const interPreloads = INTER_VARIANTS.flatMap((variant, index) =>
+	variant.preload ? (fontData["--font-inter"][index]?.src ?? []) : [],
+);
 const schemas = Array.isArray(structuredData) ? structuredData : structuredData ? [structuredData] : [];
 ---
 
@@ -61,7 +66,10 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link rel="alternate" type="application/rss+xml" title={SITE.feed.title} href={SITE.feed.path} />
 <title>{pageTitle}</title>
-<Font cssVariable="--font-inter" preload={[{ style: "normal" }]} />
+<Font cssVariable="--font-inter" />
+{interPreloads.map(({ url }) => (
+	<link rel="preload" href={url} as="font" type="font/woff2" crossorigin />
+))}
 <Font cssVariable="--font-jetbrains-mono" />
 <meta name="description" content={description} />
 <meta name="author" content={SITE.author.name} />
@@ -84,17 +92,16 @@ const schemas = Array.isArray(structuredData) ? structuredData : structuredData 
 {publishedIso && type === "article" && <meta property="article:published_time" content={publishedIso} />}
 {modifiedIso && type === "article" && <meta property="article:modified_time" content={modifiedIso} />}
 {type === "article" && tags.map((tag: string) => <meta property="article:tag" content={tag} />)}
-{schemas.map((schema) => <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />)}
-{
-	import.meta.env.PROD && (
-		<>
-			<script is:inline async src="https://plausible.io/js/pa-tvo-4wkugbTWqxuFix3DB.js" />
-			<script
-				is:inline
-				set:html={`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-plausible.init()`}
-			/>
-		</>
-	)
-}
+{schemas.map((schema) => (
+	<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+))}
+{import.meta.env.PROD && (
+	<>
+		<script is:inline async src="https://plausible.io/js/pa-tvo-4wkugbTWqxuFix3DB.js"></script>
+		<script
+			is:inline
+			set:html={`window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+plausible.init()`}></script>
+	</>
+)}
 <ClientRouter />

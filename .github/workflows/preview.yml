@@ -17,18 +17,26 @@ jobs:
     timeout-minutes: 15
     env:
       CLOUDFLARE_ENV: preview
-      SITE_URL: https://preview.omerbalyali.com
+      # Each PR gets its own Worker preview URL: <alias>-<worker name>.<account subdomain>.workers.dev.
+      PREVIEW_ALIAS: pr-${{ github.event.pull_request.number }}
+      SITE_URL: https://pr-${{ github.event.pull_request.number }}-preview-omerbalyali-com.${{ vars.CLOUDFLARE_WORKERS_SUBDOMAIN }}.workers.dev
     steps:
+      - name: Check preview configuration
+        if: vars.CLOUDFLARE_WORKERS_SUBDOMAIN == ''
+        run: |
+          echo "::error::Set the CLOUDFLARE_WORKERS_SUBDOMAIN repository variable (the <name> in <name>.workers.dev)."
+          exit 1
+
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v6
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 24
+          node-version-file: .node-version
           cache: pnpm
 
       - name: Install dependencies
@@ -36,7 +44,7 @@ jobs:
 
       - name: Cache Playwright browsers
         id: playwright-cache
-        uses: actions/cache@v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
@@ -56,10 +64,15 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-      - name: Deploy to Cloudflare preview
-        uses: cloudflare/wrangler-action@v4
+      # Uploads a version without deploying it, so PRs don't overwrite each other.
+      - name: Upload preview version
+        uses: cloudflare/wrangler-action@25853364521e0d392ece9b0c1e97a4b37b638087 # v4.1.2
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           packageManager: pnpm
-          command: deploy
+          command: versions upload --preview-alias ${{ env.PREVIEW_ALIAS }} --message "Pull request ${{ github.event.pull_request.number }}"
+
+      - name: Link the preview
+        run: |
+          echo "Preview for this PR: $SITE_URL" >> "$GITHUB_STEP_SUMMARY"

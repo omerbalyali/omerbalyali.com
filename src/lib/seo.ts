@@ -55,7 +55,7 @@ export function formatDate(value: Date | string, options?: Intl.DateTimeFormatOp
 	const date = value instanceof Date ? value : new Date(value);
 	// Content dates are calendar dates parsed as UTC midnight; format them in UTC so a build
 	// machine west of UTC doesn't show the previous day.
-	return new Intl.DateTimeFormat("en-GB", {
+	return new Intl.DateTimeFormat(SITE.formatLocale, {
 		timeZone: "UTC",
 		year: "numeric",
 		month: "long",
@@ -75,6 +75,19 @@ export function createWebsiteStructuredData() {
 		name: SITE.name,
 		description: SITE.description,
 		url: absoluteUrl("/"),
+	};
+}
+
+/** The site's author, for the home page: lets search engines connect the site and profiles. */
+export function createPersonStructuredData() {
+	return {
+		"@context": "https://schema.org",
+		"@type": "Person",
+		name: SITE.author.name,
+		jobTitle: SITE.author.jobTitle,
+		homeLocation: { "@type": "Place", name: SITE.author.location },
+		url: absoluteUrl("/"),
+		sameAs: SITE.social.map(({ url }) => url),
 	};
 }
 

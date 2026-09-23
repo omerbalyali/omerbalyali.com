@@ -18,15 +18,13 @@ const metadata = {
 	<section class="works">
 		<h1>Works</h1>
 		<ul class="works-list">
-			{
-				works.map((work) => (
-					<li>
-						<a href={`/works/${work.id}/`}>
-							<h2>{work.data.title}</h2>
-						</a>
-					</li>
-				))
-			}
+			{works.map((work) => (
+				<li>
+					<a href={`/works/${work.id}/`}>
+						<h2>{work.data.title}</h2>
+					</a>
+				</li>
+			))}
 		</ul>
 	</section>
 </Layout>

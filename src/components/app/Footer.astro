@@ -5,20 +5,14 @@ import { SITE } from "../../site";
 <footer>
 	<nav class="social" aria-label="Social">
 		<ul>
-			<li>
-				<a href="https://github.com/omerbalyali" target="_blank" rel="noopener noreferrer">GitHub</a>
-			</li>
-			<li>
-				<a href="https://linkedin.com/in/omerbalyali" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-			</li>
-			<li>
-				<a href="https://x.com/omerbalyali" target="_blank" rel="noopener noreferrer">X</a>
-			</li>
-			<li>
-				<a href="https://bsky.app/profile/omerbalyali.com" target="_blank" rel="noopener noreferrer"
-					>Bluesky</a
-				>
-			</li>
+			{SITE.social.map(({ label, url }) => (
+				<li>
+					<a href={url} target="_blank" rel="noopener noreferrer">
+						{label}
+						<span class="visually-hidden"> (opens in a new tab)</span>
+					</a>
+				</li>
+			))}
 		</ul>
 	</nav>
 
@@ -39,9 +33,7 @@ import { SITE } from "../../site";
 		</ul>
 	</nav>
 
-	<div class="copyright">
-		&copy; {new Date().getFullYear()}
-	</div>
+	<div class="copyright">&copy; {new Date().getFullYear()}</div>
 </footer>
 
 <style>
