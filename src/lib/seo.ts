@@ -53,7 +53,10 @@ export function serializeDate(value?: Date | string) {
 
 export function formatDate(value: Date | string, options?: Intl.DateTimeFormatOptions) {
 	const date = value instanceof Date ? value : new Date(value);
+	// Content dates are calendar dates parsed as UTC midnight; format them in UTC so a build
+	// machine west of UTC doesn't show the previous day.
 	return new Intl.DateTimeFormat("en-GB", {
+		timeZone: "UTC",
 		year: "numeric",
 		month: "long",
 		day: "numeric",
