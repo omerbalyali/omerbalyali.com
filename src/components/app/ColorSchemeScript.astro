@@ -17,10 +17,18 @@
 		const apply = (root = document.documentElement) => {
 			root.dataset.schemePreference = preference;
 			root.dataset.scheme = preference === "system" ? (system.matches ? "dark" : "light") : preference;
-			// A picture's media query follows the OS, not CSS color-scheme. Override
-			// only marked dark variants, preserving one accessible fallback image.
-			for (const source of root.querySelectorAll("source[data-scheme-dark]")) {
-				source.media = root.dataset.scheme === "dark" ? "all" : "not all";
+			// Scheme variants (`data-scheme-light` / `data-scheme-dark`) are elements whose
+			// `media` picks them per color scheme: <picture> sources, theme-color metas. Media
+			// queries follow the OS, not CSS color-scheme, so point them at the chosen scheme.
+			// Pictures mark only the dark source, keeping the <img> as the accessible fallback.
+			for (const variant of root.querySelectorAll("[data-scheme-light], [data-scheme-dark]")) {
+				const scheme = variant.hasAttribute("data-scheme-dark") ? "dark" : "light";
+				variant.media =
+					preference === "system"
+						? `(prefers-color-scheme: ${scheme})`
+						: root.dataset.scheme === scheme
+							? "all"
+							: "not all";
 			}
 		};
 		const notify = (persisted = true) => {
