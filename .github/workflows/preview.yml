@@ -17,8 +17,16 @@ jobs:
     timeout-minutes: 15
     env:
       CLOUDFLARE_ENV: preview
-      SITE_URL: https://preview.omerbalyali.com
+      # Each PR gets its own Worker preview URL: <alias>-<worker name>.<account subdomain>.workers.dev.
+      PREVIEW_ALIAS: pr-${{ github.event.pull_request.number }}
+      SITE_URL: https://pr-${{ github.event.pull_request.number }}-preview-omerbalyali-com.${{ vars.CLOUDFLARE_WORKERS_SUBDOMAIN }}.workers.dev
     steps:
+      - name: Check preview configuration
+        if: vars.CLOUDFLARE_WORKERS_SUBDOMAIN == ''
+        run: |
+          echo "::error::Set the CLOUDFLARE_WORKERS_SUBDOMAIN repository variable (the <name> in <name>.workers.dev)."
+          exit 1
+
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -56,10 +64,15 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      # Uploads a version without deploying it, so PRs don't overwrite each other.
       - name: Upload preview version
         uses: cloudflare/wrangler-action@4e88846969242f7752bcfdaf5511bfbb3985ca47 # v4.1.1
         with:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           packageManager: pnpm
-          command: deploy
+          command: versions upload --preview-alias ${{ env.PREVIEW_ALIAS }} --message "PR #${{ github.event.pull_request.number }}"
+
+      - name: Link the preview
+        run: |
+          echo "Preview for this PR: $SITE_URL" >> "$GITHUB_STEP_SUMMARY"
