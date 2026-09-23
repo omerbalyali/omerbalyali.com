@@ -71,7 +71,7 @@ const years = year.split(/\s*[-–]\s*/).filter(Boolean);
 
 			.year {
 				font-size: var(--t-font-size-small);
-				color: oklch(from currentColor calc(l + 0.3) c h);
+				color: color-mix(in oklch, currentColor 65%, transparent);
 			}
 
 			.description {
