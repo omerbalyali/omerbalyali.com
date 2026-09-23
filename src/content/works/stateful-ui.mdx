@@ -1,11 +1,11 @@
 ---
-layout: ../../layouts/WorkDetail.astro
 title: Stateful UI
 year: 2026
+order: 4
 description: "Stateful UI is a React component library built on Base UI and styled with Stateful CSS, a CSS methodology I am developing for managing component variants, interaction states, and design-system rules in a more predictable way. The library serves both as a practical set of accessible components and as a working example of how Stateful CSS can scale across real interface patterns."
 ---
 
-import { Image } from "astro:assets";
+import OriginalImage from "../../components/OriginalImage.astro";
 import docs from "../../assets/images/works/stateful-ui/docs.png";
 
 ## Problem
@@ -20,4 +20,4 @@ Modern React teams increasingly rely on headless or unstyled primitives for acce
 
 Stateful UI combines Base UI primitives with Stateful CSS conventions to create accessible, documented React components with predictable variants and states. Each component is designed around a clear styling contract: intent, size, shape, interaction state, and theme behavior are represented consistently across the library. The project begins with React and Base UI, with the component library acting as both a usable interface kit and a reference implementation for the underlying CSS methodology.
 
-<Image src={docs} alt="Stateful UI docs" class="card bleed" data-bleed="extra-wide" />
+<OriginalImage src={docs} alt="Stateful UI docs" class="card bleed" data-bleed="extra-wide" />

@@ -1,31 +1,33 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import { getOgImageMetadata } from "../lib/og-image";
 import type { PageMetadata } from "../lib/seo";
 import { SITE } from "../site";
 import Layout from "./Layout.astro";
 
-const { frontmatter } = Astro.props;
-const ogMetadata = frontmatter.ogImage
-	? { ogImage: frontmatter.ogImage }
-	: getOgImageMetadata(Astro.url.pathname);
+interface Props {
+	work: CollectionEntry<"works">;
+}
+
+const { work } = Astro.props;
+const { title, year, description, ogImage } = work.data;
+const ogMetadata = ogImage ? { ogImage } : getOgImageMetadata(Astro.url.pathname);
 const metadata: PageMetadata = {
-	title: frontmatter.title,
-	description: frontmatter.description ?? SITE.sections.works.description,
+	title,
+	description: description || SITE.sections.works.description,
 	canonicalURL: Astro.url.pathname,
 	noindex: true,
 	...ogMetadata,
 	type: "article",
 };
 // `year` is a single year or a range like "2025-2026"; each end gets its own valid <time>.
-const years = String(frontmatter.year ?? "")
-	.split(/\s*[-–]\s*/)
-	.filter(Boolean);
+const years = year.split(/\s*[-–]\s*/).filter(Boolean);
 ---
 
 <Layout metadata={metadata}>
 	<article>
 		<header>
-			<h1>{frontmatter.title}</h1>
+			<h1>{title}</h1>
 			{
 				years.length > 0 && (
 					<p class="year">
@@ -38,7 +40,7 @@ const years = String(frontmatter.year ?? "")
 					</p>
 				)
 			}
-			<p class="description">{frontmatter.description}</p>
+			<p class="description">{description}</p>
 		</header>
 		<section class="content prose">
 			<slot />

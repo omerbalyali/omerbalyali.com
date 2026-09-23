@@ -1,26 +1,10 @@
 ---
+import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { getOgImageMetadata } from "../../lib/og-image";
 import { SITE } from "../../site";
 
-const works = [
-	{
-		slug: "stateful-css",
-		title: "Stateful CSS",
-	},
-	{
-		slug: "isometry",
-		title: "Isometry",
-	},
-	{
-		slug: "keepspace",
-		title: "Keepspace",
-	},
-	{
-		slug: "stateful-ui",
-		title: "Stateful UI",
-	},
-];
+const works = (await getCollection("works")).sort((a, b) => a.data.order - b.data.order);
 
 const metadata = {
 	title: SITE.sections.works.title,
@@ -37,8 +21,8 @@ const metadata = {
 			{
 				works.map((work) => (
 					<li>
-						<a href={`/works/${work.slug}/`}>
-							<h2>{work.title}</h2>
+						<a href={`/works/${work.id}/`}>
+							<h2>{work.data.title}</h2>
 						</a>
 					</li>
 				))

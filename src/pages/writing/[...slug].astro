@@ -1,11 +1,10 @@
 ---
-import { getCollection, render, type CollectionEntry } from "astro:content";
+import { render } from "astro:content";
 import ProseLayout from "../../layouts/ProseLayout.astro";
+import { getPublishedPosts, type Post } from "../../lib/writing";
 
 export async function getStaticPaths() {
-	const posts = await getCollection("writing", ({ data }) => {
-		return import.meta.env.PROD ? data.draft !== true : true;
-	});
+	const posts = await getPublishedPosts();
 
 	return [
 		{
@@ -19,7 +18,7 @@ export async function getStaticPaths() {
 	];
 }
 
-type Props = { post: CollectionEntry<"writing"> } | { redirectTo: string };
+type Props = { post: Post } | { redirectTo: string };
 
 const props = Astro.props as Props;
 

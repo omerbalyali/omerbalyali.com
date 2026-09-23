@@ -1,11 +1,11 @@
 ---
-layout: ../../layouts/WorkDetail.astro
 title: Isometry
 year: 2026
+order: 2
 description: "A contract layer for design systems: machine-readable component specs that describe behavior, accessibility, structure, and styling constraints so UI can be generated and validated across codebases, tools, and AI workflows."
 ---
 
-import { Image } from "astro:assets";
+import OriginalImage from "../../components/OriginalImage.astro";
 import aiNative from "../../assets/images/works/isometry/ai-native.png";
 import cli from "../../assets/images/works/isometry/cli.png";
 import website from "../../assets/images/works/isometry/website.png";
@@ -16,7 +16,7 @@ Isometry is a design-infrastructure project for teams whose component libraries 
 
 The project started as a product and specification concept, then became a small AI-assisted MVP with a working CLI validator. The MVP reads `.isometry.yaml` contracts and checks real component CSS and TSX files for rules such as visible focus states, disabled handling, ARIA attributes, and forbidden declarations.
 
-<Image src={website} alt="Isometry website" class="card bleed" data-bleed="extra-wide" />
+<OriginalImage src={website} alt="Isometry website" class="card bleed" data-bleed="extra-wide" />
 
 <div class="highlight" data-size="large">
 	A component contract that design can review, code can validate, and AI can follow.
@@ -174,7 +174,7 @@ This is intentionally practical. The validator does not need to understand every
 
 The long-term value is not only validation. The spec becomes the narrow interface between human intent and AI-generated code.
 
-<Image src={aiNative} alt="AI-Native workflow diagram" class="card bleed" data-bleed="extra-wide" />
+<OriginalImage src={aiNative} alt="AI-Native workflow diagram" class="card bleed" data-bleed="extra-wide" />
 
 Without a spec, AI tools infer component standards from nearby files and prose instructions. With Isometry, they can read structured requirements, generate against them, and run the same validator that developers use locally and in CI.
 
@@ -193,7 +193,7 @@ Isometry is designed for the space between design and engineering, where quality
 
 The same contract can support multiple surfaces: local CLI validation, CI annotations, generated documentation, test scaffolds, registry governance, Figma review, and MCP tools for agentic workflows.
 
-<Image src={cli} alt="CLI commands" class="card bleed" data-bleed="extra-wide" />
+<OriginalImage src={cli} alt="CLI commands" class="card bleed" data-bleed="extra-wide" />
 
 ## Decisions And Tradeoffs
 

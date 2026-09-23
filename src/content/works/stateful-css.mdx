@@ -1,11 +1,11 @@
 ---
-layout: ../../layouts/WorkDetail.astro
 title: Stateful CSS
 year: 2025-2026
+order: 1
 description: "A design-system CSS methodology for building accessible, maintainable components whose interface behavior and affordances are derived from declared markup state instead of duplicated class state."
 ---
 
-import { Image } from "astro:assets";
+import OriginalImage from "../../components/OriginalImage.astro";
 import website from "../../assets/images/works/statefulcss/website.png";
 
 ## Problem
@@ -35,7 +35,7 @@ The bug risk is not the syntax. The risk is that styling has its own parallel st
 	ARIA, and data attributes already present in the DOM.
 </div>
 
-<Image src={website} alt="Stateful CSS website" class="card bleed" data-bleed="extra-wide" />
+<OriginalImage src={website} alt="Stateful CSS website" class="card bleed" data-bleed="extra-wide" />
 
 ## Method
 
