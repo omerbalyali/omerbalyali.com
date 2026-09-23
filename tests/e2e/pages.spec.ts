@@ -68,6 +68,23 @@ test.describe("page smoke", () => {
 		});
 	}
 
+	test.describe("on a phone-sized viewport", () => {
+		test.use({ viewport: { width: 375, height: 812 } });
+
+		for (const route of [...routes, ...workDetailRoutes]) {
+			test(`${route} does not scroll horizontally`, async ({ page }) => {
+				await page.goto(route);
+
+				// Wide content (e.g. long code lines) must scroll inside its own box, not widen the page.
+				const { scrollWidth, clientWidth } = await page.evaluate(() => ({
+					scrollWidth: document.documentElement.scrollWidth,
+					clientWidth: document.documentElement.clientWidth,
+				}));
+				expect(scrollWidth).toBeLessThanOrEqual(clientWidth);
+			});
+		}
+	});
+
 	test("unknown paths serve the 404 page with a 404 status", async ({ page }) => {
 		const response = await page.goto(missingRoute);
 
