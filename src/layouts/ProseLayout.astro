@@ -18,6 +18,7 @@ const metadata: PageMetadata = {
 	title: post.data.title,
 	description: post.data.description,
 	canonicalURL,
+	noindex: post.data.unlisted,
 	...ogMetadata,
 	type: "article",
 	publishedTime: post.data.pubDate,
