@@ -6,6 +6,7 @@ import { Features } from "lightningcss";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
+import csp from "./integrations/csp";
 import { markdownConfig, markdownProcessorConfig } from "./markdown.config";
 
 // https://astro.build/config
@@ -66,6 +67,7 @@ export default defineConfig({
 	integrations: [
 		mdx(),
 		sitemap({ filter: shouldIncludeInSitemap }),
+		csp({ thirdPartyOrigins: ["https://plausible.io"] }),
 		// Import the global stylesheet at page level rather than from a component: Astro emits
 		// page-level CSS before any layout's or component's own styles, so the cascade layer
 		// order declared in index.css always comes first.
