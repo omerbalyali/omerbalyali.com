@@ -9,13 +9,13 @@ describe("seo helpers", () => {
 		});
 
 		it("appends the site name to a page title", () => {
-			expect(resolveTitle("About")).toBe(`About | ${SITE.name}`);
+			expect(resolveTitle("Works")).toBe(`Works | ${SITE.name}`);
 		});
 	});
 
 	describe("absoluteUrl", () => {
 		it("resolves a relative path against the site origin", () => {
-			expect(absoluteUrl("/about/")).toBe(`${SITE.url}/about/`);
+			expect(absoluteUrl("/works/")).toBe(`${SITE.url}/works/`);
 		});
 
 		it("returns the input when it is already an absolute URL", () => {

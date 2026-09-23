@@ -14,10 +14,6 @@ export const SITE = {
 		name: "Ömer Balyalı",
 	},
 	sections: {
-		about: {
-			title: "About",
-			description: "Ömer Balyalı is a design engineer based in Berlin, Germany.",
-		},
 		works: {
 			title: "Works",
 			description: "Selected works by Ömer Balyalı.",

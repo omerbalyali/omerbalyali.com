@@ -5,7 +5,7 @@ const SITE_URL = process.env.SITE_URL ?? "https://omerbalyali.com";
 
 const expectedTitles = new Map([
 	["/", "Ömer Balyalı"],
-	["/about/", "About | Ömer Balyalı"],
+	["/works/", "Works | Ömer Balyalı"],
 ]);
 
 test.describe("page smoke", () => {
