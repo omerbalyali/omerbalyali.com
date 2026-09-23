@@ -97,6 +97,21 @@
 		margin-block: 1lh;
 	}
 
+	.highlight {
+		margin-block: 1.5lh;
+		padding-inline-start: var(--t-space-6);
+		border-inline-start: var(--t-border-width-base) solid var(--t-color-brand-primary);
+		font-size: var(--t-font-size-large);
+		font-weight: var(--t-font-weight-semibold);
+		line-height: var(--t-font-line-height-tight);
+		letter-spacing: var(--t-font-letter-spacing-tight);
+		text-wrap: balance;
+
+		&[data-size="large"] {
+			font-size: var(--t-font-size-xlarge);
+		}
+	}
+
 	details {
 		& > summary {
 			font-weight: var(--t-font-weight-semibold);
