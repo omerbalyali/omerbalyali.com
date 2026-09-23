@@ -1,4 +1,5 @@
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { resolve as resolvePath } from "node:path";
@@ -10,14 +11,24 @@ import { OG_SIZES, type OgSize } from "./og-image";
 export { OG_SIZES, type OgSize };
 export type OgVariant = "page" | "default";
 
-const COLORS = {
-	background: "#ffffff",
-	foreground: "#1b1b1b",
-	muted: "#555555",
-} as const;
+const COLORS = SITE.colors.og;
 
-const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M128 64c35.35 0 64 28.65 64 64h64C256 57.31 198.69 0 128 0S0 57.31 0 128h64c0-35.35 28.65-64 64-64Z" fill="${COLORS.foreground}"/><circle cx="128" cy="192" r="64" fill="${COLORS.foreground}"/></svg>`;
+// The logomark comes from the base theme's --t-app-brand-logomark token (the SVG the header
+// uses as a mask), so there is one source for the mark. Filled here with the OG text color.
+const THEME_APP_CSS = "src/styles/themes/base/app.css";
+const LOGO_SVG = readLogomarkFromTheme().replace("<svg ", `<svg fill="${COLORS.foreground}" `);
 const LOGO_DATA_URI = `data:image/svg+xml;utf8,${encodeURIComponent(LOGO_SVG)}`;
+
+function readLogomarkFromTheme(): string {
+	const css = readFileSync(resolvePath(process.cwd(), THEME_APP_CSS), "utf8");
+	const token = css.match(
+		/--t-app-brand-logomark:\s*url\((["'])data:image\/svg\+xml[^,]*,(<svg[\s\S]*?<\/svg>)\1\)/,
+	);
+	if (!token) {
+		throw new Error(`Couldn't read an inline SVG from --t-app-brand-logomark in ${THEME_APP_CSS}.`);
+	}
+	return decodeURIComponent(token[2]);
+}
 
 const HOST = SITE.url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
