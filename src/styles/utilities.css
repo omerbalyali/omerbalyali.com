@@ -1,13 +1,3 @@
-/* stylelint-disable custom-property-pattern */
-
-.app-container {
-	margin-inline: var(--t-app-container-gutter-inline);
-}
-
-.app-container-padded {
-	padding-inline: var(--t-app-container-gutter-inline);
-}
-
 .visually-hidden {
 	border: 0;
 	clip-path: inset(50%);

@@ -1,25 +1,23 @@
 import { initWasm, Resvg } from "@resvg/resvg-wasm";
+import { readFileSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { resolve as resolvePath } from "node:path";
 import satori from "satori";
 import { SITE } from "../site";
 
-export const OG_SIZES = {
-	wide: { width: 1200, height: 630 },
-	square: { width: 600, height: 600 },
-} as const;
+import { OG_SIZES, type OgSize } from "./og-image";
 
-export type OgSize = keyof typeof OG_SIZES;
+export { OG_SIZES, type OgSize };
 export type OgVariant = "page" | "default";
 
-const COLORS = {
-	background: "#ffffff",
-	foreground: "#1b1b1b",
-	muted: "#555555",
-} as const;
+const COLORS = SITE.colors.og;
 
-const LOGO_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M128 64c35.35 0 64 28.65 64 64h64C256 57.31 198.69 0 128 0S0 57.31 0 128h64c0-35.35 28.65-64 64-64Z" fill="${COLORS.foreground}"/><circle cx="128" cy="192" r="64" fill="${COLORS.foreground}"/></svg>`;
+// Same logomark file the site header uses as a mask, filled here with the OG text color.
+const LOGO_SVG = readFileSync(resolvePath(process.cwd(), "src/assets/brand/logomark.svg"), "utf8").replace(
+	"<svg ",
+	`<svg fill="${COLORS.foreground}" `,
+);
 const LOGO_DATA_URI = `data:image/svg+xml;utf8,${encodeURIComponent(LOGO_SVG)}`;
 
 const HOST = SITE.url.replace(/^https?:\/\//, "").replace(/\/$/, "");
@@ -81,14 +79,14 @@ export async function renderOgImage(options: RenderOptions): Promise<Uint8Array>
 	return new Resvg(svg, { fitTo: { mode: "width", value: width } }).render().asPng();
 }
 
-function logoImg(size: number, iconOffsetX = 0) {
+function logoImg(size: number, logoOffsetY = 0) {
 	return {
 		type: "img",
 		props: {
 			src: LOGO_DATA_URI,
 			width: size,
 			height: size,
-			style: { display: "block", marginTop: iconOffsetX },
+			style: { display: "block", marginTop: logoOffsetY },
 		},
 	};
 }
@@ -100,10 +98,10 @@ interface WordmarkOptions {
 	logoSize: number;
 	nameSize: number;
 	gap: number;
-	iconOffsetX?: number;
+	logoOffsetY?: number;
 }
 
-function wordmark({ orientation, logoSize, nameSize, gap, iconOffsetX = 0 }: WordmarkOptions): Node {
+function wordmark({ orientation, logoSize, nameSize, gap, logoOffsetY = 0 }: WordmarkOptions): Node {
 	return {
 		type: "div",
 		props: {
@@ -114,7 +112,7 @@ function wordmark({ orientation, logoSize, nameSize, gap, iconOffsetX = 0 }: Wor
 				gap,
 			},
 			children: [
-				logoImg(logoSize, iconOffsetX),
+				logoImg(logoSize, logoOffsetY),
 				{
 					type: "div",
 					props: {
@@ -251,7 +249,7 @@ function buildPageLayout({ title, size }: { title: string; size: OgSize }): Node
 						children: title,
 					},
 				},
-			].filter(Boolean),
+			],
 		},
 	};
 
@@ -264,7 +262,7 @@ function buildPageLayout({ title, size }: { title: string; size: OgSize }): Node
 			logoSize: isSquare ? 34 : 38,
 			nameSize: isSquare ? 36 : 40,
 			gap: isSquare ? 18 : 20,
-			iconOffsetX: isSquare ? -6 : -6,
+			logoOffsetY: -6,
 		}),
 		middle: titleStack,
 		bottom: urlBlock(isSquare ? 27 : 30),
@@ -284,7 +282,7 @@ function buildDefaultLayout(size: OgSize): Node {
 			orientation: "column",
 			logoSize: isSquare ? 60 : 72,
 			nameSize: isSquare ? 60 : 72,
-			gap: isSquare ? 40 : 40,
+			gap: 40,
 		}),
 		bottom: urlBlock(isSquare ? 27 : 32),
 	});

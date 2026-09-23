@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { absoluteUrl, formatDate, resolveTitle, serializeDate } from "../../src/lib/seo";
+import { absoluteUrl, formatDate, getImageMimeType, resolveTitle, serializeDate } from "../../src/lib/seo";
 import { SITE } from "../../src/site";
 
 describe("seo helpers", () => {
@@ -9,18 +9,30 @@ describe("seo helpers", () => {
 		});
 
 		it("appends the site name to a page title", () => {
-			expect(resolveTitle("About")).toBe(`About | ${SITE.name}`);
+			expect(resolveTitle("Works")).toBe(`Works | ${SITE.name}`);
 		});
 	});
 
 	describe("absoluteUrl", () => {
 		it("resolves a relative path against the site origin", () => {
-			expect(absoluteUrl("/about/")).toBe(`${SITE.url}/about/`);
+			expect(absoluteUrl("/works/")).toBe(`${SITE.url}/works/`);
 		});
 
 		it("returns the input when it is already an absolute URL", () => {
 			const url = new URL("https://example.com/foo");
 			expect(absoluteUrl(url)).toBe("https://example.com/foo");
+		});
+	});
+
+	describe("getImageMimeType", () => {
+		it("maps common image extensions to their MIME type", () => {
+			expect(getImageMimeType("/og/wide/default.png")).toBe("image/png");
+			expect(getImageMimeType("https://example.com/cover.JPG?v=2")).toBe("image/jpeg");
+		});
+
+		it("returns undefined for unknown or missing extensions", () => {
+			expect(getImageMimeType("/og/wide/default")).toBeUndefined();
+			expect(getImageMimeType("/image.bmp")).toBeUndefined();
 		});
 	});
 

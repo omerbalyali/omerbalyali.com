@@ -1,0 +1,100 @@
+---
+import { type CollectionEntry } from "astro:content";
+import { getOgImageMetadata } from "../lib/og-image";
+import type { PageMetadata } from "../lib/seo";
+import { createBlogPostingStructuredData, formatDate, getWritingPath } from "../lib/seo";
+import Layout from "./Layout.astro";
+
+interface Props {
+	post: CollectionEntry<"writing">;
+	minutesRead: string;
+}
+
+const { post, minutesRead } = Astro.props as Props;
+
+const canonicalURL = post.data.canonicalURL ?? getWritingPath(post.id);
+const ogMetadata = post.data.ogImage ? { ogImage: post.data.ogImage } : getOgImageMetadata(canonicalURL);
+const metadata: PageMetadata = {
+	title: post.data.title,
+	description: post.data.description,
+	canonicalURL,
+	noindex: post.data.unlisted,
+	...ogMetadata,
+	type: "article",
+	publishedTime: post.data.pubDate,
+	modifiedTime: post.data.updatedDate,
+	tags: post.data.tags,
+	structuredData: createBlogPostingStructuredData({
+		title: post.data.title,
+		description: post.data.description,
+		path: canonicalURL,
+		imagePath: ogMetadata.ogImage,
+		publishedTime: post.data.pubDate,
+		modifiedTime: post.data.updatedDate,
+		tags: post.data.tags,
+	}),
+};
+---
+
+<Layout metadata={metadata}>
+	<article class="container">
+		<header>
+			{post.data.series && <p>Series: {post.data.series}</p>}
+			<h1>{post.data.title}</h1>
+			<div class="meta-info">
+				<time
+					datetime={post.data.pubDate.toISOString()}
+					title={post.data.updatedDate ? `Updated ${formatDate(post.data.updatedDate)}` : undefined}
+					>{formatDate(post.data.pubDate)}</time
+				>
+				<span class="reading-time">{minutesRead}</span>
+			</div>
+		</header>
+
+		<section class="prose">
+			<slot />
+		</section>
+	</article>
+</Layout>
+
+<style>
+	@layer components {
+		.container {
+			inline-size: 100%;
+			max-width: 56rem;
+			margin-inline: auto;
+			font-size: var(--t-font-size-medium);
+		}
+
+		header {
+			display: flex;
+			flex-direction: column;
+			gap: var(--t-space-6);
+			margin-block-end: var(--t-space-12);
+		}
+
+		h1 {
+			font-size: var(--t-font-size-4xlarge);
+			font-weight: var(--t-font-weight-bold);
+			line-height: var(--t-font-line-height-tighter);
+			text-align: center;
+			text-wrap: balance;
+		}
+
+		.meta-info {
+			display: flex;
+			gap: var(--t-space-3);
+			justify-content: center;
+			align-items: center;
+			font-size: var(--t-font-size-base);
+			font-weight: var(--t-font-weight-medium);
+			color: color-mix(in oklch, currentColor 75%, transparent);
+
+			.reading-time::before {
+				content: "•";
+				margin-inline-end: var(--t-space-3);
+				color: color-mix(in oklch, currentColor 70%, transparent);
+			}
+		}
+	}
+</style>

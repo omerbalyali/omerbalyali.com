@@ -1,0 +1,223 @@
+/* stylelint-disable property-no-vendor-prefix */
+
+/* Box model and browser-authored outer spacing. */
+
+*,
+*::before,
+*::after,
+::backdrop,
+::file-selector-button {
+	box-sizing: border-box;
+	margin: 0;
+}
+
+/* Restore the UA centering that the universal margin reset just removed. */
+
+:where(dialog, [popover]) {
+	margin: auto;
+}
+
+/* Stop iOS/Android Safari from inflating text in landscape; set a sane tab width. */
+
+html {
+	-webkit-text-size-adjust: 100%;
+	text-size-adjust: 100%;
+	tab-size: 4;
+}
+
+/* Keep short pages at least as tall as the dynamic viewport. */
+
+body {
+	min-block-size: 100svh;
+}
+
+/*
+ * Media
+ *
+ * Replaced and embedded elements become block-level so they stop reserving
+ * descender space and sit where the layout puts them. To place an icon
+ * inline, opt back in per component: `display: inline-block; vertical-align: middle;`.
+ */
+
+:where(img, svg, video, canvas, audio, iframe, embed, object) {
+	display: block;
+}
+
+/* Never let visual media overflow its container. */
+
+:where(img, picture, video, canvas, svg, iframe) {
+	max-inline-size: 100%;
+}
+
+/* Keep the intrinsic ratio when width/height attributes are constrained by max-inline-size. */
+
+:where(img, video) {
+	block-size: auto;
+}
+
+/* No default frame around embedded documents. */
+
+:where(iframe) {
+	border: 0;
+}
+
+/* Tables */
+
+:where(table) {
+	border-collapse: collapse;
+	border-color: inherit;
+	border-spacing: 0;
+	text-indent: 0;
+}
+
+:where(th) {
+	text-align: inherit;
+}
+
+/*
+ * Forms
+ *
+ * Controls inherit surrounding typography before component styling. Native
+ * appearance is left alone: modern UA sheets already give buttons, submit
+ * inputs and the file-selector button `appearance: auto`, so forcing the
+ * legacy `button` compat value is a no-op in the target range.
+ */
+
+:where(button, input, optgroup, select, textarea),
+::file-selector-button {
+	color: inherit;
+	font: inherit;
+	font-feature-settings: inherit;
+	font-variation-settings: inherit;
+	letter-spacing: inherit;
+}
+
+/* Firefox inherits text-transform into select/button labels; Chrome does not. */
+
+:where(button, select) {
+	text-transform: none;
+}
+
+/* Drop default fieldset chrome and allow it to shrink inside flex/grid tracks. */
+
+:where(fieldset) {
+	border: 0;
+	padding: 0;
+	min-inline-size: 0;
+}
+
+:where(legend) {
+	padding: 0;
+}
+
+/* Horizontal textarea resizing breaks layouts; keep the vertical handle. */
+
+:where(textarea) {
+	resize: vertical;
+}
+
+/* Do not let an inherited overflow-wrap (e.g. from body) wrap native select text in Safari. */
+
+:where(select) {
+	overflow-wrap: normal;
+}
+
+/* Normalize the gap between the file button and its filename across browsers. */
+
+::file-selector-button {
+	margin-inline-end: 0.25rem;
+}
+
+/* Render search inputs as plain text fields instead of Safari's pill shape. */
+
+:where(input[type="search"]) {
+	-webkit-appearance: textfield;
+	appearance: textfield;
+}
+
+::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
+
+/* Prevent WebKit spin buttons from stretching the control or changing the cursor. */
+
+::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+	block-size: auto;
+}
+
+/* WebKit date/time internals: stop empty inputs collapsing and heights jumping on focus. */
+
+::-webkit-date-and-time-value {
+	min-block-size: 1lh;
+	text-align: inherit;
+}
+
+::-webkit-datetime-edit {
+	display: inline-flex;
+}
+
+::-webkit-datetime-edit-fields-wrapper {
+	padding: 0;
+}
+
+::-webkit-datetime-edit,
+::-webkit-datetime-edit-year-field,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-minute-field,
+::-webkit-datetime-edit-second-field,
+::-webkit-datetime-edit-millisecond-field,
+::-webkit-datetime-edit-meridiem-field {
+	padding-block: 0;
+}
+
+::-webkit-calendar-picker-indicator {
+	line-height: 1;
+}
+
+/* Firefox adds a red glow to invalid controls before the user has interacted. */
+
+:-moz-ui-invalid {
+	box-shadow: none;
+}
+
+/*
+ * Placeholders: Firefox uses opacity, Chrome/Safari use a fixed gray. Set both
+ * so the result is the same everywhere and still tracks the current text color.
+ */
+
+::placeholder {
+	color: color-mix(in oklab, currentColor 50%, transparent);
+	opacity: 1;
+}
+
+/* Interaction */
+
+/* Remove the double-tap zoom delay on interactive controls on touch devices. */
+
+:where(a, button, input, label, select, summary, textarea, [role="button"]) {
+	touch-action: manipulation;
+}
+
+/* Signal disabled state without forcing an opacity/color decision. */
+
+:where(:disabled, [aria-disabled="true"]) {
+	cursor: not-allowed;
+}
+
+:where(progress) {
+	vertical-align: baseline;
+}
+
+:where(summary) {
+	cursor: pointer;
+	display: list-item;
+}
+
+/* Keep hidden authoritative while preserving hidden="until-found". */
+
+:where([hidden]:not([hidden="until-found"])) {
+	display: none !important;
+}

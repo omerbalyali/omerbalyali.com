@@ -20,7 +20,7 @@ type HastElement = {
 	tagName: string;
 	properties: {
 		class?: string | string[];
-		className?: string | string[];
+		className?: string[];
 		[key: string]: string | number | boolean | (string | number)[] | null | undefined;
 	};
 	children: HastElementContent[];
@@ -95,6 +95,31 @@ function transformerWrapCodeLines(): ShikiTransformer {
 	};
 }
 
+// github-light's orange (#E36209, used for CSS custom properties) is 3.5:1 on white, below WCAG AA.
+// Swap in GitHub Primer's darker orange (#BC4C00, 5:1). Only the light `color:` is touched; dark
+// colors live in `--shiki-dark` and are left alone.
+const lightThemeColorReplacements: Record<string, string> = {
+	"#e36209": "#bc4c00",
+};
+
+function transformerAccessibleLightColors(): ShikiTransformer {
+	return {
+		name: "accessible-light-colors",
+		span(node) {
+			const { style } = node.properties;
+			if (typeof style !== "string") return;
+
+			node.properties.style = style.replace(
+				/(^|;)color:(#[0-9a-f]{6})/gi,
+				(match, prefix: string, hex: string) => {
+					const replacement = lightThemeColorReplacements[hex.toLowerCase()];
+					return replacement ? `${prefix}color:${replacement}` : match;
+				},
+			);
+		},
+	};
+}
+
 export const markdownConfig = {
 	shikiConfig: {
 		themes: {
@@ -107,6 +132,7 @@ export const markdownConfig = {
 			transformerNotationFocus(),
 			transformerNotationHighlight(),
 			transformerCodeExampleMeta(),
+			transformerAccessibleLightColors(),
 			transformerRemoveLineBreak(),
 			transformerWrapCodeLines(),
 		],

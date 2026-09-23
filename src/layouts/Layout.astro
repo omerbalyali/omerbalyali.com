@@ -2,7 +2,6 @@
 import Footer from "../components/app/Footer.astro";
 import Head from "../components/app/Head.astro";
 import Header from "../components/app/Header.astro";
-import NavBar from "../components/app/NavBar.astro";
 import type { PageMetadata } from "../lib/seo";
 
 interface Props {
@@ -19,31 +18,22 @@ const { lang = "en", metadata } = Astro.props as Props;
 		<Head {...metadata} />
 	</head>
 	<body>
-		<div class="layout">
-			<Header />
-			<main id="main-content" class="page app-container-padded">
-				<slot />
-			</main>
-			<NavBar />
-		</div>
+		<Header />
+		<main id="main-content">
+			<slot />
+		</main>
 		<Footer />
 	</body>
 </html>
 
 <style>
-	.layout {
-		min-height: 100vh;
+	main {
 		display: flex;
 		flex-direction: column;
-		background-color: var(--t-color-background-page);
-	}
-
-	.page {
-		flex-grow: 1;
-		position: relative;
-		z-index: 1;
-		padding-block: var(--t-space-16);
-		background-color: var(--t-color-background-page);
-		border-block: var(--t-border-thin) solid var(--t-color-border-primary);
+		gap: var(--t-space-18);
+		min-height: 100dvh;
+		padding-block-start: var(--t-app-gutter);
+		padding-inline: var(--t-app-gutter);
+		background-color: var(--t-color-background-root);
 	}
 </style>

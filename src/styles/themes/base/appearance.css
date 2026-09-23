@@ -1,0 +1,13 @@
+[data-theme] {
+	--t-border-width-thin: 1px;
+	--t-border-width-base: 2px;
+	--t-border-style-base: solid;
+
+	--t-radius-none: 0;
+	--t-radius-small: 0.25rem;
+	--t-radius-medium: 0.5rem;
+	--t-radius-large: 0.75rem;
+	--t-radius-xlarge: 1rem;
+	--t-radius-2xlarge: 1.5rem;
+	--t-radius-full: 9999px;
+}

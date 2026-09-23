@@ -1,0 +1,204 @@
+---
+title: Isometry
+year: 2026
+order: 2
+description: "A contract layer for design systems: machine-readable component specs that describe behavior, accessibility, structure, and styling constraints so UI can be generated and validated across codebases, tools, and AI workflows."
+---
+
+import OriginalImage from "../../components/OriginalImage.astro";
+import aiNative from "../../assets/images/works/isometry/ai-native.png";
+import cli from "../../assets/images/works/isometry/cli.png";
+import website from "../../assets/images/works/isometry/website.png";
+
+## Overview
+
+Isometry is a design-infrastructure project for teams whose component libraries need to stay consistent across product surfaces, frameworks, contributors, and AI tools. The core idea is simple: a component should have a machine-readable contract that describes how it behaves, which states it supports, what accessibility guarantees it must satisfy, what structure it exposes, and which styling constraints keep it aligned with the system.
+
+The project started as a product and specification concept, then became a small AI-assisted MVP with a working CLI validator. The MVP reads `.isometry.yaml` contracts and checks real component CSS and TSX files for rules such as visible focus states, disabled handling, ARIA attributes, and forbidden declarations.
+
+<OriginalImage src={website} alt="Isometry website" class="card bleed" data-bleed="extra-wide" />
+
+<div class="highlight" data-size="large">
+	A component contract that design can review, code can validate, and AI can follow.
+</div>
+
+## Problem
+
+Design systems often depend on documentation, conventions, and review culture to keep quality high. That works until the system becomes too large for one person to hold in their head. Components drift, variants lose states, focus treatment changes by team, and accessibility requirements are caught late because they live in prose instead of tooling.
+
+AI-assisted development makes this more urgent. An AI can generate a button quickly, but without a contract it still guesses the important details: keyboard behavior, ARIA state, token usage, forbidden CSS, slot structure, and edge states.
+
+The question behind Isometry is:
+
+> What would an interface contract look like if UI components were as explicit as APIs?
+
+## The Contract
+
+An Isometry spec is organized around a small set of sections: component identity, behavior, accessibility, structure, presentation, and API. Behavior comes first because state and interaction define what the component must communicate.
+
+```yaml
+version: isometry/v0.2
+
+component:
+  name: Button
+  version: 1.0.0
+  traits:
+    - button
+
+behavior:
+  states:
+    - idle
+    - hover
+    - focus
+    - disabled
+    - loading
+  transitions:
+    - from: idle
+      to: hover
+      on: pointer.enter
+
+accessibility:
+  role: button
+  keyboard:
+    - key: [Enter, Space]
+      action: activate
+  aria:
+    - when: state.disabled
+      set: { aria-disabled: "true" }
+    - when: state.loading
+      set: { aria-busy: "true" }
+
+structure:
+  element: button
+  slots:
+    - name: label
+      required: true
+    - name: leading-icon
+      optional: true
+
+presentation:
+  adapter: stateful-css
+  rules:
+    - when: state.focus
+      require: focus.visible
+    - when: state.disabled
+      forbid: pointer.interaction
+
+api:
+  props:
+    loading:
+      type: boolean
+      reflects: state.loading
+```
+
+This creates a shared artifact that designers can review as intent, engineers can validate against implementation, CI can enforce, and AI tools can use as structured context.
+
+## MVP: Validate Real Code
+
+For the MVP, I focused on the smallest loop that proves the idea: a local CLI reads a component contract and validates actual implementation files.
+
+```yaml lineNumbers
+version: isometry/v0.2
+
+component:
+  name: Button
+  version: 1.0.0
+  traits:
+    - button
+
+behavior:
+  states:
+    - idle
+    - hover
+    - focus
+    - disabled
+    - loading
+  transitions:
+    - from: idle
+      to: hover
+      on: pointer.enter
+
+accessibility:
+  role: button
+  wcag:
+    - id: "2.1.1"
+      name: Keyboard
+    - id: "2.4.7"
+      name: Focus Visible
+    - id: "4.1.2"
+      name: Name, Role, Value
+  keyboard:
+    - key: [Enter, Space]
+      action: activate
+      validate: documentation
+  aria:
+    - when: state.loading
+      set: { aria-busy: "true" }
+      validate: tsx
+
+presentation:
+  adapter: stateful-css
+  rules:
+    - id: focus-visible
+      when: state.focus
+      selector: ".root:focus-visible"
+      declarations:
+        anyProperty: [outline, outline-width, box-shadow]
+        forbidValues: ["none", "0", "0px"]
+      severity: error
+    - id: no-outline-removal
+      pattern: "outline: none"
+      scope: css.declaration
+      severity: error
+
+implementation:
+  css:
+    - "./Button.module.css"
+  tsx: "./Button.tsx"
+```
+
+```bash
+$ isometry validate Button
+
+Validating Button.isometry.yaml
+
+✓ structure        12 checks passed
+✓ states           5 checks passed
+✓ accessibility    6 checks passed
+✓ presentation     5 checks passed
+```
+
+This is intentionally practical. The validator does not need to understand every possible UI rule before it becomes useful. Even a focused contract can prevent common regressions: `outline: none`, missing `aria-busy`, loading states that still accept interaction, or a focus state that is documented but not implemented.
+
+## AI-Native Workflow
+
+The long-term value is not only validation. The spec becomes the narrow interface between human intent and AI-generated code.
+
+<OriginalImage src={aiNative} alt="AI-Native workflow diagram" class="card bleed" data-bleed="extra-wide" />
+
+Without a spec, AI tools infer component standards from nearby files and prose instructions. With Isometry, they can read structured requirements, generate against them, and run the same validator that developers use locally and in CI.
+
+<div class="highlight" data-size="large">
+	Structured intent in, validated implementation out.
+</div>
+
+## Design Infrastructure Angle
+
+Isometry is designed for the space between design and engineering, where quality gaps usually appear:
+
+- Designers need a way to express component intent beyond static variants.
+- Engineers need enforceable rules that fit normal workflows.
+- Design-system teams need reusable traits, migration paths, and CI visibility.
+- AI tools need structured context and objective feedback.
+
+The same contract can support multiple surfaces: local CLI validation, CI annotations, generated documentation, test scaffolds, registry governance, Figma review, and MCP tools for agentic workflows.
+
+<OriginalImage src={cli} alt="CLI commands" class="card bleed" data-bleed="extra-wide" />
+
+## Decisions And Tradeoffs
+
+I chose YAML because it is readable, diffable, familiar, and easy for humans and machines to produce. I chose practical integration points like CLI, JSON Schema, SARIF, LSP, and MCP because design infrastructure only works if it fits the tools teams already use.
+
+The tradeoff is scope. A full UI contract standard can become too abstract if it tries to model everything. The MVP keeps the feedback loop grounded: write a small contract, validate a real component, catch a real issue. From there, richer generation, trait composition, and design-tool integrations can grow without losing the practical center.
+
+This project pairs directly with Stateful CSS. Stateful CSS defines how component state maps to styling. Isometry defines the contract that says which states, accessibility rules, tokens, and implementation constraints must exist in the first place.

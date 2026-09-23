@@ -41,9 +41,13 @@ pnpm run build       # Build the site
 pnpm run preview     # Preview the built site locally
 pnpm run test        # Build, unit tests, and Playwright tests
 pnpm run test:unit   # Unit tests only
-pnpm run test:e2e    # Main Playwright smoke/behavior tests
+pnpm run test:e2e    # All Playwright tests (smoke, behavior, and accessibility)
 pnpm run test:a11y   # Playwright accessibility checks
 ```
+
+## Browser Support
+
+The site targets current evergreen browsers with Safari 17 / iOS 17 as the baseline. CSS is compiled with Lightning CSS for that target (see `vite.css.lightningcss.targets` in `astro.config.ts`).
 
 ## Testing
 
@@ -51,7 +55,7 @@ The test suite combines:
 
 - Vitest unit tests for utility functions.
 - Playwright route, metadata, navigation, feed, and interaction tests.
-- Axe-powered accessibility checks for public routes in the sitemap.
+- Axe-powered accessibility checks for sitemap routes, work detail pages, and the 404 page.
 
 Most Playwright tests run against `astro preview`, so run `pnpm run build` first when executing individual e2e specs manually.
 

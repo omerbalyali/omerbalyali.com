@@ -102,17 +102,17 @@
 
 	.plausible-opt-out-button {
 		inline-size: fit-content;
-		border: var(--t-border-thin) solid color-mix(in oklch, currentColor 22%, transparent);
-		border-radius: var(--t-border-radius-small, 0.375rem);
-		background: color-mix(in oklch, currentColor 6%, transparent);
+		border: none;
+		border-radius: var(--t-radius-small, 0.375rem);
+		background: color-mix(in oklch, currentColor 10%, transparent);
 		color: inherit;
 		font-weight: var(--t-font-weight-medium);
 		padding: 0.45em 0.75em;
 		cursor: pointer;
 		transition:
-			background-color var(--t-transition-preset),
-			border-color var(--t-transition-preset),
-			color var(--t-transition-preset);
+			background-color var(--t-transition-default),
+			border-color var(--t-transition-default),
+			color var(--t-transition-default);
 	}
 
 	.plausible-opt-out-button:hover {
@@ -121,7 +121,7 @@
 	}
 
 	.plausible-opt-out-button:focus-visible {
-		outline: 2px solid var(--t-color-accent);
+		outline: 2px solid var(--t-color-brand-primary);
 		outline-offset: 3px;
 	}
 

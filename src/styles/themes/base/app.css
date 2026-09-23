@@ -1,0 +1,13 @@
+[data-theme] {
+	--t-app-gutter: var(--t-space-9);
+
+	--t-app-page-max-width: 54rem;
+	--t-app-content-wide-max-width: 64rem;
+	--t-app-content-extra-wide-max-width: 95rem;
+	--t-app-page-gutter: var(--t-space-6);
+
+	--t-app-container-gutter-inline: max(
+		var(--t-app-page-gutter),
+		calc((100svw - var(--t-app-page-max-width)) / 2)
+	);
+}

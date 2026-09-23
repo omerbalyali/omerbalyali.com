@@ -1,2 +1,7 @@
 # Redirect /thoughts/ URLs to /writing/
 /thoughts/* /writing/:splat 308
+
+# There is no writing index; send it home. src/pages/writing/[...slug].astro keeps a
+# meta-refresh fallback for local previews, which don't apply this file.
+/writing/ / 308
+/writing / 308

@@ -45,6 +45,14 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --with-deps chromium
 
+      # The cache only holds browser binaries; system libraries still need installing.
+      - name: Install Playwright system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
+      - name: Lint and type-check
+        run: pnpm lint
+
       - name: Run tests
         run: pnpm test
 

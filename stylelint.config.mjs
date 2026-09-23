@@ -7,6 +7,7 @@ export default {
 		"alpha-value-notation": "number",
 		"custom-property-empty-line-before": null,
 		"number-max-precision": 5,
+		"custom-property-pattern": null,
 		"value-keyword-case": [
 			"lower",
 			{

@@ -1,16 +1,14 @@
-import { type CollectionKey, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import { SITE } from "../site";
-import { OG_SIZES, type OgSize, type OgVariant } from "./og";
+import type { OgVariant } from "./og";
+import { DEFAULT_OG_SLUG } from "./og-image";
+import { getPublishedPosts } from "./writing";
 
 export interface OgRoute {
 	slug: string;
 	title?: string;
 	variant: OgVariant;
 }
-
-const DEFAULT_OG_SLUG = "default";
-
-const OG_COLLECTIONS = ["writing"] as const satisfies readonly CollectionKey[];
 
 interface MdxPageModule {
 	frontmatter?: { title?: string };
@@ -45,17 +43,12 @@ export async function discoverOgRoutes(): Promise<OgRoute[]> {
 		add({ slug, title, variant: "page" });
 	}
 
-	for (const collection of OG_COLLECTIONS) {
-		const entries = await getCollection(collection, ({ data }) => {
-			if (!import.meta.env.PROD) return true;
-			return "draft" in data ? data.draft !== true : true;
-		});
-		for (const entry of entries) {
-			const data = entry.data as { title?: string };
-			if (!data.title) continue;
-			const slug = `${collection}/${entry.id}`;
-			add({ slug, title: data.title, variant: "page" });
-		}
+	for (const post of await getPublishedPosts()) {
+		add({ slug: `writing/${post.id}`, title: post.data.title, variant: "page" });
+	}
+
+	for (const work of await getCollection("works")) {
+		add({ slug: `works/${work.id}`, title: work.data.title, variant: "page" });
 	}
 
 	return routes;
@@ -67,22 +60,4 @@ function pageFilePathToSlug(filePath: string): string {
 		.replace(/\.(astro|mdx)$/, "")
 		.replace(/\/index$/, "")
 		.replace(/^index$/, "");
-}
-
-function pathnameToSlug(pathname: string): string {
-	const trimmed = pathname.replace(/^\/+|\/+$/g, "");
-	return trimmed || DEFAULT_OG_SLUG;
-}
-
-export function getOgImagePath(pathname: string, size: OgSize = "wide"): string {
-	return `/og/${size}/${pathnameToSlug(pathname)}.png`;
-}
-
-export function getOgImageMetadata(pathname: string, size: OgSize = "wide") {
-	const dimensions = OG_SIZES[size];
-	return {
-		ogImage: getOgImagePath(pathname, size),
-		ogImageWidth: dimensions.width,
-		ogImageHeight: dimensions.height,
-	};
 }

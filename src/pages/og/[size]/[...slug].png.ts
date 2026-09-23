@@ -31,9 +31,9 @@ export const GET: APIRoute = async ({ params, props }) => {
 	const png = await renderOgImage({ size, variant, title });
 
 	return new Response(new Uint8Array(png), {
+		// Caching for the deployed files is set in public/_headers.
 		headers: {
 			"Content-Type": "image/png",
-			"Cache-Control": "public, max-age=31536000, immutable",
 		},
 	});
 };

@@ -16,7 +16,18 @@ const {
 ---
 
 <Layout lang={lang} metadata={{ title, description, canonicalURL }}>
-	<article class="prose">
-		<slot />
+	<article class="container">
+		<section class="prose">
+			<slot />
+		</section>
 	</article>
 </Layout>
+
+<style>
+	@layer components {
+		.container {
+			max-width: 80ch;
+			text-wrap: pretty;
+		}
+	}
+</style>

@@ -1,36 +1,65 @@
 ---
-import { getOgImageMetadata } from "../lib/og-pages";
+import type { CollectionEntry } from "astro:content";
+import { getOgImageMetadata } from "../lib/og-image";
 import type { PageMetadata } from "../lib/seo";
 import { SITE } from "../site";
 import Layout from "./Layout.astro";
 
-const { frontmatter } = Astro.props;
-const ogMetadata = frontmatter.ogImage
-	? { ogImage: frontmatter.ogImage }
-	: getOgImageMetadata(Astro.url.pathname);
+interface Props {
+	work: CollectionEntry<"works">;
+}
+
+const { work } = Astro.props;
+const { title, year, description, ogImage } = work.data;
+const ogMetadata = ogImage ? { ogImage } : getOgImageMetadata(Astro.url.pathname);
 const metadata: PageMetadata = {
-	title: frontmatter.title,
-	description: frontmatter.description ?? SITE.sections.works.description,
+	title,
+	description: description || SITE.sections.works.description,
 	canonicalURL: Astro.url.pathname,
 	noindex: true,
 	...ogMetadata,
 	type: "article",
 };
+// `year` is a single year or a range like "2025-2026"; each end gets its own valid <time>.
+const years = year.split(/\s*[-–]\s*/).filter(Boolean);
 ---
 
 <Layout metadata={metadata}>
 	<article>
 		<header>
-			<h1>{frontmatter.title}</h1>
-			<time datetime={frontmatter.year}>{frontmatter.year}</time>
-			<p class="description">{frontmatter.description}</p>
+			<h1>{title}</h1>
+			{
+				years.length > 0 && (
+					<p class="year">
+						{years.map((year, index) => (
+							<>
+								{index > 0 && "–"}
+								<time datetime={year}>{year}</time>
+							</>
+						))}
+					</p>
+				)
+			}
+			<p class="description">{description}</p>
 		</header>
 		<section class="content prose">
 			<slot />
 		</section>
 	</article>
+</Layout>
 
-	<style>
+<style>
+	@layer components {
+		article {
+			inline-size: 100%;
+			max-width: 56rem;
+			margin-inline: auto;
+
+			.content {
+				margin-block-end: var(--t-space-18);
+			}
+		}
+
 		header {
 			margin-block-end: var(--t-space-6);
 			font-weight: var(--t-font-weight-semibold);
@@ -40,10 +69,9 @@ const metadata: PageMetadata = {
 				margin-block-end: var(--t-space-2);
 			}
 
-			time {
-				display: block;
+			.year {
 				font-size: var(--t-font-size-small);
-				color: oklch(from currentColor calc(l + 0.3) c h);
+				color: color-mix(in oklch, currentColor 65%, transparent);
 			}
 
 			.description {
@@ -58,5 +86,5 @@ const metadata: PageMetadata = {
 		section {
 			margin-block-end: var(--t-space-24);
 		}
-	</style>
-</Layout>
+	}
+</style>

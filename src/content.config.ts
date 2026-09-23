@@ -21,4 +21,20 @@ const writing = defineCollection({
 	}),
 });
 
-export const collections = { writing };
+const works = defineCollection({
+	loader: glob({
+		base: "./src/content/works",
+		pattern: "**/*.{md,mdx}",
+	}),
+	schema: z.object({
+		title: z.string(),
+		// A single year or a range, e.g. 2026 or "2025-2026".
+		year: z.coerce.string(),
+		description: z.string(),
+		// Position on the works page, ascending.
+		order: z.number(),
+		ogImage: z.string().optional(),
+	}),
+});
+
+export const collections = { writing, works };

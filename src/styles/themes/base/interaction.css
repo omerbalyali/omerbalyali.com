@@ -1,0 +1,6 @@
+[data-theme] {
+	--t-focus-ring-color: var(--t-color-brand-primary);
+	--t-focus-ring-style: solid;
+	--t-focus-ring-width: var(--t-border-width-base);
+	--t-focus-ring-offset: var(--t-border-width-base);
+}
