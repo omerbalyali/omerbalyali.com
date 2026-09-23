@@ -45,6 +45,10 @@ pnpm run test:e2e    # All Playwright tests (smoke, behavior, and accessibility)
 pnpm run test:a11y   # Playwright accessibility checks
 ```
 
+## Browser Support
+
+The site targets current evergreen browsers with Safari 17 / iOS 17 as the baseline. CSS is compiled with Lightning CSS for that target (see `vite.css.lightningcss.targets` in `astro.config.ts`).
+
 ## Testing
 
 The test suite combines:
