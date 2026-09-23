@@ -16,13 +16,28 @@ const metadata: PageMetadata = {
 	...ogMetadata,
 	type: "article",
 };
+// `year` is a single year or a range like "2025-2026"; each end gets its own valid <time>.
+const years = String(frontmatter.year ?? "")
+	.split(/\s*[-–]\s*/)
+	.filter(Boolean);
 ---
 
 <Layout metadata={metadata}>
 	<article>
 		<header>
 			<h1>{frontmatter.title}</h1>
-			<time datetime={frontmatter.year}>{frontmatter.year}</time>
+			{
+				years.length > 0 && (
+					<p class="year">
+						{years.map((year, index) => (
+							<>
+								{index > 0 && "–"}
+								<time datetime={year}>{year}</time>
+							</>
+						))}
+					</p>
+				)
+			}
 			<p class="description">{frontmatter.description}</p>
 		</header>
 		<section class="content prose">
@@ -51,8 +66,7 @@ const metadata: PageMetadata = {
 				margin-block-end: var(--t-space-2);
 			}
 
-			time {
-				display: block;
+			.year {
 				font-size: var(--t-font-size-small);
 				color: oklch(from currentColor calc(l + 0.3) c h);
 			}
