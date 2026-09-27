@@ -1,6 +1,6 @@
 ---
-import { getListedPosts } from "../../lib/writing";
 import { formatDate, getWritingPath } from "../../lib/seo";
+import { getListedPosts } from "../../lib/writing";
 
 const posts = await getListedPosts();
 ---
@@ -36,7 +36,7 @@ const posts = await getListedPosts();
 	ul {
 		display: flex;
 		flex-direction: column;
-		max-width: 60rem;
+		max-width: 48rem;
 	}
 
 	a {
@@ -64,13 +64,17 @@ const posts = await getListedPosts();
 
 		& > strong {
 			font-weight: var(--t-font-weight-semibold);
+			transition: var(--t-transition-default);
+			transition-property: color;
 		}
 
 		& > time {
 			font-size: var(--t-font-size-xsmall);
 			font-weight: var(--t-font-weight-semibold);
-			color: color-mix(in srgb, currentColor 80%, transparent);
+			color: color-mix(in srgb, currentColor 75%, transparent);
 			text-wrap: nowrap;
+			transition: var(--t-transition-default);
+			transition-property: color;
 		}
 
 		&:hover {
@@ -83,10 +87,6 @@ const posts = await getListedPosts();
 			& > time {
 				color: color-mix(in srgb, var(--t-color-foreground-base) 80%, transparent);
 			}
-		}
-
-		ul:has(a:hover) &:not(:hover) {
-			opacity: 0.7;
 		}
 	}
 </style>
